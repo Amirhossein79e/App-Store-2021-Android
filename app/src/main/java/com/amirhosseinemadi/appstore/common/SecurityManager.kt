@@ -1,0 +1,86 @@
+package com.amirhosseinemadi.appstore.common
+
+import android.util.Base64
+import com.amirhosseinemadi.appstore.BuildConfig
+import java.nio.charset.StandardCharsets
+import java.security.*
+import java.security.spec.X509EncodedKeySpec
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
+import kotlin.collections.HashMap
+
+class SecurityManager {
+
+    companion object
+    {
+
+        public fun encrypt(inputData:String) : Map<String,Any>
+        {
+            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+
+            val keyGenerator:KeyGenerator = KeyGenerator.getInstance("AES");
+            keyGenerator.init(128)
+            val aesKey:Key = keyGenerator.generateKey()
+
+            val secureRandom:SecureRandom = SecureRandom()
+            var iv:ByteArray? = null
+            secureRandom.nextBytes(iv)
+            val ivSpec:IvParameterSpec = IvParameterSpec(iv)
+
+            aesCipher.init(Cipher.ENCRYPT_MODE,aesKey,ivSpec)
+
+            val rsaCipher:Cipher = Cipher.getInstance("RSA")
+
+            val x509Spec:X509EncodedKeySpec = X509EncodedKeySpec(Base64.decode(BuildConfig.PUBLIC_KEY,Base64.DEFAULT))
+            val publicKey:PublicKey = KeyFactory.getInstance("RSA").generatePublic(x509Spec);
+
+            rsaCipher.init(Cipher.ENCRYPT_MODE,publicKey)
+
+            val encKey:String = Base64.encodeToString(rsaCipher.doFinal(aesKey.encoded),Base64.DEFAULT)
+            val encIv:String = Base64.encodeToString(rsaCipher.doFinal(iv),Base64.DEFAULT)
+            val encData:String = Base64.encodeToString(aesCipher.doFinal(inputData.toByteArray()),Base64.DEFAULT)
+
+            val outputData:String = "$encKey@$encIv@$encData"
+
+            val map:MutableMap<String,Any> = HashMap()
+            map.put("key",aesKey)
+            map.put("iv",ivSpec)
+            map.put("output",outputData)
+
+            return map
+        }
+
+
+        public fun decrypt(inputData:String, aesKey:ByteArray, iv:ByteArray?) : String
+        {
+            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+
+            val keySpec:SecretKeySpec = SecretKeySpec(aesKey,"AES")
+            val key:Key = SecretKeyFactory.getInstance("AES").generateSecret(keySpec)
+
+            val ivSpec:IvParameterSpec = IvParameterSpec(iv)
+
+            aesCipher.init(Cipher.DECRYPT_MODE,key,ivSpec)
+
+            val outputData:String = String(aesCipher.doFinal(Base64.decode(inputData,Base64.DEFAULT)),StandardCharsets.UTF_8)
+
+            return outputData
+        }
+
+
+        public fun getDigest(inputData:String) : String
+        {
+            val digest:MessageDigest = MessageDigest.getInstance("SHA1")
+
+            digest.update(inputData.toByteArray())
+            val outputData:String = Base64.encodeToString(digest.digest(),Base64.DEFAULT)
+
+            return outputData
+        }
+
+    }
+
+}
