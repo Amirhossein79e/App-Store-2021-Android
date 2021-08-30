@@ -9,6 +9,7 @@ import com.amirhosseinemadi.appstore.BuildConfig
 import java.math.BigInteger
 import java.nio.charset.StandardCharsets
 import java.security.*
+import java.security.spec.KeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
 import javax.crypto.Cipher
@@ -96,10 +97,12 @@ class SecurityManager {
         }
 
 
-        public fun storeDataKey(alias:String) : Any
+        public fun storeDataKey(alias:String) : Any?
         {
-            //TODO
             val keyStore:KeyStore = KeyStore.getInstance("AndroidKeyStore")
+            keyStore.load(null)
+
+            var key:Any? = null
 
             if (!keyStore.containsAlias(alias))
             {
@@ -113,6 +116,8 @@ class SecurityManager {
                         .setKeySize(128)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                         .build()
+                    keyGen.init(keyGenSpec)
+                    key = keyGen.generateKey()
 
                 } else
                 {
@@ -126,17 +131,19 @@ class SecurityManager {
                         KeyPairGeneratorSpec.Builder(Application.component.context())
                             .setAlias(alias)
                             .setKeySize(2048)
-                            .setSubject(X500Principal("CN = " + alias))
+                            .setSubject(X500Principal("CN = $alias"))
                             .setSerialNumber(BigInteger("3455335345345"))
                             .setStartDate(calendar.time)
                             .setEndDate(endCalendar.time)
                             .build()
+                        keyGen.initialize(keyGenSpec)
+                        key = keyGen.generateKeyPair()
 
                 }
 
             }
 
-            return ""
+            return key
         }
 
 

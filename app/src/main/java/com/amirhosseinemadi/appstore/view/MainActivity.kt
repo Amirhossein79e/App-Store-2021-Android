@@ -7,15 +7,14 @@ import android.util.Base64
 import com.amirhosseinemadi.appstore.BuildConfig
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.SecurityManager
-import java.security.KeyPairGenerator
-import java.security.KeyStore
-import java.security.SecureRandom
-import java.security.Security
+import java.security.*
 import java.security.cert.CertificateFactory
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.SecretKeySpec
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +39,16 @@ class MainActivity : AppCompatActivity() {
 //            println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 //            val key:KeyStore.Entry = keyStore.getEntry("test",null)
 //        }
+        SecurityManager.storeDataKey("SSS")
+        val keys = KeyStore.getInstance("AndroidKeyStore")
+        keys.load(null)
+        for (alias in keys.aliases())
+        {
+            println(alias)
+            print("!!!!!!!!!!!!!!!!")
+        }
+        val entry:SecretKey = keys.getKey("SSS",null) as SecretKey
+        print(entry.encoded)
 
 
 
