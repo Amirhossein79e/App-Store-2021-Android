@@ -9,7 +9,6 @@ import com.amirhosseinemadi.appstore.BuildConfig
 import java.math.BigInteger
 import java.nio.charset.StandardCharsets
 import java.security.*
-import java.security.spec.KeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
 import javax.crypto.Cipher
@@ -35,7 +34,7 @@ class SecurityManager {
             val aesKey:Key = keyGenerator.generateKey()
 
             val secureRandom:SecureRandom = SecureRandom()
-            var iv:ByteArray? = null
+            var iv:ByteArray? = ByteArray(16)
             secureRandom.nextBytes(iv)
             val ivSpec:IvParameterSpec = IvParameterSpec(iv)
 
@@ -43,14 +42,14 @@ class SecurityManager {
 
             val rsaCipher:Cipher = Cipher.getInstance("RSA")
 
-            val x509Spec:X509EncodedKeySpec = X509EncodedKeySpec(Base64.decode(BuildConfig.PUBLIC_KEY,Base64.DEFAULT))
+            val x509Spec:X509EncodedKeySpec = X509EncodedKeySpec(Base64.decode(BuildConfig.PUBLIC_KEY,Base64.NO_WRAP))
             val publicKey:PublicKey = KeyFactory.getInstance("RSA").generatePublic(x509Spec);
 
             rsaCipher.init(Cipher.ENCRYPT_MODE,publicKey)
 
-            val encKey:String = Base64.encodeToString(rsaCipher.doFinal(aesKey.encoded),Base64.DEFAULT)
-            val encIv:String = Base64.encodeToString(rsaCipher.doFinal(iv),Base64.DEFAULT)
-            val encData:String = Base64.encodeToString(aesCipher.doFinal(inputData.toByteArray()),Base64.DEFAULT)
+            val encKey:String = Base64.encodeToString(rsaCipher.doFinal(aesKey.encoded),Base64.NO_WRAP)
+            val encIv:String = Base64.encodeToString(rsaCipher.doFinal(iv),Base64.NO_WRAP)
+            val encData:String = Base64.encodeToString(aesCipher.doFinal(inputData.toByteArray()),Base64.NO_WRAP)
 
             val outputData:String = "$encKey@$encIv@$encData"
 
@@ -61,6 +60,7 @@ class SecurityManager {
 
             return map
         }
+
 
 
         public fun decrypt(inputData:String, aesKey:ByteArray, iv:ByteArray?) : String
@@ -74,10 +74,11 @@ class SecurityManager {
 
             aesCipher.init(Cipher.DECRYPT_MODE,key,ivSpec)
 
-            val outputData:String = String(aesCipher.doFinal(Base64.decode(inputData,Base64.DEFAULT)),StandardCharsets.UTF_8)
+            val outputData:String = String(aesCipher.doFinal(Base64.decode(inputData,Base64.NO_WRAP)),StandardCharsets.UTF_8)
 
             return outputData
         }
+
 
 
         public fun decryptRaw(inputData:String, aesKey:ByteArray, iv:ByteArray?) : ByteArray
@@ -91,10 +92,11 @@ class SecurityManager {
 
             aesCipher.init(Cipher.DECRYPT_MODE,key,ivSpec)
 
-            val outputData:ByteArray = aesCipher.doFinal(Base64.decode(inputData,Base64.DEFAULT))
+            val outputData:ByteArray = aesCipher.doFinal(Base64.decode(inputData,Base64.NO_WRAP))
 
             return outputData
         }
+
 
 
         public fun storeDataKey(alias:String) : Any?
@@ -106,7 +108,6 @@ class SecurityManager {
 
             if (!keyStore.containsAlias(alias))
             {
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 {
                     val keyGen: KeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
@@ -141,10 +142,94 @@ class SecurityManager {
 
                 }
 
+            }else
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                {
+                    val entry:KeyStore.SecretKeyEntry = keyStore.getEntry(alias,null) as KeyStore.SecretKeyEntry
+                    key = entry.secretKey
+                }else
+                {
+                    val privateKey:PrivateKey = keyStore.getKey(alias,null) as PrivateKey
+                    val publicKey:PublicKey = keyStore.getCertificate(alias).publicKey
+                    key = KeyPair(publicKey,privateKey)
+                }
             }
 
             return key
         }
+
+
+
+        public fun storeDataEncrypt(inputData: String,alias: String) : String
+        {
+            var finalString:String = ""
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                val cipher:Cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+
+                val key:SecretKey = storeDataKey(alias) as SecretKey
+
+                cipher.init(Cipher.ENCRYPT_MODE,key)
+
+                val encrypted:String = Base64.encodeToString(cipher.doFinal(inputData.toByteArray()),Base64.NO_WRAP)
+
+                finalString = Base64.encodeToString(cipher.iv,Base64.NO_WRAP)+encrypted
+
+            }else
+            {
+                val cipher:Cipher = Cipher.getInstance("RSA")
+
+                val key:KeyPair = storeDataKey(alias) as KeyPair
+
+                cipher.init(Cipher.ENCRYPT_MODE,key.public)
+
+                val encrypted:String = Base64.encodeToString(cipher.doFinal(inputData.toByteArray()),Base64.NO_WRAP)
+
+                finalString = encrypted
+            }
+
+            return finalString
+        }
+
+
+
+        public fun storeDataDecrypt(inputData: String,alias: String) : String
+        {
+            var finalString:String = ""
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                val cipher:Cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+
+                val key:SecretKey = storeDataKey(alias) as SecretKey
+
+                val iv:ByteArray? = Base64.decode(inputData.substring(0,24),Base64.NO_WRAP)
+                val ivSpec:IvParameterSpec = IvParameterSpec(iv)
+
+                cipher.init(Cipher.DECRYPT_MODE,key,ivSpec)
+
+                val decrypted:String = String(cipher.doFinal(Base64.decode(inputData.substring(24),Base64.NO_WRAP)))
+
+                finalString = decrypted
+
+            }else
+            {
+                val cipher:Cipher = Cipher.getInstance("RSA")
+
+                val key:KeyPair = storeDataKey(alias) as KeyPair
+
+                cipher.init(Cipher.ENCRYPT_MODE,key.public)
+
+                val decrypted:String = String(cipher.doFinal(Base64.decode(inputData,Base64.NO_WRAP)))
+
+                finalString = decrypted
+            }
+
+            return finalString
+        }
+
 
 
         public fun getDigest(inputData:String) : String
@@ -152,7 +237,7 @@ class SecurityManager {
             val digest:MessageDigest = MessageDigest.getInstance("SHA1")
 
             digest.update(inputData.toByteArray())
-            val outputData:String = Base64.encodeToString(digest.digest(),Base64.DEFAULT)
+            val outputData:String = Base64.encodeToString(digest.digest(),Base64.NO_WRAP)
 
             return outputData
         }

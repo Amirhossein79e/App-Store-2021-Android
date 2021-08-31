@@ -1,4 +1,5 @@
 package com.amirhosseinemadi.appstore.view
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
@@ -6,6 +7,7 @@ import android.security.keystore.KeyProperties
 import android.util.Base64
 import com.amirhosseinemadi.appstore.BuildConfig
 import com.amirhosseinemadi.appstore.R
+import com.amirhosseinemadi.appstore.common.PrefManager
 import com.amirhosseinemadi.appstore.common.SecurityManager
 import java.security.*
 import java.security.cert.CertificateFactory
@@ -21,39 +23,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //SecurityManager.encrypt("a")
-//        val keyStore:KeyStore = KeyStore.getInstance("AndroidKeyStore")
-//        keyStore.load(null)
-//        if (!keyStore.containsAlias("test2")){
-//        val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,Security.getProvider("AndroidKeyStore"))
-//        keyGenerator.init(KeyGenParameterSpec.Builder("test2",KeyProperties.PURPOSE_ENCRYPT or  KeyProperties.PURPOSE_DECRYPT)
-//            .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-//            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-//            .setRandomizedEncryptionRequired(false)
-//            .build())
-//        keyGenerator.generateKey()}else
-//        {
-//            val keyStore:KeyStore = KeyStore.getInstance("AndroidKeyStore")
-//            keyStore.load(null)
-//            println(keyStore.aliases().nextElement())
-//            println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-//            val key:KeyStore.Entry = keyStore.getEntry("test",null)
-//        }
-        SecurityManager.storeDataKey("SSS")
-        val keys = KeyStore.getInstance("AndroidKeyStore")
-        keys.load(null)
-        for (alias in keys.aliases())
-        {
-            println(alias)
-            print("!!!!!!!!!!!!!!!!")
-        }
-        val entry:SecretKey = keys.getKey("SSS",null) as SecretKey
-        print(entry.encoded)
 
-
-
-
-
+        //PrefManager.setUser("Amirhossein")
+        val shared = getSharedPreferences("main", MODE_PRIVATE)
+        println(shared.getString("user",null))
+        println(PrefManager.getUser()+"!!!!!!!!!!!!!!")
 
     }
 }
