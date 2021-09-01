@@ -1,6 +1,6 @@
 package com.amirhosseinemadi.appstore
 
-import com.amirhosseinemadi.appstore.common.SecurityManager
+import com.amirhosseinemadi.appstore.util.SecurityManager
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import org.junit.Assert

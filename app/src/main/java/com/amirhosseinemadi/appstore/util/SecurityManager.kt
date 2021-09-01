@@ -1,4 +1,4 @@
-package com.amirhosseinemadi.appstore.common
+package com.amirhosseinemadi.appstore.util
 
 import android.os.Build
 import android.security.KeyPairGeneratorSpec
@@ -6,6 +6,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import com.amirhosseinemadi.appstore.BuildConfig
+import com.amirhosseinemadi.appstore.common.Application
 import java.math.BigInteger
 import java.nio.charset.StandardCharsets
 import java.security.*
@@ -34,7 +35,7 @@ class SecurityManager {
             val aesKey:Key = keyGenerator.generateKey()
 
             val secureRandom:SecureRandom = SecureRandom()
-            var iv:ByteArray? = ByteArray(16)
+            var iv:ByteArray = ByteArray(16)
             secureRandom.nextBytes(iv)
             val ivSpec:IvParameterSpec = IvParameterSpec(iv)
 
@@ -62,7 +63,6 @@ class SecurityManager {
         }
 
 
-
         public fun decrypt(inputData:String, aesKey:ByteArray, iv:ByteArray?) : String
         {
             val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
@@ -80,7 +80,6 @@ class SecurityManager {
         }
 
 
-
         public fun decryptRaw(inputData:String, aesKey:ByteArray, iv:ByteArray?) : ByteArray
         {
             val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
@@ -96,7 +95,6 @@ class SecurityManager {
 
             return outputData
         }
-
 
 
         public fun storeDataKey(alias:String) : Any?
@@ -160,7 +158,6 @@ class SecurityManager {
         }
 
 
-
         public fun storeDataEncrypt(inputData: String,alias: String) : String
         {
             var finalString:String = ""
@@ -192,7 +189,6 @@ class SecurityManager {
 
             return finalString
         }
-
 
 
         public fun storeDataDecrypt(inputData: String,alias: String) : String
@@ -229,7 +225,6 @@ class SecurityManager {
 
             return finalString
         }
-
 
 
         public fun getDigest(inputData:String) : String

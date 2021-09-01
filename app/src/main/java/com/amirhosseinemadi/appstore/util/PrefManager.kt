@@ -1,12 +1,31 @@
-package com.amirhosseinemadi.appstore.common
+package com.amirhosseinemadi.appstore.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.amirhosseinemadi.appstore.common.Application
 
 class PrefManager() {
 
     companion object
     {
+
+        public fun setLang(language:String)
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val editor:SharedPreferences.Editor = preferences.edit()
+            editor.putString("language",language)
+            editor.commit()
+        }
+
+
+        public fun getLang() : String?
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val lang:String? = preferences.getString("language","fa")
+            return lang
+        }
+
+
         public fun setToken(token: String)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
@@ -14,7 +33,6 @@ class PrefManager() {
             editor.putString("token", SecurityManager.storeDataEncrypt(token,"token"))
             editor.commit()
         }
-
 
 
         public fun getToken(): String?
@@ -29,7 +47,6 @@ class PrefManager() {
         }
 
 
-
         public fun setAccess(access: String)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
@@ -37,7 +54,6 @@ class PrefManager() {
             editor.putString("access", SecurityManager.storeDataEncrypt(access,"access"))
             editor.commit()
         }
-
 
 
         public fun getAccess(): String?
@@ -52,7 +68,6 @@ class PrefManager() {
         }
 
 
-
         public fun setUser(user: String)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
@@ -60,7 +75,6 @@ class PrefManager() {
             editor.putString("user", SecurityManager.storeDataEncrypt(user,"user"))
             editor.commit()
         }
-
 
 
         public fun getUser(): String?
@@ -73,6 +87,7 @@ class PrefManager() {
             }
             return user
         }
+
     }
 
 
