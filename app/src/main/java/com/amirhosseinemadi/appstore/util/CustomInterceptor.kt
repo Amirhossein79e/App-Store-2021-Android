@@ -1,41 +1,54 @@
 package com.amirhosseinemadi.appstore.util
 
-import okhttp3.FormBody
-import okhttp3.Interceptor
-import okhttp3.Response
-import okhttp3.ResponseBody
+import android.util.Log
+import okhttp3.*
+import kotlin.math.log
 
 class CustomInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response
     {
-        val postParam: FormBody = chain.request().body() as FormBody
+        val request:Request = chain.request()
+        var modifiedRequest:Request? = null
+
+        val postParam: FormBody = request.body() as FormBody
+        val strSend = postParam.name(0)+" : "+postParam.value(0) +" -- "+ postParam.name(1)+" : "+postParam.value(1)
+        Log.i("Request to Server ","( $strSend )")
 
         val encryptedMap: Map<String, Any> = SecurityManager.encrypt(postParam.value(1))
 
-        chain.request().newBuilder()
+        modifiedRequest = request.newBuilder()
             .post(
                 FormBody.Builder()
                     .add(postParam.name(0), postParam.value(0))
                     .add(postParam.name(1), encryptedMap.get("output") as String)
                     .build()
+            ).build()
+
+        val strSendEnc = (modifiedRequest.body() as FormBody).name(0)+" : "+ (modifiedRequest.body() as FormBody).value(0) +" -- "+ (modifiedRequest.body() as FormBody).name(1)+" : "+ (modifiedRequest.body() as FormBody).value(1)
+        Log.i("Request to Server ","( $strSendEnc )")
+
+        val response:Response = chain.proceed(modifiedRequest)
+        var modifiedResponse:Response? = null
+        val responseBody:ResponseBody? = response.body()
+
+        val strRecEnc = response.peekBody(1024*2048).string()
+        Log.i("Response from Server ","( $strRecEnc )")
+
+        if (responseBody != null)
+        {
+            val decrypted: String = SecurityManager.decrypt(
+                response.peekBody(1024*2048).string(),
+                encryptedMap.get("key") as ByteArray,
+                encryptedMap.get("iv") as ByteArray
             )
 
-        val decrypted: String = SecurityManager.decrypt(
-            chain.proceed(chain.request()).body()?.string()
-                .toString(),
-            encryptedMap.get("key") as ByteArray,
-            encryptedMap.get("iv") as ByteArray
-        )
+            modifiedResponse = response.newBuilder()
+                .body(ResponseBody.create(responseBody.contentType(),decrypted))
+                .build()
 
-        val response: Response = chain.proceed(chain.request()).newBuilder()
-            .body(
-                ResponseBody.create(
-                    chain.proceed(chain.request()).body()?.contentType(),
-                    decrypted
-                )
-            )
-            .build()
+            return modifiedResponse
+        }
 
         return response
     }

@@ -30,7 +30,7 @@ class Module(private val context: Context) {
             .build()
 
         val retrofit:Retrofit = Retrofit.Builder()
-            .baseUrl("https://bermoodaco.ir/exe.php")
+            .baseUrl("https://bermoodaco.ir/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
