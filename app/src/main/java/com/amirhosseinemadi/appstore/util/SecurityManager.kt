@@ -25,7 +25,7 @@ class SecurityManager {
 
         public fun encrypt(inputData:String) : Map<String,Any>
         {
-            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
 
             val keyGenerator:KeyGenerator = KeyGenerator.getInstance("AES");
             keyGenerator.init(128)
@@ -38,7 +38,7 @@ class SecurityManager {
 
             aesCipher.init(Cipher.ENCRYPT_MODE,aesKey,ivSpec)
 
-            val rsaCipher:Cipher = Cipher.getInstance("RSA")
+            val rsaCipher:Cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
 
             val x509Spec:X509EncodedKeySpec = X509EncodedKeySpec(Base64.decode(BuildConfig.PUBLIC_KEY,Base64.NO_WRAP))
             val publicKey:PublicKey = KeyFactory.getInstance("RSA").generatePublic(x509Spec);
@@ -62,7 +62,7 @@ class SecurityManager {
 
         public fun decrypt(inputData:String, aesKey:ByteArray, iv:ByteArray?) : String
         {
-            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
 
             val key:SecretKey = SecretKeySpec(aesKey,"AES")
 
@@ -78,9 +78,6 @@ class SecurityManager {
             }catch (exception:IllegalBlockSizeException)
             {
                 outputData = String(Base64.decode(inputData,Base64.NO_WRAP),StandardCharsets.UTF_8)
-            }catch (exception:BadPaddingException)
-            {
-                outputData = String(Base64.decode(inputData,Base64.NO_WRAP),StandardCharsets.UTF_8)
             }
 
             return outputData
@@ -89,7 +86,7 @@ class SecurityManager {
 
         public fun decryptRaw(inputData:String, aesKey:ByteArray, iv:ByteArray?) : ByteArray
         {
-            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
 
             val key:Key = SecretKeySpec(aesKey,"AES")
 

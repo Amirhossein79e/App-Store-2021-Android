@@ -1,8 +1,11 @@
 package com.amirhosseinemadi.appstore.view
+import android.content.res.AssetManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Base64
 import android.widget.Toast
+import com.amirhosseinemadi.appstore.BuildConfig
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.common.Module
@@ -18,6 +21,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.security.KeyStore
+import java.util.*
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -26,10 +31,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val service:Service = Application.component.retrofit().create(Service::class.java)
-        val test = Random.nextBytes(150)
-        val str = "{\"uid\":\"12345678\",\"token\":\"${test.toString()}\"}"
+        val test = Random.nextBytes(155)
+        val str = "{\"uid\":\"12345678\",\"token\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}"
         val  call:Call<ResponseBody> = service.test(100,str)
-
 
         call.enqueue(object : Callback<ResponseBody>
         {
