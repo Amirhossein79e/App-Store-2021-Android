@@ -2,11 +2,11 @@ package com.amirhosseinemadi.appstore.common
 
 import android.content.Context
 import com.amirhosseinemadi.appstore.util.CustomInterceptor
-import com.amirhosseinemadi.appstore.util.SecurityManager
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -32,6 +32,7 @@ class Module(private val context: Context) {
         val retrofit:Retrofit = Retrofit.Builder()
             .baseUrl("https://bermoodaco.ir/")
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .client(client)
             .build()
 

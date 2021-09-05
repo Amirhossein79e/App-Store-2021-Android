@@ -13,7 +13,7 @@ class CustomInterceptor : Interceptor {
 
         val postParam: FormBody = request.body() as FormBody
         val strSend = postParam.name(0)+" : "+postParam.value(0) +" -- "+ postParam.name(1)+" : "+postParam.value(1)
-        Log.i("Request to Server ","( $strSend )")
+        Log.i("Request to Server : ","( $strSend )")
 
         val encryptedMap: Map<String, Any> = SecurityManager.encrypt(postParam.value(1))
 
@@ -26,22 +26,24 @@ class CustomInterceptor : Interceptor {
             ).build()
 
         val strSendEnc = (modifiedRequest.body() as FormBody).name(0)+" : "+ (modifiedRequest.body() as FormBody).value(0) +" -- "+ (modifiedRequest.body() as FormBody).name(1)+" : "+ (modifiedRequest.body() as FormBody).value(1)
-        Log.i("Request to Server ","( $strSendEnc )")
+        Log.i("Request to Server : ","( $strSendEnc )")
 
         val response:Response = chain.proceed(modifiedRequest)
         var modifiedResponse:Response? = null
         val responseBody:ResponseBody? = response.body()
 
-        val strRecEnc = response.peekBody(1024*2048).string()
-        Log.i("Response from Server ","( $strRecEnc )")
-
         if (responseBody != null)
         {
+            val strRecEnc = response.body()?.string()
+            Log.i("Response from Server : ","( $strRecEnc )")
+
             val decrypted: String = SecurityManager.decrypt(
-                response.peekBody(1024*2048).string(),
+                strRecEnc!!,
                 encryptedMap.get("key") as ByteArray,
                 encryptedMap.get("iv") as ByteArray
             )
+
+            Log.i("Response from Server : ","( $decrypted )")
 
             modifiedResponse = response.newBuilder()
                 .body(ResponseBody.create(responseBody.contentType(),decrypted))
