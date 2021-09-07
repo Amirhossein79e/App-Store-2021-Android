@@ -59,6 +59,21 @@ interface Service {
     fun getApp(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<AppModel>>
 
 
+    @POST("exe.php")
+    @FormUrlEncoded
+    fun getTitlesSearch(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<List<String>>>
+
+
+    @POST("exe.php")
+    @FormUrlEncoded
+    fun getAppsSearch(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<List<AppModel>>>
+
+
+    @POST("exe.php")
+    @FormUrlEncoded
+    fun getUpdates(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<List<AppModel>>>
+
+
 
 
 }

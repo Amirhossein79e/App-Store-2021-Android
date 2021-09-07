@@ -6,6 +6,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
+import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -158,6 +159,45 @@ class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
         jsonObject.put("packageName",packageName)
 
         service.getApp(GET_APP,jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getTitlesSearch(query:String, observer:SingleObserver<ResponseObject<List<String>>>)
+    {
+        val jsonObject:JSONObject = JSONObject()
+        jsonObject.put("query",query)
+
+        service.getTitlesSearch(GET_TITLES_SEARCH,jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getAppsSearch(query:String, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    {
+        val jsonObject: JSONObject = JSONObject()
+        jsonObject.put("query", query)
+
+        service.getAppsSearch(GET_APPS_SEARCH, jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getUpdates(packages:List<JSONObject>, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    {
+        val jsonArray:JSONArray = JSONArray()
+        packages.forEach()
+        {
+            jsonArray.put(it)
+        }
+
+        service.getUpdates(GET_UPDATES, jsonArray.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(observer)
