@@ -1,16 +1,16 @@
 package com.amirhosseinemadi.appstore.model
 
 import com.amirhosseinemadi.appstore.common.Application
-import com.amirhosseinemadi.appstore.model.entity.ResponseObject
-import com.amirhosseinemadi.appstore.model.entity.UserModel
+import com.amirhosseinemadi.appstore.model.entity.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.json.JSONObject
 import retrofit2.Retrofit
+import javax.inject.Inject
 
-class ApiCaller {
+class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
 
     private val INIT_TOKEN:Int = 100
     private val SYNC_TOKEN:Int = 101
@@ -34,12 +34,10 @@ class ApiCaller {
 
     private val DOWNLOAD:Int = 500
 
-    private lateinit var retrofit:Retrofit
     private lateinit var service: Service
 
     init
     {
-        retrofit = Application.component.retrofit()
         service = retrofit.create(Service::class.java)
     }
 
@@ -105,6 +103,61 @@ class ApiCaller {
         jsonObject.put("token",token)
 
         service.syncUser(SYNC_USER,jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getHome(observer:SingleObserver<ResponseObject<HomeModel>>)
+    {
+        service.getHome(GET_HOME,"")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getCategories(observer:SingleObserver<ResponseObject<List<CategoryModel>>>)
+    {
+        service.getCategories(GET_CATEGORIES,"")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getApps(offset:Int, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    {
+        val jsonObject:JSONObject = JSONObject()
+        jsonObject.put("offset",offset)
+
+        service.getApps(GET_APPS,jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getAppsByCategory(offset:Int, category:String, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    {
+        val jsonObject:JSONObject = JSONObject()
+        jsonObject.put("offset",offset)
+        jsonObject.put("category",category)
+
+        service.getAppsByCategory(GET_APPS_BY_CATEGORY,jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getApp(packageName:String, observer:SingleObserver<ResponseObject<AppModel>>)
+    {
+        val jsonObject:JSONObject = JSONObject()
+        jsonObject.put("packageName",packageName)
+
+        service.getApp(GET_APP,jsonObject.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(observer)

@@ -35,7 +35,7 @@ class PrefManager() {
         }
 
 
-        public fun getToken(): String?
+        public fun getToken() : String?
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             var token: String? = preferences.getString("token", null)
@@ -56,7 +56,7 @@ class PrefManager() {
         }
 
 
-        public fun getAccess(): String?
+        public fun getAccess() : String?
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             var access: String? = preferences.getString("access", null)
@@ -77,7 +77,7 @@ class PrefManager() {
         }
 
 
-        public fun getUser(): String?
+        public fun getUser() : String?
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             var user: String? = preferences.getString("user", null)
