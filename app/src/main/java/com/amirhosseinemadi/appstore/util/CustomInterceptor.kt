@@ -38,17 +38,33 @@ class CustomInterceptor : Interceptor {
             val strRecEnc = response.body()?.string()
             Log.i("Response from Server : ","( $strRecEnc )")
 
-            val decrypted: String = SecurityManager.decrypt(
-                strRecEnc!!,
-                encryptedMap.get("key") as ByteArray,
-                encryptedMap.get("iv") as ByteArray
-            )
+            if(postParam.value(0).equals("500"))
+            {
+                val decrypted: ByteArray = SecurityManager.decryptRaw(
+                    strRecEnc!!,
+                    encryptedMap.get("key") as ByteArray,
+                    encryptedMap.get("iv") as ByteArray
+                )
 
-            Log.i("Response from Server : ","( $decrypted )")
+                Log.i("Response from Server : ","( File Bytes )")
 
-            modifiedResponse = response.newBuilder()
-                .body(ResponseBody.create(responseBody.contentType(),decrypted))
-                .build()
+                modifiedResponse = response.newBuilder()
+                    .body(ResponseBody.create(responseBody.contentType(),decrypted))
+                    .build()
+            }else
+            {
+                val decrypted: String = SecurityManager.decrypt(
+                    strRecEnc!!,
+                    encryptedMap.get("key") as ByteArray,
+                    encryptedMap.get("iv") as ByteArray
+                )
+
+                Log.i("Response from Server : ","( $decrypted )")
+
+                modifiedResponse = response.newBuilder()
+                    .body(ResponseBody.create(responseBody.contentType(),decrypted))
+                    .build()
+            }
 
             return modifiedResponse
         }

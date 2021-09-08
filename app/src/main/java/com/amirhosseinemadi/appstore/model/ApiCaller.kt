@@ -1,13 +1,16 @@
 package com.amirhosseinemadi.appstore.model
 
+import android.provider.Telephony
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.entity.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
+import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
+import retrofit2.Response
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -198,6 +201,72 @@ class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
         }
 
         service.getUpdates(GET_UPDATES, jsonArray.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getComments(access:String, packageName:String, offset:Int, observer:SingleObserver<ResponseObject<List<CommentModel>>>)
+    {
+        val jsonObject: JSONObject = JSONObject()
+        jsonObject.put("access", access)
+        jsonObject.put("packageName", packageName)
+        jsonObject.put("offset", offset)
+
+        service.getComments(GET_COMMENTS, jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun getComments(packageName:String, observer:SingleObserver<ResponseObject<String>>)
+    {
+        val jsonObject: JSONObject = JSONObject()
+        jsonObject.put("packageName", packageName)
+
+        service.getRating(GET_RATING, jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun submitComment(access: String, detail:String, rate:Float, packageName:String, observer:SingleObserver<ResponseObject<String>>)
+    {
+        val jsonObject: JSONObject = JSONObject()
+        jsonObject.put("access", access)
+        jsonObject.put("detail", detail)
+        jsonObject.put("rate", rate)
+        jsonObject.put("packageName", packageName)
+
+        service.submitComment(SUBMIT_COMMENT, jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun deleteComment(access: String, packageName:String, observer:SingleObserver<ResponseObject<String>>)
+    {
+        val jsonObject: JSONObject = JSONObject()
+        jsonObject.put("access", access)
+        jsonObject.put("packageName", packageName)
+
+        service.deleteComment(DELETE_COMMENT, jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun download(packageName:String, observer:SingleObserver<Response<ResponseBody>>)
+    {
+        val jsonObject: JSONObject = JSONObject()
+        jsonObject.put("packageName", packageName)
+
+        service.download(DOWNLOAD, jsonObject.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(observer)

@@ -3,11 +3,14 @@ package com.amirhosseinemadi.appstore.model
 import com.amirhosseinemadi.appstore.model.entity.*
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface Service {
+
 
     @POST("exe.php")
     @FormUrlEncoded
@@ -74,6 +77,29 @@ interface Service {
     fun getUpdates(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<List<AppModel>>>
 
 
+    @POST("exe.php")
+    @FormUrlEncoded
+    fun getComments(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<List<CommentModel>>>
+
+
+    @POST("exe.php")
+    @FormUrlEncoded
+    fun getRating(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<String>>
+
+
+    @POST("exe.php")
+    @FormUrlEncoded
+    fun submitComment(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<String>>
+
+
+    @POST("exe.php")
+    @FormUrlEncoded
+    fun deleteComment(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<String>>
+
+
+    @POST("exe.php")
+    @FormUrlEncoded
+    fun download(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<Response<ResponseBody>>
 
 
 }

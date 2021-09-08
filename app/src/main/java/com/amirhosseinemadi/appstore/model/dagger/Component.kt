@@ -1,7 +1,8 @@
-package com.amirhosseinemadi.appstore.common
+package com.amirhosseinemadi.appstore.model.dagger
 
 import android.content.Context
 import com.amirhosseinemadi.appstore.model.ApiCaller
+import com.amirhosseinemadi.appstore.model.dagger.Module
 import com.amirhosseinemadi.appstore.view.MainActivity
 import dagger.Component
 import retrofit2.Retrofit
