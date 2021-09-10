@@ -1,4 +1,4 @@
-package com.amirhosseinemadi.appstore.model.dagger
+package com.amirhosseinemadi.appstore.util.dagger
 
 import android.content.Context
 import com.amirhosseinemadi.appstore.util.CustomInterceptor

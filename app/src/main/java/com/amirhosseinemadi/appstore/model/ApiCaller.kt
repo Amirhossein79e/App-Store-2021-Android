@@ -38,7 +38,7 @@ class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
 
     private val DOWNLOAD:Int = 500
 
-    private lateinit var service: Service
+    private var service: Service
 
     init
     {

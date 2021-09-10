@@ -1,8 +1,8 @@
 package com.amirhosseinemadi.appstore.common
 
 import android.app.Application
-import com.amirhosseinemadi.appstore.model.dagger.Component
-import com.amirhosseinemadi.appstore.model.dagger.Module
+import com.amirhosseinemadi.appstore.util.dagger.Component
+import com.amirhosseinemadi.appstore.util.dagger.Module
 
 class Application : Application() {
 
