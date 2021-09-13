@@ -2,6 +2,7 @@ package com.amirhosseinemadi.appstore.common
 
 import android.app.Application
 import com.amirhosseinemadi.appstore.util.dagger.Component
+import com.amirhosseinemadi.appstore.util.dagger.DaggerComponent
 import com.amirhosseinemadi.appstore.util.dagger.Module
 
 class Application : Application() {

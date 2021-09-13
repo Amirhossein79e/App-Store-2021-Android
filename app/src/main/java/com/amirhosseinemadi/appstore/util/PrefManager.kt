@@ -8,6 +8,22 @@ class PrefManager() {
 
     companion object
     {
+        public fun setFirst(isFirst:Boolean)
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val editor:SharedPreferences.Editor = preferences.edit()
+            editor.putBoolean("first",isFirst)
+            editor.commit()
+        }
+
+
+        public fun getFirst() : Boolean
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val isFirst:Boolean = preferences.getBoolean("first",true)
+            return isFirst
+        }
+
 
         public fun setLang(language:String)
         {

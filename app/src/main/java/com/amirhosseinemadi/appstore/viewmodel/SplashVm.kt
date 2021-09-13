@@ -1,6 +1,5 @@
 package com.amirhosseinemadi.appstore.viewmodel
 
-import androidx.databinding.Bindable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amirhosseinemadi.appstore.common.Application
@@ -13,13 +12,14 @@ class SplashVm : ViewModel() {
 
     var apiCaller:ApiCaller
     var initResponse:MutableLiveData<ResponseObject<String>>
+    var syncResponse:MutableLiveData<ResponseObject<String>>
 
 
     init
     {
         apiCaller = Application.component.apiCaller()
         initResponse = MutableLiveData()
-
+        syncResponse = MutableLiveData()
     }
 
 
@@ -42,10 +42,36 @@ class SplashVm : ViewModel() {
     }
 
 
+    public fun sync(uid:String, token:String)
+    {
+        apiCaller.syncToken(uid,token,object : SingleObserver<ResponseObject<String>>
+        {
+            override fun onSubscribe(d: Disposable?) {
+
+            }
+
+            override fun onSuccess(t: ResponseObject<String>?) {
+                syncResponse.value = t
+            }
+
+            override fun onError(e: Throwable?) {
+
+            }
+        })
+    }
+
+
     public fun getInitResponse(uid:String,token:String) : MutableLiveData<ResponseObject<String>>
     {
         init(uid,token)
         return initResponse
+    }
+
+
+    public fun getSyncResponse(uid:String,token:String) : MutableLiveData<ResponseObject<String>>
+    {
+        sync(uid,token)
+        return syncResponse
     }
 
 }
