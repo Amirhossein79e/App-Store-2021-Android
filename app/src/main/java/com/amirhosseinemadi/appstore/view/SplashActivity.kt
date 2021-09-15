@@ -3,20 +3,12 @@ package com.amirhosseinemadi.appstore.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.ActivitySplashBinding
-import com.amirhosseinemadi.appstore.databinding.ActivitySplashBindingImpl
-import com.amirhosseinemadi.appstore.model.entity.ResponseObject
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.viewmodel.SplashVm
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.installations.remote.TokenResult
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingService
 
 class SplashActivity : AppCompatActivity() {
 
@@ -35,7 +27,24 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkInit()
     {
-        val uid: String = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        val uidNotHex: String = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        var uid = ""
+
+        if (uidNotHex.length == 16)
+        {
+            for (i: Int in uidNotHex.indices)
+            {
+                if (i % 2 == 0 && i > 1)
+                {
+                    uid += ":"
+                }
+                uid += uidNotHex.get(i)
+            }
+        }else if (uidNotHex.length == 23)
+        {
+            uid = uidNotHex
+        }
+
         var token: String? = PrefManager.getToken()
 
         if (token == null)
