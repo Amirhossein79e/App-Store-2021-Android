@@ -1,5 +1,6 @@
-package com.amirhosseinemadi.appstore.view
+package com.amirhosseinemadi.appstore.view.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
@@ -78,7 +79,7 @@ class SplashActivity : AppCompatActivity() {
                         if (t?.responseCode == 1)
                         {
                             PrefManager.setFirst(false)
-                            //TODO
+                            startActivity(Intent(this,IntroActivity::class.java))
                         }
                     })
         }else
@@ -88,7 +89,7 @@ class SplashActivity : AppCompatActivity() {
                     { t ->
                         if (t?.responseCode == 1)
                         {
-                            //TODO
+                            startActivity(Intent(this,IntroActivity::class.java))
                         }
                     })
         }

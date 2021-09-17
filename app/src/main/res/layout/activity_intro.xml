@@ -2,16 +2,67 @@
 <layout>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.IntroActivity">
+    tools:context=".view.activity.IntroActivity">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05"
+        android:id="@+id/guide_start">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95"
+        android:id="@+id/guide_end">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.03"
+        android:id="@+id/guide_top">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.97"
+        android:id="@+id/guide_bottom">
+    </androidx.constraintlayout.widget.Guideline>
 
 
     <androidx.viewpager2.widget.ViewPager2
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/view_pager">
+        android:id="@+id/view_pager"
+        android:layout_marginBottom="@dimen/dp56">
     </androidx.viewpager2.widget.ViewPager2>
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/view_pager"
+        android:id="@+id/tab_layout"
+        app:tabBackground="@drawable/view_pager_indicator"
+        app:tabIndicatorHeight="0dp"
+        app:tabGravity="center"
+        app:tabRippleColor="@color/transparent"
+        app:tabUnboundedRipple="false">
+    </com.google.android.material.tabs.TabLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

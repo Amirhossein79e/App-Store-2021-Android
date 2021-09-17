@@ -2,7 +2,7 @@ package com.amirhosseinemadi.appstore.util.dagger
 
 import android.content.Context
 import com.amirhosseinemadi.appstore.model.ApiCaller
-import com.amirhosseinemadi.appstore.view.MainActivity
+import com.amirhosseinemadi.appstore.view.activity.MainActivity
 import dagger.Component
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -17,6 +17,6 @@ interface Component {
 
     fun apiCaller() : ApiCaller
 
-    fun inject(activity:MainActivity)
+    fun inject(activity: MainActivity)
 
 }

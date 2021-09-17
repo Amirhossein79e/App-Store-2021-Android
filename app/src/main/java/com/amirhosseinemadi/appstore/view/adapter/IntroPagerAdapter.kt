@@ -5,14 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class IntroPagerAdapter(fragmentManager: FragmentManager,activity:AppCompatActivity) : FragmentStateAdapter(fragmentManager,activity.lifecycle) {
-
-    private var fragments:MutableList<Fragment>
-
-    init
-    {
-        fragments = ArrayList()
-    }
+class IntroPagerAdapter(fragmentManager: FragmentManager,activity:AppCompatActivity,private val fragments:MutableList<Fragment>) : FragmentStateAdapter(fragmentManager,activity.lifecycle) {
 
     override fun getItemCount(): Int {
         return fragments.size

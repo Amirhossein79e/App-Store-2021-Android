@@ -1,4 +1,4 @@
-package com.amirhosseinemadi.appstore.view
+package com.amirhosseinemadi.appstore.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             override fun onSuccess(t: ResponseObject<List<CategoryModel>>?) {
                 if(t?.responseCode == 1)
                 {
-                    println(t?.data?.get(0)?.icon)
+                    println(t.data?.get(0)?.icon)
                 }else
                 {
                     println(t?.message)
