@@ -2,6 +2,7 @@ package com.amirhosseinemadi.appstore.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -33,6 +34,7 @@ class IntroActivity : AppCompatActivity() {
         val pagerAdapter:IntroPagerAdapter = IntroPagerAdapter(supportFragmentManager,this,fragment)
         viewPager.adapter = pagerAdapter
         TabLayoutMediator(tabLayout,viewPager,{ tab, position -> }).attach()
+
 
     }
 
