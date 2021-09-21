@@ -1,5 +1,6 @@
 package com.amirhosseinemadi.appstore.view.activity
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -54,9 +55,9 @@ class IntroActivity : AppCompatActivity() {
     private fun initIndicator()
     {
         val fragment:MutableList<Fragment> = ArrayList()
-        fragment.add(IntroFragment(R.drawable.ic_welcome_intro,R.string.app_name,R.string.app_name))
-        fragment.add(IntroFragment(R.drawable.ic_comment_intro,R.string.app_name,R.string.app_name))
-        fragment.add(IntroFragment(R.drawable.ic_develop_intro,R.string.app_name,R.string.app_name))
+        fragment.add(IntroFragment(R.drawable.ic_welcome_intro,R.string.intro_title_one,R.string.intro_sub_one))
+        fragment.add(IntroFragment(R.drawable.ic_comment_intro,R.string.intro_title_two,R.string.intro_sub_two))
+        fragment.add(IntroFragment(R.drawable.ic_develop_intro,R.string.intro_title_three,R.string.intro_sub_three))
 
         val pagerAdapter:IntroPagerAdapter = IntroPagerAdapter(supportFragmentManager,this,fragment)
         viewPager.adapter = pagerAdapter
@@ -65,10 +66,10 @@ class IntroActivity : AppCompatActivity() {
 
         for (i:Int in 0 until fragment.size)
         {
-            val view:View = layoutInflater.inflate(R.layout.view_pager_indicator_item,null)
+            val view:View = layoutInflater.inflate(R.layout.view_pager_indicator_item,linearIndicator)
             view.findViewById<AppCompatTextView>(R.id.txt_indicator).setOnClickListener { viewPager.currentItem = i }
             views.add(view)
-            linearIndicator.addView(view)
+            //linearIndicator.addView(view)
         }
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback()
@@ -86,10 +87,10 @@ class IntroActivity : AppCompatActivity() {
                 views.get(position).isSelected = true
                 if (position == viewPager.adapter?.itemCount!! -1)
                 {
-                    btnNext.text = "Finish"
+                    btnNext.text = resources.getString(R.string.finish)
                 }else
                 {
-                    btnNext.text = "Next"
+                    btnNext.text = resources.getString(R.string.next)
                 }
             }
         })

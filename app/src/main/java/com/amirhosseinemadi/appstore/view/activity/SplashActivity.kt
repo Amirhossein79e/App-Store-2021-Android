@@ -1,15 +1,18 @@
 package com.amirhosseinemadi.appstore.view.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Resources
 import android.os.Bundle
 import android.provider.Settings
+import android.util.DisplayMetrics
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.ActivitySplashBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.viewmodel.SplashVm
 import com.google.firebase.messaging.FirebaseMessaging
+import java.util.*
 
 class SplashActivity : AppCompatActivity() {
 
@@ -18,11 +21,16 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val configuration = resources.configuration
+        configuration.setLocale(Locale("fa"))
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val resources = Resources(assets, displayMetrics, configuration)
+
         viewModel = SplashVm()
         splashBinding = DataBindingUtil.setContentView<ActivitySplashBinding>(this,R.layout.activity_splash).also { it.viewModel = viewModel }
-
         checkInit()
-
     }
 
 

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="colorPrimary">@color/md_blue_50</color>
+    <color name="colorPrimaryVariant">@color/md_blue_900</color>
+    <color name="colorOnPrimary">@color/md_blue_A200</color>
+
     <color name="md_red_50">#FFEBEE</color>
     <color name="md_red_100">#FFCDD2</color>
     <color name="md_red_200">#EF9A9A</color>

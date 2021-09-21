@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">App Store</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="next" translatable="false">بعدی</string>
+    <string name="finish" translatable="false">پایان</string>
+    <!-- Intro Strings -->
+    <string name="intro_title_one" translatable="false">خوش آمدید</string>
+    <string name="intro_sub_one" translatable="false">دسترسی به جدید ترین برنامه ها با اپ استور</string>
+    <string name="intro_title_two" translatable="false">نظرات</string>
+    <string name="intro_sub_two" translatable="false">می توانید قبل از دانلود برنامه ها نظرات کاربران را ببینید</string>
+    <string name="intro_title_three" translatable="false">در حال توسعه</string>
+    <string name="intro_sub_three" translatable="false">ایده هایی که به نظر شما استفاده از اپ استور را لذت بخش میکند پیاده سازی می شود</string>
+</resources>

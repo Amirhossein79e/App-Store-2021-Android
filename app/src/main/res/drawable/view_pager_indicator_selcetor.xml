@@ -6,7 +6,7 @@
 
     <item android:state_selected="true">
         <shape android:shape="ring" android:useLevel="false" android:innerRadius="@dimen/dp0" android:thickness="@dimen/dp6">
-            <solid android:color="@color/md_blue_A200"> </solid>
+            <solid android:color="@color/colorOnPrimary"> </solid>
         </shape>
     </item>
 
@@ -15,7 +15,7 @@
         <layer-list>
             <item>
                 <shape android:shape="ring" android:useLevel="false" android:innerRadius="3dp" android:thickness="3dp">
-                    <solid android:color="@color/md_blue_A200"> </solid>
+                    <solid android:color="@color/colorOnPrimary"> </solid>
                 </shape>
             </item>
         </layer-list>

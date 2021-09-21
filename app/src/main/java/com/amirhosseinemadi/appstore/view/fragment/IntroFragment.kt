@@ -53,8 +53,8 @@ class IntroFragment() : Fragment() {
     private fun setAttrs()
     {
         img.setImageDrawable(ContextCompat.getDrawable(requireContext(),imgRes!!))
-        img.setImageDrawable(ContextCompat.getDrawable(requireContext(),imgRes!!))
-        img.setImageDrawable(ContextCompat.getDrawable(requireContext(),imgRes!!))
+        txtTitle.text = resources.getString(txtTitleRes!!)
+        txtSub.text = resources.getString(txtSubRes!!)
     }
 
 }

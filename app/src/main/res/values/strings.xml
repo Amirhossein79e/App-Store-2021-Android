@@ -1,6 +1,15 @@
 <resources>
-    <string name="app_name">App Store</string>
+    <string name="app_name" translatable="false">App Store</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="finish">Finish</string>
+    <string name="next" translatable="false">Next</string>
+    <string name="finish" translatable="false">Finish</string>
+    <!-- Intro Strings -->
+    <string name="intro_title_one" translatable="false">Welcome</string>
+    <string name="intro_sub_one" translatable="false">Access the latest applications with the App Store</string>
+    <string name="intro_title_two" translatable="false">Comments</string>
+    <string name="intro_sub_two" translatable="false">Check other users comments about the app before download apps</string>
+    <string name="intro_title_three" translatable="false">Developing</string>
+    <string name="intro_sub_three" translatable="false">Ideas that you think make the App Store enjoyable will be implemented</string>
+
 </resources>
