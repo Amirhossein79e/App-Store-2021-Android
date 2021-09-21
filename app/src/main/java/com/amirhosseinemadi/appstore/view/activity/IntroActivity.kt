@@ -35,15 +35,28 @@ class IntroActivity : AppCompatActivity() {
         viewPager = introBinding.viewPager
         linearIndicator = introBinding.linearIndicator
         btnNext = introBinding.btnNext
+        btnNext.setOnClickListener(this::nextClick)
+    }
+
+
+    private fun nextClick(view: View)
+    {
+        if (viewPager.currentItem < viewPager.adapter?.itemCount!! -1)
+        {
+            viewPager.currentItem = viewPager.currentItem+1
+        }else
+        {
+            //TODO Intent to Main
+        }
     }
 
 
     private fun initIndicator()
     {
         val fragment:MutableList<Fragment> = ArrayList()
-        fragment.add(IntroFragment())
-        fragment.add(IntroFragment())
-        fragment.add(IntroFragment())
+        fragment.add(IntroFragment(R.drawable.ic_welcome_intro,R.string.app_name,R.string.app_name))
+        fragment.add(IntroFragment(R.drawable.ic_comment_intro,R.string.app_name,R.string.app_name))
+        fragment.add(IntroFragment(R.drawable.ic_develop_intro,R.string.app_name,R.string.app_name))
 
         val pagerAdapter:IntroPagerAdapter = IntroPagerAdapter(supportFragmentManager,this,fragment)
         viewPager.adapter = pagerAdapter
@@ -71,6 +84,13 @@ class IntroActivity : AppCompatActivity() {
                     }
                 }
                 views.get(position).isSelected = true
+                if (position == viewPager.adapter?.itemCount!! -1)
+                {
+                    btnNext.text = "Finish"
+                }else
+                {
+                    btnNext.text = "Next"
+                }
             }
         })
     }

@@ -56,9 +56,9 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp48"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guide_bottom"
         android:gravity="center"
         android:id="@+id/linear_indicator">
     </LinearLayout>
@@ -70,7 +70,10 @@
         app:layout_constraintBottom_toBottomOf="@id/linear_indicator"
         app:layout_constraintTop_toTopOf="@id/linear_indicator"
         app:layout_constraintEnd_toStartOf="@id/guide_end"
+        android:background="@drawable/btn_selector"
+        android:elevation="0dp"
         android:textAllCaps="false"
+        android:textColor="@color/md_white_1000"
         android:text="Next"
         android:id="@+id/btn_next">
     </androidx.appcompat.widget.AppCompatButton>
