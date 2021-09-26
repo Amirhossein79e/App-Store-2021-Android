@@ -13,5 +13,6 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/md_blue_50</item>
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/shabnam</item>
+        <item name="rippleColor">@color/md_blue_A400</item>
     </style>
 </resources>

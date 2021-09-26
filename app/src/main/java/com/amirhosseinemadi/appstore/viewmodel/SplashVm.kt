@@ -1,5 +1,6 @@
 package com.amirhosseinemadi.appstore.viewmodel
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amirhosseinemadi.appstore.common.Application
@@ -10,9 +11,10 @@ import io.reactivex.rxjava3.disposables.Disposable
 
 class SplashVm : ViewModel() {
 
-    var apiCaller:ApiCaller
+    private var apiCaller:ApiCaller
     var initResponse:MutableLiveData<ResponseObject<String>>
     var syncResponse:MutableLiveData<ResponseObject<String>>
+    var error:MutableLiveData<Throwable>
 
 
     init
@@ -20,6 +22,7 @@ class SplashVm : ViewModel() {
         apiCaller = Application.component.apiCaller()
         initResponse = MutableLiveData()
         syncResponse = MutableLiveData()
+        error = MutableLiveData()
     }
 
 
@@ -36,7 +39,7 @@ class SplashVm : ViewModel() {
             }
 
             override fun onError(e: Throwable?) {
-
+                error.value = e
             }
         })
     }
@@ -55,7 +58,7 @@ class SplashVm : ViewModel() {
             }
 
             override fun onError(e: Throwable?) {
-
+                error.value = e
             }
         })
     }

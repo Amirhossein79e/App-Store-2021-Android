@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.DataBindingUtil
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.ActivityIntroBinding
+import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.view.adapter.IntroPagerAdapter
 import com.amirhosseinemadi.appstore.view.fragment.IntroFragment
 import com.google.android.material.tabs.TabLayout
@@ -47,7 +49,7 @@ class IntroActivity : AppCompatActivity() {
             viewPager.currentItem = viewPager.currentItem+1
         }else
         {
-            //TODO Intent to Main
+            PrefManager.setFirst(false)
         }
     }
 
@@ -66,10 +68,10 @@ class IntroActivity : AppCompatActivity() {
 
         for (i:Int in 0 until fragment.size)
         {
-            val view:View = layoutInflater.inflate(R.layout.view_pager_indicator_item,linearIndicator)
+            val view:View = layoutInflater.inflate(R.layout.view_pager_indicator_item,linearIndicator,false)
             view.findViewById<AppCompatTextView>(R.id.txt_indicator).setOnClickListener { viewPager.currentItem = i }
             views.add(view)
-            //linearIndicator.addView(view)
+            linearIndicator.addView(view)
         }
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback()

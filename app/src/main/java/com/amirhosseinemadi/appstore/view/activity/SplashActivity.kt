@@ -1,16 +1,20 @@
 package com.amirhosseinemadi.appstore.view.activity
 
+import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
+import android.content.res.Configuration
 import android.os.Bundle
 import android.provider.Settings
-import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.amirhosseinemadi.appstore.R
+import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.databinding.ActivitySplashBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.viewmodel.SplashVm
+import com.google.firebase.crashlytics.internal.common.CrashlyticsReportDataCapture
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
 import com.google.firebase.messaging.FirebaseMessaging
 import java.util.*
 
@@ -21,16 +25,19 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val configuration = resources.configuration
-        configuration.setLocale(Locale("fa"))
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val resources = Resources(assets, displayMetrics, configuration)
-
         viewModel = SplashVm()
         splashBinding = DataBindingUtil.setContentView<ActivitySplashBinding>(this,R.layout.activity_splash).also { it.viewModel = viewModel }
+        handleError()
         checkInit()
+    }
+
+
+    private fun handleError()
+    {
+        viewModel.error.observe(this,
+            {
+                //TODO
+            })
     }
 
 
@@ -86,8 +93,10 @@ class SplashActivity : AppCompatActivity() {
                     { t ->
                         if (t?.responseCode == 1)
                         {
-                            PrefManager.setFirst(false)
                             startActivity(Intent(this,IntroActivity::class.java))
+                        }else
+                        {
+                            //TODO
                         }
                     })
         }else
@@ -98,9 +107,19 @@ class SplashActivity : AppCompatActivity() {
                         if (t?.responseCode == 1)
                         {
                             startActivity(Intent(this,IntroActivity::class.java))
+                        }else
+                        {
+                            //TODO
                         }
                     })
         }
+    }
+
+
+    override fun attachBaseContext(newBase: Context?) {
+        val configuration:Configuration = newBase!!.resources.configuration
+        configuration.setLocale(Locale(PrefManager.getLang()))
+        super.attachBaseContext(newBase.createConfigurationContext(configuration))
     }
 
 }

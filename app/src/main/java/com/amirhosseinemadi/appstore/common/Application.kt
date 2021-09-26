@@ -9,7 +9,7 @@ class Application : Application() {
 
     companion object
     {
-        public lateinit var component: Component;
+        public lateinit var component: Component
     }
 
     override fun onCreate() {

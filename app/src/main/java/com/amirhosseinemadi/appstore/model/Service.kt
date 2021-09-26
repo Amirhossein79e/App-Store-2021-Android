@@ -1,7 +1,6 @@
 package com.amirhosseinemadi.appstore.model
 
 import com.amirhosseinemadi.appstore.model.entity.*
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import okhttp3.ResponseBody
 import retrofit2.Response
