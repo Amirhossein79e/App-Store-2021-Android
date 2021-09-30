@@ -12,4 +12,10 @@
     <string name="intro_sub_two" translatable="false">می توانید قبل از دانلود برنامه ها نظرات کاربران را ببینید</string>
     <string name="intro_title_three" translatable="false">در حال توسعه</string>
     <string name="intro_sub_three" translatable="false">ایده هایی که به نظر شما استفاده از اپ استور را لذت بخش میکند پیاده سازی می شود</string>
+    <!-- Dialog Strings -->
+    <string name="yes">بله</string>
+    <string name="no">خیر</string>
+    <string name="network_error">اتصال اینترنت خود را بررسی کنید</string>
+    <string name="network_pos">تنظیمات اینترنت</string>
+
 </resources>

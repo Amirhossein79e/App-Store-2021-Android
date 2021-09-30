@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">@color/md_blue_900</item>
         <item name="colorOnPrimary">@color/md_blue_A200</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/md_blue_50</item>
+        <item name="colorSecondary">@color/md_white_1000</item>
         <item name="colorSecondaryVariant">@color/md_blue_900</item>
         <item name="colorOnSecondary">@color/md_blue_A200</item>
         <!-- Status bar color. -->
@@ -15,4 +15,14 @@
         <item name="android:fontFamily">@font/shabnam</item>
         <item name="rippleColor">@color/md_blue_A400</item>
     </style>
+
+
+    <style name="btn_style">
+        <item name="android:background">@drawable/btn_selector</item>
+        <item name="android:textColor">@color/md_white_1000</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:elevation">@dimen/dp8</item>
+    </style>
+
+
 </resources>

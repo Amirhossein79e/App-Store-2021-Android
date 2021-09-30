@@ -71,10 +71,7 @@
         app:layout_constraintBottom_toBottomOf="@id/linear_indicator"
         app:layout_constraintTop_toTopOf="@id/linear_indicator"
         app:layout_constraintEnd_toStartOf="@id/guide_end"
-        android:background="@drawable/btn_selector"
-        android:elevation="0dp"
-        android:textAllCaps="false"
-        android:textColor="@color/md_white_1000"
+        style="@style/btn_style"
         android:text="@string/next"
         android:id="@+id/btn_next">
     </androidx.appcompat.widget.AppCompatButton>

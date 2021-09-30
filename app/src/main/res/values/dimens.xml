@@ -24,5 +24,6 @@
     <dimen name="dp152">152dp</dimen>
     <dimen name="dp0">0dp</dimen>
     <dimen name="dp6">6dp</dimen>
+    <dimen name="dp12">12dp</dimen>
 
 </resources>

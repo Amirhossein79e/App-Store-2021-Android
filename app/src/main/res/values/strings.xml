@@ -11,5 +11,11 @@
     <string name="intro_sub_two" translatable="false">Check other users comments about the app before download apps</string>
     <string name="intro_title_three" translatable="false">Developing</string>
     <string name="intro_sub_three" translatable="false">Ideas that you think make the App Store enjoyable will be implemented</string>
+    <!-- Dialog Strings -->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="network_error">Check your network connection</string>
+    <string name="network_pos">Network Settings</string>
+
 
 </resources>
