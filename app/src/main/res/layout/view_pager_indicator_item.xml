@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="@dimen/dp16"
+        android:layout_height="@dimen/dp16"
+        android:layout_marginStart="@dimen/dp4"
+        android:layout_marginEnd="@dimen/dp4"
+        android:background="@drawable/view_pager_indicator_selector"
+        android:id="@+id/txt_indicator">
+    </androidx.appcompat.widget.AppCompatTextView>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
