@@ -1,5 +1,6 @@
 package com.amirhosseinemadi.appstore.view.activity
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -50,6 +51,8 @@ class IntroActivity : AppCompatActivity() {
         }else
         {
             PrefManager.setFirst(false)
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
         }
     }
 

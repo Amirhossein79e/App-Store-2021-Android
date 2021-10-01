@@ -1,8 +1,10 @@
 package com.amirhosseinemadi.appstore.view.activity
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,7 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.databinding.ActivitySplashBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
+import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.viewmodel.SplashVm
 import com.google.firebase.crashlytics.internal.common.CrashlyticsReportDataCapture
 import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
@@ -22,6 +25,7 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var viewModel:SplashVm
     private lateinit var splashBinding:ActivitySplashBinding
+    private lateinit var dialog:Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +40,14 @@ class SplashActivity : AppCompatActivity() {
     {
         viewModel.error.observe(this,
             {
-                //TODO
+                dialog = Utilities.dialogIcon(this,null,R.string.request_failed,R.string.request_failed_pos,R.string.request_failed_neg,true,true,{
+                    dialog.dismiss()
+                    checkInit()
+                },{
+                    dialog.dismiss()
+                    finish()
+                })
+                dialog.show()
             })
     }
 
@@ -94,9 +105,17 @@ class SplashActivity : AppCompatActivity() {
                         if (t?.responseCode == 1)
                         {
                             startActivity(Intent(this,IntroActivity::class.java))
+                            finish()
                         }else
                         {
-                            //TODO
+                            dialog = Utilities.dialogIcon(this,null, R.string.request_failed,R.string.request_failed_pos,R.string.request_failed_neg,true,true,{
+                                dialog.dismiss()
+                                viewModel.getInitResponse(uid,token)
+                            },{
+                                dialog.dismiss()
+                                finish()
+                            })
+                            dialog.show()
                         }
                     })
         }else
@@ -107,9 +126,17 @@ class SplashActivity : AppCompatActivity() {
                         if (t?.responseCode == 1)
                         {
                             startActivity(Intent(this,IntroActivity::class.java))
+                            finish()
                         }else
                         {
-                            //TODO
+                            dialog = Utilities.dialogIcon(this,null, R.string.request_failed,R.string.request_failed_pos,R.string.request_failed_neg,true,true,{
+                                dialog.dismiss()
+                                viewModel.getInitResponse(uid,token)
+                            },{
+                                dialog.dismiss()
+                                finish()
+                            })
+                            dialog.show()
                         }
                     })
         }

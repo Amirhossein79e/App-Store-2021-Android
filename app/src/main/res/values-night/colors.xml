@@ -4,7 +4,7 @@
     <color name="colorPrimary">@color/md_blue_grey_900</color>
     <color name="colorPrimaryVariant">@color/md_blue_900</color>
     <color name="colorOnPrimary">@color/md_blue_A200</color>
-    <color name="colorSecondary">@color/md_white_1000</color>
+    <color name="colorSecondary">@color/md_blue_grey_700</color>
     <color name="rippleColor">#2979FF</color>
 
     <color name="md_red_50">#FFEBEE</color>

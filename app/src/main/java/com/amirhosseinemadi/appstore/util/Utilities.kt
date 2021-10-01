@@ -1,6 +1,7 @@
 package com.amirhosseinemadi.appstore.util
 
 import android.app.Dialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.DrawableRes
@@ -15,11 +16,12 @@ class Utilities {
 
     companion object
     {
-        public fun dialogIcon(@DrawableRes imgRes:Int?, @StringRes txtRes:Int, @StringRes posRes:Int?, @StringRes negRes:Int?, posVisibility:Boolean, negVisibility:Boolean, posListener:View.OnClickListener?, negListener:View.OnClickListener?) : Dialog
+        public fun dialogIcon(context:Context, @DrawableRes imgRes:Int?, @StringRes txtRes:Int, @StringRes posRes:Int?, @StringRes negRes:Int?, posVisibility:Boolean, negVisibility:Boolean, posListener:View.OnClickListener?, negListener:View.OnClickListener?) : Dialog
         {
-            val view:View = LayoutInflater.from(Application.component.context()).inflate(R.layout.icon_dialog,null)
-            val dialog:Dialog = Dialog(Application.component.context())
+            val view:View = LayoutInflater.from(context).inflate(R.layout.icon_dialog,null)
+            val dialog:Dialog = Dialog(context)
             dialog.setContentView(view)
+            dialog.window?.setBackgroundDrawable(context.getDrawable(R.drawable.dialog_background))
 
             if (imgRes != null)
             {
@@ -29,7 +31,7 @@ class Utilities {
                 }
             }
 
-            view.findViewById<AppCompatTextView>(R.id.txt).text = Application.component.context().getText(txtRes)
+            view.findViewById<AppCompatTextView>(R.id.txt).text = context.getText(txtRes)
 
             if (posVisibility)
             {
@@ -37,7 +39,7 @@ class Utilities {
                     it.visibility = View.VISIBLE
                     if (posRes != null)
                     {
-                        it.text = Application.component.context().getText(posRes)
+                        it.text = context.getText(posRes)
                     }
                     it.setOnClickListener(posListener)
                 }
@@ -49,7 +51,7 @@ class Utilities {
                     it.visibility = View.VISIBLE
                     if (negRes != null)
                     {
-                        it.text = Application.component.context().getText(negRes)
+                        it.text = context.getText(negRes)
                     }
                     if (negListener != null)
                     {

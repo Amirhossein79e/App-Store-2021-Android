@@ -17,5 +17,8 @@
     <string name="no">خیر</string>
     <string name="network_error">اتصال اینترنت خود را بررسی کنید</string>
     <string name="network_pos">تنظیمات اینترنت</string>
+    <string name="request_failed">خطایی رخ داده . مجددا تلاش کنید</string>
+    <string name="request_failed_pos">تلاش مجدد</string>
+    <string name="request_failed_neg">لفو</string>
 
 </resources>

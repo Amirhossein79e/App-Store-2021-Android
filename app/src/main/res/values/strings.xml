@@ -16,6 +16,9 @@
     <string name="no">No</string>
     <string name="network_error">Check your network connection</string>
     <string name="network_pos">Network Settings</string>
+    <string name="request_failed">a Problem occurred . Try again</string>
+    <string name="request_failed_pos">Retry</string>
+    <string name="request_failed_neg">Cancel</string>
 
 
 </resources>
