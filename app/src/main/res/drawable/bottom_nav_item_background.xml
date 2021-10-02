@@ -13,7 +13,7 @@
 
     <item>
         <shape android:shape="ring" android:useLevel="false" android:innerRadius="@dimen/dp0" android:thickness="@dimen/dp24">
-            <solid android:color="@color/colorOnPrimary"> </solid>
+            <solid android:color="@color/transparent"> </solid>
         </shape>
     </item>
 

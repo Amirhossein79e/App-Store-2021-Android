@@ -10,7 +10,6 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.amirhosseinemadi.appstore.R
-import com.amirhosseinemadi.appstore.common.Application
 
 class Utilities {
 
@@ -18,8 +17,9 @@ class Utilities {
     {
         public fun dialogIcon(context:Context, @DrawableRes imgRes:Int?, @StringRes txtRes:Int, @StringRes posRes:Int?, @StringRes negRes:Int?, posVisibility:Boolean, negVisibility:Boolean, posListener:View.OnClickListener?, negListener:View.OnClickListener?) : Dialog
         {
-            val view:View = LayoutInflater.from(context).inflate(R.layout.icon_dialog,null)
+            val view:View = LayoutInflater.from(context).inflate(R.layout.dialog,null)
             val dialog:Dialog = Dialog(context)
+            dialog.setCancelable(false)
             dialog.setContentView(view)
             dialog.window?.setBackgroundDrawable(context.getDrawable(R.drawable.dialog_background))
 

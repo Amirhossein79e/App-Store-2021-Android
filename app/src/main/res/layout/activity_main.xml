@@ -52,20 +52,41 @@
     </androidx.constraintlayout.widget.Guideline>
 
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frame">
+    </FrameLayout>
+
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/guide_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:elevation="@dimen/dp24"
-        app:labelVisibilityMode="unlabeled"
-        android:background="@drawable/bottom_nav_background"
-        app:itemBackground="@drawable/bottom_nav_item_background"
-        app:itemIconTint="@color/bottom_nav_item_color"
-        app:itemTextColor="@color/bottom_nav_item_color"
-        app:itemIconSize="@dimen/dp32"
-        app:menu="@menu/bottom_nav_menu">
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        app:cardCornerRadius="@dimen/dp0"
+        android:minHeight="@dimen/dp56"
+        app:cardElevation="@dimen/dp16"
+        app:cardBackgroundColor="@color/colorPrimary"
+        android:id="@+id/card_bottom_nav">
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="@dimen/dp56"
+            app:labelVisibilityMode="unlabeled"
+            android:background="@drawable/bottom_nav_background"
+            app:itemBackground="@drawable/bottom_nav_item_background"
+            app:itemIconTint="@color/bottom_nav_item_color"
+            app:itemTextColor="@color/bottom_nav_item_color"
+            app:itemIconSize="@dimen/dp32"
+            app:menu="@menu/bottom_nav_menu"
+            android:id="@+id/bottom_nav">
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
