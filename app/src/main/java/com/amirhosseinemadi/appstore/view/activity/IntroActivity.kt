@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.ActivityIntroBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
+import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.adapter.IntroPagerAdapter
 import com.amirhosseinemadi.appstore.view.fragment.IntroFragment
 import com.google.android.material.tabs.TabLayout
@@ -36,6 +37,11 @@ class IntroActivity : AppCompatActivity() {
 
     private fun initView()
     {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        {
+            Utilities.underApiStatusBarHandle(this)
+        }
+
         viewPager = introBinding.viewPager
         linearIndicator = introBinding.linearIndicator
         btnNext = introBinding.btnNext

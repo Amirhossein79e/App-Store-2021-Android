@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
@@ -31,8 +32,18 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewModel = SplashVm()
         splashBinding = DataBindingUtil.setContentView<ActivitySplashBinding>(this,R.layout.activity_splash).also { it.viewModel = viewModel }
+        initView()
         handleError()
         checkInit()
+    }
+
+
+    private fun initView()
+    {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        {
+            Utilities.underApiStatusBarHandle(this)
+        }
     }
 
 

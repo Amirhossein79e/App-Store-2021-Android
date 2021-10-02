@@ -2,13 +2,17 @@ package com.amirhosseinemadi.appstore.util
 
 import android.app.Dialog
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.WindowInsetsControllerCompat
 import com.amirhosseinemadi.appstore.R
 
 class Utilities {
@@ -66,6 +70,18 @@ class Utilities {
 
             return dialog
         }
+
+
+        public fun underApiStatusBarHandle(activity: AppCompatActivity)
+        {
+            when(activity.delegate.localNightMode)
+            {
+                AppCompatDelegate.MODE_NIGHT_NO -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = true
+
+                else -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = false
+            }
+        }
+
     }
 
 }
