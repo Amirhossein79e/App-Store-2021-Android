@@ -67,22 +67,25 @@
         app:cardCornerRadius="@dimen/dp0"
         android:minHeight="@dimen/dp56"
         app:cardElevation="@dimen/dp16"
-        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardBackgroundColor="@color/colorOnPrimary"
+        android:clipChildren="false"
         android:id="@+id/card_bottom_nav">
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minHeight="@dimen/dp56"
+            android:layout_height="@dimen/dp56"
+            android:layout_gravity="center"
             app:labelVisibilityMode="unlabeled"
             android:background="@drawable/bottom_nav_background"
             app:itemBackground="@drawable/bottom_nav_item_background"
             app:itemIconTint="@color/bottom_nav_item_color"
             app:itemTextColor="@color/bottom_nav_item_color"
             app:itemIconSize="@dimen/dp32"
+            app:elevation="@dimen/dp0"
             app:menu="@menu/bottom_nav_menu"
-            android:id="@+id/bottom_nav">
+            android:id="@+id/bottom_nav"
+            android:clipChildren="false">
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 

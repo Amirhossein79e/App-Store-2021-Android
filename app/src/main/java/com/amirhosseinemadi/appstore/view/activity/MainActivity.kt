@@ -54,8 +54,8 @@ class MainActivity : AppCompatActivity() {
         frame = mainBinding.frame
 
         mainBinding.cardBottomNav.setBackgroundResource(R.drawable.bottom_nav_card_background)
+        mainBinding.cardBottomNav.clipChildren = false
         bottomNav.setOnItemSelectedListener(this::itemListener)
-        bottomNav.selectedItemId = R.id.item_home
     }
 
 
