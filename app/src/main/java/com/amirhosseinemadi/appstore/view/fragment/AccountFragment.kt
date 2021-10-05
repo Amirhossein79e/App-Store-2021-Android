@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentAccountBinding
+import com.amirhosseinemadi.appstore.view.bottomsheet.LoginFragment
 import com.amirhosseinemadi.appstore.viewmodel.AccountVm
 
 class AccountFragment : Fragment() {
@@ -21,7 +22,9 @@ class AccountFragment : Fragment() {
         accountBinding = DataBindingUtil.inflate<FragmentAccountBinding>(inflater, R.layout.fragment_account,null,false).also { it.viewModel = viewModel }
 
 
-        Handler(requireActivity().mainLooper).postDelayed({accountBinding.btnSettings.animate().rotation(180f).setDuration(200).start()},2000)
+        accountBinding.btnLog.setOnClickListener({
+            LoginFragment().show(parentFragmentManager,"")
+        })
 
 
         return accountBinding.root

@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05"
+        app:layout_constraintGuide_percent="0.04"
         android:id="@+id/guide_top">
     </androidx.constraintlayout.widget.Guideline>
 
@@ -56,7 +56,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/guide_top"
         app:layout_constraintBottom_toBottomOf="@id/guide_top"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_end"
+        app:layout_constraintEnd_toEndOf="@id/guide_end"
         android:layout_marginEnd="@dimen/dp4"
         android:src="@drawable/ic_settings"
         android:background="@drawable/btn_selector"
@@ -75,7 +76,7 @@
         android:layout_marginTop="@dimen/dp24"
         app:cardCornerRadius="@dimen/dp16"
         app:cardBackgroundColor="@color/colorSecondary"
-        app:cardElevation="@dimen/dp12">
+        app:cardElevation="@dimen/dp16">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -84,32 +85,19 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="@dimen/dp12"
                 android:layout_marginStart="@dimen/dp12"
-                android:textSize="30sp"
-                android:text="Welcome !"
-                android:id="@+id/txt_welcome">
-            </androidx.appcompat.widget.AppCompatTextView>
-
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintTop_toBottomOf="@id/txt_welcome"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginStart="@dimen/dp12"
                 android:gravity="center"
                 android:background="@drawable/circle_background"
-                android:textSize="26sp"
+                android:textSize="28sp"
                 android:textColor="@color/md_white_1000"
                 android:textAllCaps="true"
-                android:text="A"
+                android:text="U"
                 android:id="@+id/txt_word">
             </androidx.appcompat.widget.AppCompatTextView>
 
@@ -123,15 +111,28 @@
                 android:layout_marginStart="@dimen/dp8"
                 android:gravity="center"
                 android:textSize="22sp"
-                android:text="amirhossein"
+                android:text="User"
                 android:id="@+id/txt_user">
+            </androidx.appcompat.widget.AppCompatTextView>
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/txt_word"
+                app:layout_constraintBottom_toBottomOf="@id/txt_word"
+                app:layout_constraintStart_toStartOf="@id/txt_user"
+                android:layout_marginTop="40dp"
+                android:textSize="14sp"
+                android:text="Welcome !"
+                android:id="@+id/txt_welcome">
             </androidx.appcompat.widget.AppCompatTextView>
 
 
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp40"
-                app:layout_constraintTop_toBottomOf="@id/txt_word"
+                app:layout_constraintTop_toBottomOf="@id/txt_welcome"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/dp16"

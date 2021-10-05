@@ -19,6 +19,10 @@
     <string name="request_failed">a Problem occurred . Try again</string>
     <string name="request_failed_pos">Retry</string>
     <string name="request_failed_neg">Cancel</string>
+    <string name="email">Email</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="password_repeat">Password repeat</string>
 
 
 </resources>
