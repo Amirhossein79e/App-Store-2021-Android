@@ -2,19 +2,20 @@
     <!-- Base application theme. -->
     <style name="Theme.AppStore" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/md_blue_50</item>
-        <item name="colorPrimaryVariant">@color/md_blue_900</item>
-        <item name="colorOnPrimary">@color/md_blue_A200</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/md_white_1000</item>
-        <item name="colorSecondaryVariant">@color/md_blue_900</item>
-        <item name="colorOnSecondary">@color/md_blue_A200</item>
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/md_blue_50</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimary</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/shabnam_light</item>
         <item name="rippleColor">@color/md_blue_A400</item>
+        <item name="bottomSheetDialogTheme">@style/bottom_sheet_theme</item>
     </style>
 
 
@@ -32,9 +33,11 @@
         <item name="android:paddingStart">@dimen/dp12</item>
         <item name="android:paddingEnd">@dimen/dp8</item>
         <item name="android:paddingBottom">@dimen/dp12</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text_size_small_normal</item>
         <item name="android:maxLines">1</item>
         <item name="android:maxLength">500</item>
+        <item name="android:textColor">@color/md_grey_700</item>
+        <item name="android:textColorHint">@color/md_grey_500</item>
     </style>
 
 
@@ -52,7 +55,7 @@
         <item name="android:layout_width">@dimen/dp40</item>
         <item name="android:layout_height">@dimen/dp4</item>
         <item name="android:background">@drawable/edt_selector</item>
-        <item name="android:backgroundTint">@color/md_grey_400</item>
+        <item name="android:backgroundTint">@color/md_grey_500</item>
     </style>
 
 

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="view_model"
+            type="com.amirhosseinemadi.appstore.viewmodel.AccountVm" />
+    </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -60,8 +68,8 @@
         style="@style/edt_style"
         android:drawableEnd="@drawable/ic_account"
         android:hint="@string/username"
-        android:id="@+id/txt_user"
-        android:ellipsize="end">
+        android:visibility="gone"
+        android:id="@+id/txt_user">
     </com.google.android.material.textfield.TextInputEditText>
 
 
@@ -103,6 +111,7 @@
         style="@style/edt_style"
         android:drawableEnd="@drawable/ic_password"
         android:hint="@string/password_repeat"
+        android:visibility="gone"
         android:id="@+id/txt_retype_password">
     </androidx.appcompat.widget.AppCompatEditText>
 
@@ -113,14 +122,31 @@
         app:layout_constraintTop_toBottomOf="@id/txt_retype_password"
         app:layout_constraintStart_toEndOf="@id/guide_start"
         app:layout_constraintEnd_toStartOf="@id/guide_end"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="@dimen/dp56"
+        android:layout_marginTop="@dimen/dp40"
         android:layout_marginBottom="@dimen/dp24"
         style="@style/btn_style"
-        android:text="Login"
-        android:textSize="18sp"
+        android:text="@string/sign_in"
+        android:textSize="@dimen/text_size_normal"
         android:id="@+id/btn">
     </androidx.appcompat.widget.AppCompatButton>
 
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintTop_toBottomOf="@id/btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginBottom="@dimen/dp16"
+        android:textSize="@dimen/text_size_small_normal"
+        android:textColor="@color/colorOnPrimary"
+        android:textStyle="bold"
+        android:text="@string/sign_up_alt"
+        android:id="@+id/txt_alt_log">
+    </androidx.appcompat.widget.AppCompatTextView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

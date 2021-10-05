@@ -58,7 +58,6 @@
         app:layout_constraintBottom_toBottomOf="@id/guide_top"
         app:layout_constraintStart_toStartOf="@id/guide_end"
         app:layout_constraintEnd_toEndOf="@id/guide_end"
-        android:layout_marginEnd="@dimen/dp4"
         android:src="@drawable/ic_settings"
         android:background="@drawable/btn_selector"
         android:backgroundTint="@color/transparent"
@@ -90,11 +89,12 @@
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:padding="@dimen/dp2"
                 android:layout_marginTop="@dimen/dp12"
                 android:layout_marginStart="@dimen/dp12"
                 android:gravity="center"
                 android:background="@drawable/circle_background"
-                android:textSize="28sp"
+                android:textSize="@dimen/text_size_large"
                 android:textColor="@color/md_white_1000"
                 android:textAllCaps="true"
                 android:text="U"
@@ -110,7 +110,7 @@
                 app:layout_constraintStart_toEndOf="@id/txt_word"
                 android:layout_marginStart="@dimen/dp8"
                 android:gravity="center"
-                android:textSize="22sp"
+                android:textSize="@dimen/text_size_large_normal"
                 android:text="User"
                 android:id="@+id/txt_user">
             </androidx.appcompat.widget.AppCompatTextView>
@@ -123,7 +123,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/txt_word"
                 app:layout_constraintStart_toStartOf="@id/txt_user"
                 android:layout_marginTop="40dp"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_small"
                 android:text="Welcome !"
                 android:id="@+id/txt_welcome">
             </androidx.appcompat.widget.AppCompatTextView>
@@ -136,11 +136,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/dp16"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp8"
+                android:layout_marginEnd="@dimen/dp12"
+                android:layout_marginBottom="@dimen/dp12"
                 style="@style/btn_style"
                 android:textAllCaps="false"
-                android:text="Logout"
+                android:text="@string/sign_in"
                 android:id="@+id/btn_log">
             </androidx.appcompat.widget.AppCompatButton>
 

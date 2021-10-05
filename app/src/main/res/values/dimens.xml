@@ -26,4 +26,10 @@
     <dimen name="dp6">6dp</dimen>
     <dimen name="dp12">12dp</dimen>
 
+    <dimen name="text_size_large">26sp</dimen>
+    <dimen name="text_size_large_normal">22sp</dimen>
+    <dimen name="text_size_normal">18sp</dimen>
+    <dimen name="text_size_small_normal">16sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+
 </resources>

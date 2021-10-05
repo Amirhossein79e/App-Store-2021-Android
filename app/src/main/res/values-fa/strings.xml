@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">App Store</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="next" translatable="false">بعدی</string>
     <string name="finish" translatable="false">پایان</string>
@@ -20,9 +19,14 @@
     <string name="request_failed">خطایی رخ داده . مجددا تلاش کنید</string>
     <string name="request_failed_pos">تلاش مجدد</string>
     <string name="request_failed_neg">لفو</string>
+    <!-- Account Strings -->
     <string name="email">ایمیل</string>
     <string name="username">نام کاربری</string>
     <string name="password">رمز عبور</string>
     <string name="password_repeat">تکرار رمز عبور</string>
-
+    <string name="sign_up_alt"><u>ایجاد حساب</u></string>
+    <string name="sign_in_alt"><u>ورود به حساب</u></string>
+    <string name="sign_up">ایجاد حساب</string>
+    <string name="sign_in">ورود به حساب</string>
+    <string name="sign_out">خروح از حساب</string>
 </resources>

@@ -12,17 +12,18 @@ import io.reactivex.rxjava3.disposables.Disposable
 class SplashVm : ViewModel() {
 
     private var apiCaller:ApiCaller
-    var initResponse:MutableLiveData<ResponseObject<String>>
-    var syncResponse:MutableLiveData<ResponseObject<String>>
     var error:MutableLiveData<Throwable>
-
+    val initResponse:MutableLiveData<ResponseObject<String>>
+    val syncResponse:MutableLiveData<ResponseObject<String>>
+    val syncUserResponse:MutableLiveData<ResponseObject<String>>
 
     init
     {
         apiCaller = Application.component.apiCaller()
+        error = MutableLiveData()
         initResponse = MutableLiveData()
         syncResponse = MutableLiveData()
-        error = MutableLiveData()
+        syncUserResponse = MutableLiveData()
     }
 
 
@@ -64,17 +65,44 @@ class SplashVm : ViewModel() {
     }
 
 
-    public fun getInitResponse(uid:String,token:String) : MutableLiveData<ResponseObject<String>>
+    public fun syncUser(access:String, token:String)
+    {
+        apiCaller.syncUser(access,token,object : SingleObserver<ResponseObject<String>>
+        {
+            override fun onSubscribe(d: Disposable?) {
+
+            }
+
+            override fun onSuccess(t: ResponseObject<String>?) {
+                syncUserResponse.value = t
+            }
+
+            override fun onError(e: Throwable?) {
+                error.value = e
+            }
+
+        })
+    }
+
+
+    public fun getInitResponse(uid:String, token:String) : MutableLiveData<ResponseObject<String>>
     {
         init(uid,token)
         return initResponse
     }
 
 
-    public fun getSyncResponse(uid:String,token:String) : MutableLiveData<ResponseObject<String>>
+    public fun getSyncResponse(uid:String, token:String) : MutableLiveData<ResponseObject<String>>
     {
         sync(uid,token)
         return syncResponse
+    }
+
+
+    public fun getSyncUserResponse(access:String, token:String) : MutableLiveData<ResponseObject<String>>
+    {
+        syncUser(access,token)
+        return syncUserResponse
     }
 
 }

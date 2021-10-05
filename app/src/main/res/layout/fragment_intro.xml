@@ -76,7 +76,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/dp8"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_large"
             android:gravity="center"
             android:id="@+id/txt_title">
         </androidx.appcompat.widget.AppCompatTextView>
@@ -91,7 +91,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="@dimen/dp24"
             android:layout_marginBottom="@dimen/dp32"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_small_normal"
             android:gravity="center"
             android:id="@+id/txt_sub">
         </androidx.appcompat.widget.AppCompatTextView>

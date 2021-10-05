@@ -7,16 +7,23 @@ import android.renderscript.ScriptIntrinsicBlur
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.airbnb.lottie.model.content.BlurEffect
 import com.amirhosseinemadi.appstore.R
+import com.amirhosseinemadi.appstore.databinding.FragmentLoginBinding
+import com.amirhosseinemadi.appstore.viewmodel.AccountVm
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class LoginFragment : BottomSheetDialogFragment() {
 
+    private lateinit var viewModel:AccountVm
+    private lateinit var loginBinding:FragmentLoginBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewModel = AccountVm()
+        loginBinding = DataBindingUtil.inflate<FragmentLoginBinding>(inflater,R.layout.fragment_login,null,false).also{ it.viewModel = viewModel}
 
-        return inflater.inflate(R.layout.fragment_login,null,false)
+        return loginBinding.root
     }
 
 

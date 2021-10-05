@@ -72,7 +72,7 @@ class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
     }
 
 
-    public fun singUpUser(email:String, password:String, username:String, token:String, observer:SingleObserver<ResponseObject<UserModel>>)
+    public fun signUpUser(email:String, password:String, username:String, token:String, observer:SingleObserver<ResponseObject<UserModel>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("mail",email)

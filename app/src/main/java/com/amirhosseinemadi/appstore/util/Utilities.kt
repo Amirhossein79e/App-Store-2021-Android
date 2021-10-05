@@ -2,7 +2,7 @@ package com.amirhosseinemadi.appstore.util
 
 import android.app.Dialog
 import android.content.Context
-import android.os.Build
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.DrawableRes
@@ -14,11 +14,36 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.WindowInsetsControllerCompat
 import com.amirhosseinemadi.appstore.R
+import com.amirhosseinemadi.appstore.common.Application
 
 class Utilities {
 
     companion object
     {
+        public fun getUid() : String
+        {
+            val uid: String = Settings.Secure.getString(Application.component.context().contentResolver, Settings.Secure.ANDROID_ID)
+            var refactoredUid = ""
+
+            if (uid.length == 16)
+            {
+                for (i: Int in uid.indices)
+                {
+                    if (i % 2 == 0 && i > 1)
+                    {
+                        refactoredUid += ":"
+                    }
+                    refactoredUid += uid.get(i)
+                }
+            }else if (uid.length == 23)
+            {
+                refactoredUid = uid
+            }
+
+            return refactoredUid
+        }
+
+
         public fun dialogIcon(context:Context, @DrawableRes imgRes:Int?, @StringRes txtRes:Int, @StringRes posRes:Int?, @StringRes negRes:Int?, posVisibility:Boolean, negVisibility:Boolean, posListener:View.OnClickListener?, negListener:View.OnClickListener?) : Dialog
         {
             val view:View = LayoutInflater.from(context).inflate(R.layout.dialog,null)

@@ -28,11 +28,11 @@
         app:layout_constraintTop_toBottomOf="@id/img"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginTop="@dimen/dp16"
         app:layout_goneMarginTop="@dimen/dp8"
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginEnd="@dimen/dp16"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_small_normal"
         android:id="@+id/txt">
     </androidx.appcompat.widget.AppCompatTextView>
 
