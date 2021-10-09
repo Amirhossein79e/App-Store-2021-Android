@@ -38,6 +38,11 @@ interface Service {
 
     @POST("exe.php")
     @FormUrlEncoded
+    fun validateUser(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<String>>
+
+
+    @POST("exe.php")
+    @FormUrlEncoded
     fun getHome(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Single<ResponseObject<HomeModel>>
 
 

@@ -21,6 +21,7 @@ class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
     private val SIGNUP_USER:Int = 102
     private val SIGNIN_USER:Int = 103
     private val SYNC_USER:Int = 104
+    private val VALIDATE_USER:Int = 105
 
     private val GET_HOME:Int = 200
     private val GET_CATEGORIES:Int = 201
@@ -107,6 +108,18 @@ class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
         jsonObject.put("token",token)
 
         service.syncUser(SYNC_USER,jsonObject.toString())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(observer)
+    }
+
+
+    public fun validateUser(access:String, observer:SingleObserver<ResponseObject<String>>)
+    {
+        val jsonObject:JSONObject = JSONObject()
+        jsonObject.put("access",access)
+
+        service.validateUser(VALIDATE_USER,jsonObject.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(observer)
