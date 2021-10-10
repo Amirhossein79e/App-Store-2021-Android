@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minHeight="@dimen/dp56"
-    android:background="@drawable/snack_background">
+    android:background="@drawable/snack_background"
+    android:rotation="180">
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -15,6 +16,9 @@
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginEnd="@dimen/dp16"
         android:gravity="center"
+        android:paddingTop="@dimen/dp8"
+        android:paddingBottom="@dimen/dp8"
+        android:lineHeight="@dimen/dp16"
         android:textSize="@dimen/text_size_small_normal"
         android:textColor="@color/white"
         android:id="@+id/txt">

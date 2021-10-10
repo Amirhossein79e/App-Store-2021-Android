@@ -34,7 +34,7 @@ class CustomSnack(viewGroup:ViewGroup, view: View, contentViewCallback:com.googl
 
     private class MyContentViewCallback(val view:View) : com.google.android.material.snackbar.ContentViewCallback {
         override fun animateContentIn(delay: Int, duration: Int) {
-            view.scaleY = 0f
+            //view.scaleY = 0f
             view.animate()
                 .scaleY(1f)
                 .setDuration(duration.toLong())

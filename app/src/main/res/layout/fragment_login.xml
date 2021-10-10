@@ -99,6 +99,7 @@
         style="@style/edt_style"
         android:drawableEnd="@drawable/ic_password"
         android:hint="@string/password"
+        android:inputType="textPassword"
         android:text="@={view_model.passwordStr}"
         android:id="@+id/txt_password">
     </androidx.appcompat.widget.AppCompatEditText>
@@ -114,6 +115,7 @@
         style="@style/edt_style"
         android:drawableEnd="@drawable/ic_password"
         android:hint="@string/password_repeat"
+        android:inputType="textPassword"
         android:visibility="@{view_model.visib}"
         android:text="@={view_model.passwordReStr}"
         android:id="@+id/txt_retype_password">
@@ -129,8 +131,9 @@
         android:layout_marginTop="@dimen/dp40"
         android:layout_marginBottom="@dimen/dp24"
         style="@style/btn_style"
-        android:text="@string/sign_in"
+        android:text="@{view_model.btnText}"
         android:textSize="@dimen/text_size_normal"
+        android:onClick="@{view_model.btnClick}"
         android:id="@+id/btn">
     </androidx.appcompat.widget.AppCompatButton>
 
@@ -147,9 +150,18 @@
         android:textSize="@dimen/text_size_small_normal"
         android:textColor="@color/colorOnPrimary"
         android:textStyle="bold"
-        android:text="@{view_model.signText}"
+        android:text="@string/sign_up_alt"
+        android:onClick="@{view_model::signClick}"
         android:id="@+id/txt_alt_log">
     </androidx.appcompat.widget.AppCompatTextView>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:rotation="180"
+        android:id="@+id/coordinator">
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

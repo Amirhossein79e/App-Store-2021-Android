@@ -19,6 +19,7 @@ import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.customview.CustomSnack
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import java.time.Duration
+import java.util.regex.Pattern
 
 class Utilities {
 
@@ -45,6 +46,17 @@ class Utilities {
             }
 
             return refactoredUid
+        }
+
+
+        public fun underApiStatusBarHandle(activity: AppCompatActivity)
+        {
+            when(activity.delegate.localNightMode)
+            {
+                AppCompatDelegate.MODE_NIGHT_NO -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = true
+
+                else -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = false
+            }
         }
 
 
@@ -112,20 +124,27 @@ class Utilities {
         }
 
 
-        public fun underApiStatusBarHandle(activity: AppCompatActivity)
-        {
-            when(activity.delegate.localNightMode)
-            {
-                AppCompatDelegate.MODE_NIGHT_NO -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = true
-
-                else -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = false
-            }
-        }
-
-
         public fun showSnack(viewGroup:ViewGroup, text:String, @BaseTransientBottomBar.Duration duration:Int)
         {
             CustomSnack.make(viewGroup,duration).setText(text).show()
+        }
+
+
+        public fun validateEmail(email:String) : Boolean
+        {
+            val pattern:Pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",Pattern.CASE_INSENSITIVE)
+            return pattern.matcher(email).find()
+        }
+
+
+        public fun validatePassword(password:String) : Boolean
+        {
+            var valid = false
+            if (password.length > 7)
+            {
+                valid = true
+            }
+            return valid
         }
 
     }
