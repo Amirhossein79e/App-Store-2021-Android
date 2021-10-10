@@ -5,6 +5,7 @@ import android.content.Context
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,9 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.WindowInsetsControllerCompat
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
+import com.amirhosseinemadi.appstore.customview.CustomSnack
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import java.time.Duration
 
 class Utilities {
 
@@ -41,6 +45,17 @@ class Utilities {
             }
 
             return refactoredUid
+        }
+
+
+        public fun loadingDialog(context: Context) : Dialog
+        {
+            val view:View = LayoutInflater.from(context).inflate(R.layout.dialog_loading,null)
+            val dialog:Dialog = Dialog(context)
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.window?.setBackgroundDrawable(context.getDrawable(R.drawable.dialog_background))
+            return dialog
         }
 
 
@@ -105,6 +120,12 @@ class Utilities {
 
                 else -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = false
             }
+        }
+
+
+        public fun showSnack(viewGroup:ViewGroup, text:String, @BaseTransientBottomBar.Duration duration:Int)
+        {
+            CustomSnack.make(viewGroup,duration).setText(text).show()
         }
 
     }
