@@ -18,9 +18,6 @@ import com.amirhosseinemadi.appstore.databinding.FragmentIntroBinding
 class IntroFragment() : Fragment() {
 
     private lateinit var introBinding: FragmentIntroBinding
-    private lateinit var img:AppCompatImageView
-    private lateinit var txtTitle:AppCompatTextView
-    private lateinit var txtSub:AppCompatTextView
     private var imgRes:Int? = null
     private var txtTitleRes:Int? = null
     private var txtSubRes:Int? = null
@@ -36,25 +33,16 @@ class IntroFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         introBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_intro,container,false)
-        initView()
         setAttrs()
         return introBinding.root
     }
 
 
-    private fun initView()
-    {
-        img = introBinding.img
-        txtTitle = introBinding.txtTitle
-        txtSub = introBinding.txtSub
-    }
-
-
     private fun setAttrs()
     {
-        img.setImageDrawable(ContextCompat.getDrawable(requireContext(),imgRes!!))
-        txtTitle.text = resources.getString(txtTitleRes!!)
-        txtSub.text = resources.getString(txtSubRes!!)
+        introBinding.img.setImageDrawable(ContextCompat.getDrawable(requireContext(),imgRes!!))
+        introBinding.txtTitle.text = resources.getString(txtTitleRes!!)
+        introBinding.txtSub.text = resources.getString(txtSubRes!!)
     }
 
 }

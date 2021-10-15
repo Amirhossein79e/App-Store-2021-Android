@@ -23,9 +23,6 @@ import com.google.android.material.tabs.TabLayout
 class IntroActivity : AppCompatActivity() {
 
     private lateinit var introBinding:ActivityIntroBinding
-    private lateinit var viewPager:ViewPager2
-    private lateinit var linearIndicator:LinearLayout
-    private lateinit var btnNext:AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,18 +39,15 @@ class IntroActivity : AppCompatActivity() {
             Utilities.underApiStatusBarHandle(this)
         }
 
-        viewPager = introBinding.viewPager
-        linearIndicator = introBinding.linearIndicator
-        btnNext = introBinding.btnNext
-        btnNext.setOnClickListener(this::nextClick)
+        introBinding.btnNext.setOnClickListener(this::nextClick)
     }
 
 
     private fun nextClick(view: View)
     {
-        if (viewPager.currentItem < viewPager.adapter?.itemCount!! -1)
+        if (introBinding.viewPager.currentItem < introBinding.viewPager.adapter?.itemCount!! -1)
         {
-            viewPager.currentItem = viewPager.currentItem+1
+            introBinding.viewPager.currentItem = introBinding.viewPager.currentItem+1
         }else
         {
             PrefManager.setFirst(false)
@@ -71,19 +65,19 @@ class IntroActivity : AppCompatActivity() {
         fragment.add(IntroFragment(R.drawable.ic_develop_intro,R.string.intro_title_three,R.string.intro_sub_three))
 
         val pagerAdapter:IntroPagerAdapter = IntroPagerAdapter(supportFragmentManager,this,fragment)
-        viewPager.adapter = pagerAdapter
+        introBinding.viewPager.adapter = pagerAdapter
 
         val views:MutableList<View> = ArrayList()
 
         for (i:Int in 0 until fragment.size)
         {
-            val view:View = layoutInflater.inflate(R.layout.view_pager_indicator_item,linearIndicator,false)
-            view.findViewById<AppCompatTextView>(R.id.txt_indicator).setOnClickListener { viewPager.currentItem = i }
+            val view:View = layoutInflater.inflate(R.layout.view_pager_indicator_item,introBinding.linearIndicator,false)
+            view.findViewById<AppCompatTextView>(R.id.txt_indicator).setOnClickListener { introBinding.viewPager.currentItem = i }
             views.add(view)
-            linearIndicator.addView(view)
+            introBinding.linearIndicator.addView(view)
         }
 
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback()
+        introBinding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback()
         {
             override fun onPageSelected(position: Int)
             {
@@ -96,12 +90,12 @@ class IntroActivity : AppCompatActivity() {
                     }
                 }
                 views.get(position).isSelected = true
-                if (position == viewPager.adapter?.itemCount!! -1)
+                if (position == introBinding.viewPager.adapter?.itemCount!! -1)
                 {
-                    btnNext.text = resources.getString(R.string.finish)
+                    introBinding.btnNext.text = resources.getString(R.string.finish)
                 }else
                 {
-                    btnNext.text = resources.getString(R.string.next)
+                    introBinding.btnNext.text = resources.getString(R.string.next)
                 }
             }
         })

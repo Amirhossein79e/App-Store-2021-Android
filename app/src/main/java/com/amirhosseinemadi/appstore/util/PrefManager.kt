@@ -63,11 +63,17 @@ class PrefManager() {
         }
 
 
-        public fun setAccess(access: String)
+        public fun setAccess(access: String?)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = preferences.edit()
-            editor.putString("access", SecurityManager.storeDataEncrypt(access,"access"))
+            if (access != null)
+            {
+                editor.putString("access", SecurityManager.storeDataEncrypt(access, "access"))
+            }else
+            {
+                editor.putString("access",access)
+            }
             editor.commit()
         }
 
@@ -84,11 +90,17 @@ class PrefManager() {
         }
 
 
-        public fun setUser(user: String)
+        public fun setUser(user: String?)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = preferences.edit()
-            editor.putString("user", SecurityManager.storeDataEncrypt(user,"user"))
+            if (user != null)
+            {
+                editor.putString("user", SecurityManager.storeDataEncrypt(user, "user"))
+            }else
+            {
+                editor.putString("user",user)
+            }
             editor.commit()
         }
 
@@ -102,6 +114,12 @@ class PrefManager() {
                 user = SecurityManager.storeDataDecrypt(user,"user")
             }
             return user
+        }
+
+
+        public fun checkSignIn() : Boolean
+        {
+            return getUser() != null && getAccess() != null
         }
 
     }

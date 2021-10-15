@@ -31,8 +31,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel:MainVm
     private lateinit var mainBinding:ActivityMainBinding
     private lateinit var dialog:Dialog
-    private lateinit var frame:FrameLayout
-    private lateinit var bottomNav:BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,12 +48,9 @@ class MainActivity : AppCompatActivity() {
             Utilities.underApiStatusBarHandle(this)
         }
 
-        bottomNav = mainBinding.bottomNav
-        frame = mainBinding.frame
-
         mainBinding.cardBottomNav.setBackgroundResource(R.drawable.bottom_nav_card_background)
         mainBinding.cardBottomNav.clipChildren = false
-        bottomNav.setOnItemSelectedListener(this::itemListener)
+        mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
     }
 
 
@@ -63,13 +58,13 @@ class MainActivity : AppCompatActivity() {
     {
         when(item.itemId)
         {
-            R.id.item_home -> supportFragmentManager.beginTransaction().replace(frame.id,HomeFragment()).commit()
+            R.id.item_home -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,HomeFragment()).commit()
 
-            R.id.item_search -> supportFragmentManager.beginTransaction().replace(frame.id,SearchFragment()).commit()
+            R.id.item_search -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,SearchFragment()).commit()
 
-            R.id.item_category -> supportFragmentManager.beginTransaction().replace(frame.id,CategoryFragment()).commit()
+            R.id.item_category -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,CategoryFragment()).commit()
 
-            R.id.item_account -> supportFragmentManager.beginTransaction().replace(frame.id,AccountFragment()).commit()
+            R.id.item_account -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,AccountFragment()).commit()
         }
 
         item.isChecked = true

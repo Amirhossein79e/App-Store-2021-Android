@@ -20,6 +20,7 @@
     <string name="request_failed_pos">تلاش مجدد</string>
     <string name="request_failed_neg">لفو</string>
     <!-- Account Strings -->
+    <string name="user">کاربر</string>
     <string name="email">ایمیل</string>
     <string name="username">نام کاربری</string>
     <string name="password">رمز عبور</string>
@@ -29,4 +30,5 @@
     <string name="sign_up">ایجاد حساب</string>
     <string name="sign_in">ورود به حساب</string>
     <string name="sign_out">خروح از حساب</string>
+    <string name="sign_out_successfull">با موفقیت خارج شدید</string>
 </resources>
