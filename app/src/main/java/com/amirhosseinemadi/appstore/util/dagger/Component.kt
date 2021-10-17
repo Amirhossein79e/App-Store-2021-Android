@@ -17,6 +17,4 @@ interface Component {
 
     fun apiCaller() : ApiCaller
 
-    fun inject(activity: MainActivity)
-
 }

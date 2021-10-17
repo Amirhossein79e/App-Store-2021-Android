@@ -16,6 +16,14 @@ import javax.inject.Inject
 
 class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
 
+    companion object
+    {
+        public val SLIDER_URL:String = "https://bermoodaco.ir/picture/slider/"
+        public val CATEGORY_URL:String = "https://bermoodaco.ir/picture/category/"
+        public val ICON_URL:String = "https://bermoodaco.ir/picture/icon/"
+        public val IMAGE_URL:String = "https://bermoodaco.ir/picture/image/"
+    }
+
     private val INIT_TOKEN:Int = 100
     private val SYNC_TOKEN:Int = 101
     private val SIGNUP_USER:Int = 102

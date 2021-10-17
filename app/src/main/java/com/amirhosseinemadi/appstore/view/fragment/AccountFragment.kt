@@ -26,7 +26,7 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View {
         viewModel = AccountVm(this)
         accountBinding = DataBindingUtil.inflate<FragmentAccountBinding>(inflater, R.layout.fragment_account,null,false).also { it.viewModel = viewModel }
-        accountBinding.setLifecycleOwner { requireActivity().lifecycle }
+        accountBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())
         initView()
         handleError()

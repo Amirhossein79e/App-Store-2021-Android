@@ -25,7 +25,7 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = AccountVm(this)
         loginBinding = DataBindingUtil.inflate<FragmentLoginBinding>(inflater,R.layout.fragment_login,container,false).also{ it.viewModel = viewModel}
-        loginBinding.setLifecycleOwner { requireActivity().lifecycle }
+        loginBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())
         handleError()
 

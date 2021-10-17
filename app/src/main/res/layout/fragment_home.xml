@@ -1,14 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="view_model"
+            type="com.amirhosseinemadi.appstore.viewmodel.HomeVm" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.fragment.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05"
+        android:id="@+id/guide_start">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95"
+        android:id="@+id/guide_end">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.04"
+        android:id="@+id/guide_top">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98"
+        android:id="@+id/guide_bottom">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp0"
+            app:layout_constraintStart_toEndOf="@id/guide_start"
+            app:layout_constraintEnd_toStartOf="@id/guide_end"
+            app:layout_constraintTop_toBottomOf="@id/guide_top"
+            app:layout_constraintDimensionRatio="2:1"
+            android:orientation="horizontal"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/dp24"
+            android:paddingEnd="@dimen/dp24"
+            android:id="@+id/pager">
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintTop_toBottomOf="@id/pager"
+        android:layout_marginTop="@dimen/dp16">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

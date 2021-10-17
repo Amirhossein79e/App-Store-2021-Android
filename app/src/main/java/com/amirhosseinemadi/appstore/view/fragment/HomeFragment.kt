@@ -1,60 +1,84 @@
 package com.amirhosseinemadi.appstore.view.fragment
 
+import android.app.Dialog
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.amirhosseinemadi.appstore.R
+import com.amirhosseinemadi.appstore.databinding.FragmentHomeBinding
+import com.amirhosseinemadi.appstore.util.Utilities
+import com.amirhosseinemadi.appstore.view.adapter.MainPagerAdapter
+import com.amirhosseinemadi.appstore.view.callback.HomeCallback
+import com.amirhosseinemadi.appstore.viewmodel.HomeVm
+import com.google.android.material.snackbar.BaseTransientBottomBar
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class HomeFragment : Fragment(),HomeCallback {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var viewModel:HomeVm
+    private lateinit var homeBinding:FragmentHomeBinding
+    private lateinit var loading:Dialog
+    private lateinit var snapHelper:PagerSnapHelper
+    private lateinit var layoutManager:LinearLayoutManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewModel = HomeVm()
+        homeBinding = DataBindingUtil.inflate<FragmentHomeBinding>(inflater,R.layout.fragment_home,container,false).also { it.viewModel = viewModel }
+        homeBinding.root.layoutParams = ConstraintLayout.LayoutParams(container?.layoutParams)
+        homeBinding.lifecycleOwner = this
+        loading = Utilities.loadingDialog(requireContext())
+        initView()
+        handleError()
+        home()
+
+        return homeBinding.root
+    }
+
+
+    private fun initView()
+    {
+        layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false).also { homeBinding.pager.layoutManager = it }
+        snapHelper = PagerSnapHelper().also { it.attachToRecyclerView(homeBinding.pager) }
+    }
+
+
+    private fun handleError()
+    {
+        viewModel.error.observe(requireActivity(),
+            {
+                Utilities.showSnack(requireActivity().findViewById(R.id.coordinator), requireContext().getString(R.string.request_failed),
+                    BaseTransientBottomBar.LENGTH_SHORT)
+            })
+    }
+
+
+    private fun home()
+    {
+        viewModel.getHomeResponse()
+            .observe(requireActivity(),
+                {
+                    homeBinding.pager.adapter = MainPagerAdapter(requireContext(),it.data?.slider as List<String>)
+                })
+    }
+
+    override fun onShow() {
+        if (!loading.isShowing)
+        {
+            loading.show()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    override fun onHide() {
+        if (loading.isShowing)
+        {
+            loading.dismiss()
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
