@@ -17,10 +17,10 @@ import com.amirhosseinemadi.appstore.view.callback.AccountCallback
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
 
-class AccountVm(val progressCallback:AccountCallback) : ViewModel() {
+class AccountVm(val accountCallback:AccountCallback) : ViewModel() {
 
     private var apiCaller: ApiCaller
-    var error:MutableLiveData<Throwable>
+    var error:MutableLiveData<String>
 
     val signUpResponse:MutableLiveData<ResponseObject<UserModel>>
     val signInResponse:MutableLiveData<ResponseObject<UserModel>>
@@ -53,14 +53,14 @@ class AccountVm(val progressCallback:AccountCallback) : ViewModel() {
             {
                 if (Utilities.validatePassword(passwordStr))
                 {
-                    progressCallback.signIn(emailStr,passwordStr)
+                    accountCallback.signIn(emailStr,passwordStr)
                 }else
                 {
-                    progressCallback.onMessage("رمز عبور حداقل ۸ رقم می باشد")
+                    accountCallback.onMessage("رمز عبور حداقل ۸ رقم می باشد")
                 }
             }else
             {
-                progressCallback.onMessage("ایمیل وارد شده صحیح نیست");
+                accountCallback.onMessage("ایمیل وارد شده صحیح نیست");
             }
         }else
         {
@@ -72,22 +72,22 @@ class AccountVm(val progressCallback:AccountCallback) : ViewModel() {
                     {
                         if (passwordStr.equals(passwordReStr))
                         {
-                            progressCallback.signUp(emailStr, passwordStr, usernameStr, PrefManager.getToken()!!)
+                            accountCallback.signUp(emailStr, passwordStr, usernameStr, PrefManager.getToken()!!)
                         } else
                         {
-                            progressCallback.onMessage("رمز عبور با تکرار رمز عبور همخوانی ندارد")
+                            accountCallback.onMessage("رمز عبور با تکرار رمز عبور همخوانی ندارد")
                         }
                     } else
                     {
-                        progressCallback.onMessage("رمز عبور حداقل ۸ رقم می باشد")
+                        accountCallback.onMessage("رمز عبور حداقل ۸ رقم می باشد")
                     }
                 }else
                 {
-                    progressCallback.onMessage("نام کاربری وارد شده صحیح نیست . نام کاربری حداقل دو کارکتر می باشد")
+                    accountCallback.onMessage("نام کاربری وارد شده صحیح نیست . نام کاربری حداقل دو کارکتر می باشد")
                 }
             }else
             {
-                progressCallback.onMessage("ایمیل وارد شده صحیح نیست");
+                accountCallback.onMessage("ایمیل وارد شده صحیح نیست");
             }
         }
     }
@@ -122,17 +122,17 @@ class AccountVm(val progressCallback:AccountCallback) : ViewModel() {
         apiCaller.signUpUser(email,password,username,token,object : SingleObserver<ResponseObject<UserModel>>
         {
             override fun onSubscribe(d: Disposable?) {
-                progressCallback.onShow()
+                accountCallback.onShow()
             }
 
             override fun onSuccess(t: ResponseObject<UserModel>?) {
                 signUpResponse.value = t
-                progressCallback.onHide()
+                accountCallback.onHide()
             }
 
             override fun onError(e: Throwable?) {
-                error.value = e
-                progressCallback.onHide()
+                error.value = "signUp"
+                accountCallback.onHide()
             }
 
         })
@@ -144,17 +144,17 @@ class AccountVm(val progressCallback:AccountCallback) : ViewModel() {
         apiCaller.signInUser(email,password,object : SingleObserver<ResponseObject<UserModel>>
         {
             override fun onSubscribe(d: Disposable?) {
-                progressCallback.onShow()
+                accountCallback.onShow()
             }
 
             override fun onSuccess(t: ResponseObject<UserModel>?) {
                 signInResponse.value = t
-                progressCallback.onHide()
+                accountCallback.onHide()
             }
 
             override fun onError(e: Throwable?) {
-                error.value = e
-                progressCallback.onHide()
+                error.value = "signIn"
+                accountCallback.onHide()
             }
 
         })
@@ -166,17 +166,17 @@ class AccountVm(val progressCallback:AccountCallback) : ViewModel() {
         apiCaller.validateUser(access,object : SingleObserver<ResponseObject<String>>
         {
             override fun onSubscribe(d: Disposable?) {
-                progressCallback.onShow()
+                accountCallback.onShow()
             }
 
             override fun onSuccess(t: ResponseObject<String>?) {
                 validateResponse.value = t
-                progressCallback.onHide()
+                accountCallback.onHide()
             }
 
             override fun onError(e: Throwable?) {
-                error.value = e
-                progressCallback.onHide()
+                error.value = "validateUser"
+                accountCallback.onHide()
             }
         })
 

@@ -1,5 +1,6 @@
 package com.amirhosseinemadi.appstore.util
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.provider.Settings
@@ -10,6 +11,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
@@ -17,6 +19,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.customview.CustomSnack
+import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import java.time.Duration
 import java.util.regex.Pattern
@@ -66,7 +69,7 @@ class Utilities {
             val dialog:Dialog = Dialog(context)
             dialog.setCancelable(false)
             dialog.setContentView(view)
-            dialog.window?.setBackgroundDrawable(context.getDrawable(R.drawable.dialog_background))
+            dialog.window?.setBackgroundDrawable(AppCompatResources.getDrawable(context,R.drawable.dialog_background))
             return dialog
         }
 
@@ -127,6 +130,12 @@ class Utilities {
         public fun showSnack(viewGroup:ViewGroup, text:String, @BaseTransientBottomBar.Duration duration:Int)
         {
             CustomSnack.make(viewGroup,duration).setText(text).show()
+        }
+
+
+        public fun showErrorFragment(activity:Activity, callback:Callback)
+        {
+
         }
 
 

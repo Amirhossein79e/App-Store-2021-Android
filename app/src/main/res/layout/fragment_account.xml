@@ -56,7 +56,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/guide_top"
         app:layout_constraintBottom_toBottomOf="@id/guide_top"
-        app:layout_constraintStart_toStartOf="@id/guide_end"
         app:layout_constraintEnd_toEndOf="@id/guide_end"
         android:src="@drawable/ic_settings"
         android:background="@drawable/btn_selector"
@@ -75,7 +74,7 @@
         android:layout_marginTop="@dimen/dp24"
         app:cardCornerRadius="@dimen/dp16"
         app:cardBackgroundColor="@color/colorSecondary"
-        app:cardElevation="@dimen/dp16">
+        app:cardElevation="@dimen/dp24">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout

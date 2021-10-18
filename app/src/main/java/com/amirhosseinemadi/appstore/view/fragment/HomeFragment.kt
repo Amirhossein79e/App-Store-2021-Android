@@ -15,6 +15,7 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentHomeBinding
 import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.adapter.MainPagerAdapter
+import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.amirhosseinemadi.appstore.view.callback.HomeCallback
 import com.amirhosseinemadi.appstore.viewmodel.HomeVm
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -28,7 +29,7 @@ class HomeFragment : Fragment(),HomeCallback {
     private lateinit var layoutManager:LinearLayoutManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        viewModel = HomeVm()
+        viewModel = HomeVm(this)
         homeBinding = DataBindingUtil.inflate<FragmentHomeBinding>(inflater,R.layout.fragment_home,container,false).also { it.viewModel = viewModel }
         homeBinding.root.layoutParams = ConstraintLayout.LayoutParams(container?.layoutParams)
         homeBinding.lifecycleOwner = this
@@ -52,8 +53,23 @@ class HomeFragment : Fragment(),HomeCallback {
     {
         viewModel.error.observe(requireActivity(),
             {
-                Utilities.showSnack(requireActivity().findViewById(R.id.coordinator), requireContext().getString(R.string.request_failed),
-                    BaseTransientBottomBar.LENGTH_SHORT)
+                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,ErrorFragment(object : Callback
+                {
+                    override fun notify(vararg obj: Any?)
+                    {
+                        val fragment:Fragment? = requireActivity().supportFragmentManager.findFragmentByTag("error")
+
+                        if (fragment != null)
+                        {
+                            requireActivity().supportFragmentManager.beginTransaction().remove(fragment).commit()
+                        }
+                        when(it)
+                        {
+                            "home" -> { home() }
+                        }
+                    }
+
+                }),"error").commit()
             })
     }
 

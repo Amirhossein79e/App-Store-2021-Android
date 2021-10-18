@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.ErrorFragment"
+    android:background="@color/colorPrimary">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05"
+        android:id="@+id/guide_start">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95"
+        android:id="@+id/guide_end">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.04"
+        android:id="@+id/guide_top">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98"
+        android:id="@+id/guide_bottom">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="@dimen/dp0"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintTop_toBottomOf="@id/guide_top"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/ic_connection_failed"
+        android:id="@+id/img">
+    </androidx.appcompat.widget.AppCompatImageView>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintBottom_toBottomOf="@id/img"
+        android:layout_marginStart="@dimen/dp24"
+        android:layout_marginEnd="@dimen/dp24"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_normal"
+        android:text="@string/request_failed"
+        android:textStyle="bold"
+        android:id="@+id/txt">
+    </androidx.appcompat.widget.AppCompatTextView>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp40"
+        app:layout_constraintTop_toBottomOf="@id/txt"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        android:layout_marginTop="@dimen/dp40"
+        style="@style/btn_style"
+        android:text="@string/request_failed_pos"
+        android:id="@+id/btn">
+    </androidx.appcompat.widget.AppCompatButton>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

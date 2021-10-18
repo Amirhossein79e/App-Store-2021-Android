@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.disposables.Disposable
 class SplashVm : ViewModel() {
 
     private var apiCaller:ApiCaller
-    var error:MutableLiveData<Throwable>
+    var error:MutableLiveData<String>
     val initResponse:MutableLiveData<ResponseObject<String>>
     val syncResponse:MutableLiveData<ResponseObject<String>>
     val syncUserResponse:MutableLiveData<ResponseObject<String>>
@@ -40,7 +40,7 @@ class SplashVm : ViewModel() {
             }
 
             override fun onError(e: Throwable?) {
-                error.value = e
+                error.value = "init"
             }
         })
     }
@@ -59,7 +59,7 @@ class SplashVm : ViewModel() {
             }
 
             override fun onError(e: Throwable?) {
-                error.value = e
+                error.value = "sync"
             }
         })
     }
@@ -78,7 +78,7 @@ class SplashVm : ViewModel() {
             }
 
             override fun onError(e: Throwable?) {
-                error.value = e
+                error.value = "syncUser"
             }
 
         })

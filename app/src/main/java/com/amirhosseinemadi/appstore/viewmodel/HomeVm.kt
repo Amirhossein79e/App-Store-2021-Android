@@ -6,13 +6,14 @@ import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.ApiCaller
 import com.amirhosseinemadi.appstore.model.entity.HomeModel
 import com.amirhosseinemadi.appstore.model.entity.ResponseObject
+import com.amirhosseinemadi.appstore.view.callback.HomeCallback
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
 
-class HomeVm : ViewModel() {
+class HomeVm(private val homeCallback: HomeCallback) : ViewModel() {
 
     private val apiCaller:ApiCaller
-    val error:MutableLiveData<Throwable>
+    val error:MutableLiveData<String>
     val homeResponse:MutableLiveData<ResponseObject<HomeModel>>
 
     init
@@ -28,15 +29,17 @@ class HomeVm : ViewModel() {
         apiCaller.getHome(object : SingleObserver<ResponseObject<HomeModel>>
         {
             override fun onSubscribe(d: Disposable?) {
-
+                homeCallback.onShow()
             }
 
             override fun onSuccess(t: ResponseObject<HomeModel>?) {
                 homeResponse.value = t
+                homeCallback.onHide()
             }
 
             override fun onError(e: Throwable?) {
-                error.value = e
+                error.value = "home"
+                homeCallback.onHide()
             }
 
         })

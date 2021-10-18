@@ -2,18 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/dp8">
 
 
     <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="@dimen/dp80"
-        android:layout_height="@dimen/dp80"
+        android:layout_width="@dimen/dp88"
+        android:layout_height="@dimen/dp88"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:lottie_rawRes="@raw/loading"
         app:lottie_repeatMode="restart"
+        app:lottie_autoPlay="true"
         app:lottie_repeatCount="-1">
     </com.airbnb.lottie.LottieAnimationView>
 

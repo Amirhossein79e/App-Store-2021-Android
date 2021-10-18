@@ -73,9 +73,25 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
     private fun handleError()
     {
-        viewModel.error.observe(this,
+        viewModel.error.observe(requireActivity(),
             {
-                Utilities.showSnack(requireActivity().findViewById(R.id.coordinator), requireContext().getString(R.string.request_failed),BaseTransientBottomBar.LENGTH_SHORT)
+                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,ErrorFragment(object : Callback
+                {
+                    override fun notify(vararg obj: Any?)
+                    {
+                        val fragment:Fragment? = requireActivity().supportFragmentManager.findFragmentByTag("error")
+
+                        if (fragment != null)
+                        {
+                            requireActivity().supportFragmentManager.beginTransaction().remove(fragment).commit()
+                        }
+                        when(it)
+                        {
+                            "validateUser" -> { checkAccount() }
+                        }
+                    }
+
+                }),"error").commit()
             })
     }
 

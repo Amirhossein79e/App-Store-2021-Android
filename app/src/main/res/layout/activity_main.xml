@@ -67,7 +67,7 @@
         app:cardCornerRadius="@dimen/dp0"
         android:minHeight="@dimen/dp56"
         app:cardElevation="@dimen/dp16"
-        app:cardBackgroundColor="@color/colorOnPrimary"
+        app:cardBackgroundColor="@color/colorSecondary"
         android:clipChildren="false"
         android:id="@+id/card_bottom_nav">
 
