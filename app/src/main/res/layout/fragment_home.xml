@@ -17,24 +17,6 @@
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05"
-        android:id="@+id/guide_start">
-    </androidx.constraintlayout.widget.Guideline>
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95"
-        android:id="@+id/guide_end">
-    </androidx.constraintlayout.widget.Guideline>
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.04"
         android:id="@+id/guide_top">
@@ -50,12 +32,41 @@
     </androidx.constraintlayout.widget.Guideline>
 
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp0"
+        app:layout_constraintTop_toBottomOf="@id/guide_top"
+        app:layout_constraintBottom_toTopOf="@id/guide_bottom"
+        android:fillViewport="true">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05"
+                android:id="@+id/guide_start">
+            </androidx.constraintlayout.widget.Guideline>
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95"
+                android:id="@+id/guide_end">
+            </androidx.constraintlayout.widget.Guideline>
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp0"
-            app:layout_constraintStart_toEndOf="@id/guide_start"
-            app:layout_constraintEnd_toStartOf="@id/guide_end"
-            app:layout_constraintTop_toBottomOf="@id/guide_top"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintDimensionRatio="2:1"
             android:orientation="horizontal"
             android:clipToPadding="false"
@@ -68,11 +79,18 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="@dimen/dp0"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/pager"
         app:layout_constraintStart_toEndOf="@id/guide_start"
         app:layout_constraintEnd_toStartOf="@id/guide_end"
-        app:layout_constraintTop_toBottomOf="@id/pager"
-        android:layout_marginTop="@dimen/dp16">
+        android:layout_marginTop="@dimen/dp16"
+        android:id="@+id/recycler">
     </androidx.recyclerview.widget.RecyclerView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
