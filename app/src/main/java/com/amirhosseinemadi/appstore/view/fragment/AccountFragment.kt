@@ -101,7 +101,7 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
         if (PrefManager.checkSignIn())
         {
             viewModel.getValidateResponse(PrefManager.getAccess()!!)
-                .observe(requireActivity(),
+                .observe(viewLifecycleOwner,
                     {
                         when(it.responseCode)
                         {

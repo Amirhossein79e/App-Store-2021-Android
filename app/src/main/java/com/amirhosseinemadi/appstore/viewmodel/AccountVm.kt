@@ -1,5 +1,6 @@
 package com.amirhosseinemadi.appstore.viewmodel
 
+import android.content.Context
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.view.View
@@ -17,7 +18,7 @@ import com.amirhosseinemadi.appstore.view.callback.AccountCallback
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
 
-class AccountVm(val accountCallback:AccountCallback) : ViewModel() {
+class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
 
     private var apiCaller: ApiCaller
     var error:MutableLiveData<String>

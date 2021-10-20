@@ -38,7 +38,7 @@ class HomeVm(private val homeCallback: HomeCallback) : ViewModel() {
 
             override fun onSuccess(t: ResponseObject<HomeModel>?) {
                 homeResponse.value = t
-                homeCallback.onHide()
+                //homeCallback.onHide()
             }
 
             override fun onError(e: Throwable?) {

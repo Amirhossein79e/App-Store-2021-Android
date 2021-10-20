@@ -35,7 +35,7 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
 
     private fun handleError()
     {
-        viewModel.error.observe(this,
+        viewModel.error.observe(viewLifecycleOwner,
             {
                 Utilities.showSnack(loginBinding.coordinator, requireContext().getString(R.string.request_failed),BaseTransientBottomBar.LENGTH_SHORT)
             })
@@ -69,7 +69,7 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
         if (!viewModel.signUpResponse.hasObservers())
         {
             viewModel.signUpResponse
-                .observe(this,
+                .observe(viewLifecycleOwner,
                     {
                         when (it.responseCode)
                         {
@@ -98,7 +98,7 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
         if (!viewModel.signInResponse.hasObservers())
         {
             viewModel.signInResponse
-                .observe(this,
+                .observe(viewLifecycleOwner,
                     {
                         when (it.responseCode)
                         {

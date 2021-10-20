@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.ActivitySplashBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
@@ -128,7 +129,7 @@ class SplashActivity : AppCompatActivity() {
         }else
         {
             viewModel.getSyncResponse(uid, token)
-                .observe(this@SplashActivity,
+                .observe(this,
                     {
                         if (it?.responseCode == 1)
                         {
@@ -176,7 +177,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context?) {
         val configuration:Configuration = newBase!!.resources.configuration
-        configuration.setLocale(Locale(PrefManager.getLang()))
+        configuration.setLocale(Locale(PrefManager.getLang(),"IR"))
         super.attachBaseContext(newBase.createConfigurationContext(configuration))
     }
 

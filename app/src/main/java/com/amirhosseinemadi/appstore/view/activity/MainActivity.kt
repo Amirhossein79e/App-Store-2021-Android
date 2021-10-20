@@ -1,7 +1,9 @@
 package com.amirhosseinemadi.appstore.view.activity
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.Network
@@ -18,6 +20,7 @@ import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.ActivityMainBinding
+import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.fragment.AccountFragment
 import com.amirhosseinemadi.appstore.view.fragment.CategoryFragment
@@ -25,6 +28,7 @@ import com.amirhosseinemadi.appstore.view.fragment.HomeFragment
 import com.amirhosseinemadi.appstore.view.fragment.SearchFragment
 import com.amirhosseinemadi.appstore.viewmodel.MainVm
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -112,6 +116,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+
+    override fun attachBaseContext(newBase: Context?) {
+        val configuration: Configuration = newBase!!.resources.configuration
+        configuration.setLocale(Locale(PrefManager.getLang()))
+        super.attachBaseContext(newBase.createConfigurationContext(configuration))
     }
 
 }

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
@@ -32,6 +33,8 @@ class HomeFragment : Fragment(),HomeCallback {
     private lateinit var homeBinding:FragmentHomeBinding
     private lateinit var loading:Dialog
     private lateinit var snapHelper:PagerSnapHelper
+    private lateinit var recyclerList: HashMap<String,RecyclerView>
+    private var i:Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = HomeVm(this)
@@ -57,7 +60,7 @@ class HomeFragment : Fragment(),HomeCallback {
 
     private fun handleError()
     {
-        viewModel.error.observe(requireActivity(),
+        viewModel.error.observe(viewLifecycleOwner,
             {
                 requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,ErrorFragment(object : Callback
                 {
@@ -72,6 +75,13 @@ class HomeFragment : Fragment(),HomeCallback {
                         when(it)
                         {
                             "home" -> { home() }
+
+                            else ->
+                            { if (recyclerList.get(it) != null)
+                                {
+                                    app(it,recyclerList.get(it)!!)
+                                }
+                            }
                         }
                     }
 
@@ -82,8 +92,9 @@ class HomeFragment : Fragment(),HomeCallback {
 
     private fun home()
     {
+        recyclerList = HashMap()
         viewModel.getHomeResponse()
-            .observe(requireActivity(),
+            .observe(viewLifecycleOwner,
                 {
                     if(it.responseCode == 1)
                     {
@@ -92,21 +103,8 @@ class HomeFragment : Fragment(),HomeCallback {
                         {
                             override fun notify(vararg obj: Any?)
                             {
-                                val recycler:RecyclerView = obj[1] as RecyclerView
-                                viewModel.app(obj[0] as String,object : Callback
-                                {
-                                    override fun notify(vararg obj: Any?)
-                                    {
-                                        recycler.layoutManager = LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false)
-                                        recycler.adapter = SubRecyclerAdapter(requireActivity(),viewModel.appResponse.value?.data!!, object : Callback
-                                        {
-                                            override fun notify(vararg obj: Any?)
-                                            {
-
-                                            }
-                                        })
-                                    }
-                                })
+                                recyclerList.set(obj[0] as String,obj[1] as RecyclerView)
+                                app(obj[0] as String,recyclerList.get(obj[0])!!)
                             }
                         })
                     }else
@@ -114,6 +112,37 @@ class HomeFragment : Fragment(),HomeCallback {
                         Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!,BaseTransientBottomBar.LENGTH_SHORT)
                     }
                 })
+    }
+
+
+    private fun app(category:String, recycler:RecyclerView)
+    {
+        viewModel.app(category,object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+                if (viewModel.appResponse.value?.responseCode == 1)
+                {
+                    recycler.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+                    recycler.adapter = SubRecyclerAdapter(requireActivity(), viewModel.appResponse.value?.data!!, object : Callback
+                        {
+                            override fun notify(vararg obj: Any?)
+                            {
+
+                            }
+                        })
+                    i++
+                    if (i + 1 == viewModel.homeResponse.value?.data?.rows?.size)
+                    {
+                        onHide()
+                    }
+                    }else
+                    {
+                        Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),viewModel.appResponse.value?.message!!,BaseTransientBottomBar.LENGTH_SHORT)
+                    }
+
+                }
+        })
     }
 
 
