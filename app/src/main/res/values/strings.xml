@@ -30,4 +30,5 @@
     <string name="sign_in">Sign in</string>
     <string name="sign_out">Sign out</string>
     <string name="sign_out_successfull">Successfully Signed out</string>
+    <string name="welcome">Welcome!</string>
 </resources>

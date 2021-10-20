@@ -6,16 +6,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentHomeBinding
+import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.model.entity.HomeCategoryModel
+import com.amirhosseinemadi.appstore.model.entity.ResponseObject
 import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.adapter.MainPagerAdapter
 import com.amirhosseinemadi.appstore.view.adapter.MainRecyclerAdapter
+import com.amirhosseinemadi.appstore.view.adapter.SubRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.amirhosseinemadi.appstore.view.callback.HomeCallback
 import com.amirhosseinemadi.appstore.viewmodel.HomeVm
@@ -83,7 +88,27 @@ class HomeFragment : Fragment(),HomeCallback {
                     if(it.responseCode == 1)
                     {
                         homeBinding.pager.adapter = MainPagerAdapter(requireContext(), it.data?.slider as List<String>)
-                        homeBinding.recycler.adapter = MainRecyclerAdapter(requireContext(),it.data?.rows as List<HomeCategoryModel>)
+                        homeBinding.recycler.adapter = MainRecyclerAdapter(requireContext(),it.data?.rows as List<HomeCategoryModel>, object : Callback
+                        {
+                            override fun notify(vararg obj: Any?)
+                            {
+                                val recycler:RecyclerView = obj[1] as RecyclerView
+                                viewModel.app(obj[0] as String,object : Callback
+                                {
+                                    override fun notify(vararg obj: Any?)
+                                    {
+                                        recycler.layoutManager = LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false)
+                                        recycler.adapter = SubRecyclerAdapter(requireActivity(),viewModel.appResponse.value?.data!!, object : Callback
+                                        {
+                                            override fun notify(vararg obj: Any?)
+                                            {
+
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
                     }else
                     {
                         Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!,BaseTransientBottomBar.LENGTH_SHORT)

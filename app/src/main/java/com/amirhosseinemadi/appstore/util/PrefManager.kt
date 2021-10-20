@@ -37,7 +37,7 @@ class PrefManager() {
         public fun getLang() : String?
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
-            val lang:String? = preferences.getString("language","en")
+            val lang:String? = preferences.getString("language","fa")
             return lang
         }
 

@@ -110,7 +110,7 @@
                 android:layout_marginStart="@dimen/dp8"
                 android:gravity="center"
                 android:textSize="@dimen/text_size_large_normal"
-                android:text="User"
+                android:text="@string/user"
                 android:id="@+id/txt_user">
             </androidx.appcompat.widget.AppCompatTextView>
 
@@ -123,7 +123,7 @@
                 app:layout_constraintStart_toStartOf="@id/txt_user"
                 android:layout_marginTop="40dp"
                 android:textSize="@dimen/text_size_small"
-                android:text="Welcome !"
+                android:text="@string/welcome"
                 android:id="@+id/txt_welcome">
             </androidx.appcompat.widget.AppCompatTextView>
 
@@ -137,6 +137,8 @@
                 android:layout_marginTop="@dimen/dp16"
                 android:layout_marginEnd="@dimen/dp12"
                 android:layout_marginBottom="@dimen/dp12"
+                android:paddingStart="@dimen/dp4"
+                android:paddingEnd="@dimen/dp4"
                 style="@style/btn_style"
                 android:textAllCaps="false"
                 android:text="@string/sign_in"

@@ -8,8 +8,9 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.model.entity.HomeCategoryModel
+import com.amirhosseinemadi.appstore.view.callback.Callback
 
-class MainRecyclerAdapter(private val context:Context, private val list: List<HomeCategoryModel>) : RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder>() {
+class MainRecyclerAdapter(private val context:Context, private val list: List<HomeCategoryModel>, private val callback:Callback) : RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view:View = LayoutInflater.from(context).inflate(R.layout.main_item,parent,false)
@@ -20,6 +21,7 @@ class MainRecyclerAdapter(private val context:Context, private val list: List<Ho
 
         val homeCategoryModel:HomeCategoryModel = list.get(position)
         holder.txt.text = homeCategoryModel.categoryName
+        callback.notify(homeCategoryModel.category,holder.recycler)
 
     }
 
