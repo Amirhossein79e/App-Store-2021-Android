@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentCategoryBinding
 import com.amirhosseinemadi.appstore.util.Utilities
+import com.amirhosseinemadi.appstore.view.adapter.CategoryRecyclerAdapter
+import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.amirhosseinemadi.appstore.view.callback.CategoryCallback
 import com.amirhosseinemadi.appstore.viewmodel.CategoryVm
 
@@ -25,6 +27,7 @@ class CategoryFragment : Fragment(),CategoryCallback {
         categoryBinding = DataBindingUtil.inflate<FragmentCategoryBinding>(inflater,R.layout.fragment_category,container,false).also{ it.viewModel = viewModel }
         dialog = Utilities.loadingDialog(requireContext())
         initView()
+        category()
 
         return categoryBinding.root
     }
@@ -41,7 +44,13 @@ class CategoryFragment : Fragment(),CategoryCallback {
         viewModel.getCategoryResponse()
             .observe(viewLifecycleOwner,
                 {
+                    categoryBinding.recycler.adapter = CategoryRecyclerAdapter(requireContext(),it.data!!,object : Callback
+                    {
+                        override fun notify(vararg obj: Any?)
+                        {
 
+                        }
+                    })
                 })
     }
 

@@ -1,5 +1,7 @@
 package com.amirhosseinemadi.appstore.view.callback
 
+import androidx.annotation.StringRes
+
 interface AccountCallback {
 
     public fun onShow()
@@ -11,5 +13,7 @@ interface AccountCallback {
     public fun signIn(email:String, password:String)
 
     public fun onMessage(message:String)
+
+    public fun getStr(@StringRes res:Int) : String
 
 }

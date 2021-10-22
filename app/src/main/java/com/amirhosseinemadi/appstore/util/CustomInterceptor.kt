@@ -2,7 +2,6 @@ package com.amirhosseinemadi.appstore.util
 
 import android.util.Log
 import okhttp3.*
-import kotlin.math.log
 
 class CustomInterceptor : Interceptor {
 

@@ -5,6 +5,7 @@ import android.security.KeyPairGeneratorSpec
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import android.util.Base64DataException
 import com.amirhosseinemadi.appstore.BuildConfig
 import com.amirhosseinemadi.appstore.common.Application
 import java.math.BigInteger
@@ -78,6 +79,12 @@ class SecurityManager {
             }catch (exception:IllegalBlockSizeException)
             {
                 outputData = String(Base64.decode(inputData,Base64.NO_WRAP),StandardCharsets.UTF_8)
+            }catch (exception:BadPaddingException)
+            {
+                outputData = inputData
+            }catch (exception:Base64DataException)
+            {
+                outputData = inputData
             }
 
             return outputData

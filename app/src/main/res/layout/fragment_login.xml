@@ -100,6 +100,7 @@
         android:drawableEnd="@drawable/ic_password"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:textAlignment="viewStart"
         android:text="@={view_model.passwordStr}"
         android:id="@+id/txt_password">
     </androidx.appcompat.widget.AppCompatEditText>
@@ -115,7 +116,8 @@
         style="@style/edt_style"
         android:drawableEnd="@drawable/ic_password"
         android:hint="@string/password_repeat"
-        android:inputType="textPassword"
+        android:inputType="textWebPassword"
+        android:textAlignment="viewStart"
         android:visibility="@{view_model.visib}"
         android:text="@={view_model.passwordReStr}"
         android:id="@+id/txt_retype_password">

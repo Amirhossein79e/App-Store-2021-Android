@@ -126,5 +126,9 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
         Utilities.showSnack(loginBinding.coordinator,message,BaseTransientBottomBar.LENGTH_SHORT)
     }
 
+    override fun getStr(res: Int) : String {
+        return requireActivity().getString(res)
+    }
+
 
 }

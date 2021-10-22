@@ -32,7 +32,7 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     var usernameStr:String = ""
     var passwordReStr:String = ""
     val visib:MutableLiveData<Int> = MutableLiveData<Int>().also{ it.value = View.GONE }
-    val btnText:MutableLiveData<String> = MutableLiveData<String>().also{ it.value = Application.component.context().getString(R.string.sign_in) }
+    val btnText:MutableLiveData<String> = MutableLiveData<String>().also{ it.value = accountCallback.getStr(R.string.sign_in) }
     private var signIn:Boolean
 
     init
@@ -99,20 +99,20 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
         if (signIn)
         {
             signIn = false
-            val str:SpannableString = SpannableString(Application.component.context().getString(R.string.sign_in_alt))
+            val str:SpannableString = SpannableString(accountCallback.getStr(R.string.sign_in_alt))
             str.setSpan(UnderlineSpan(),0,str.length,0)
             (view as AppCompatTextView).text = str
-            btnText.value = Application.component.context().getString(R.string.sign_up)
+            btnText.value = accountCallback.getStr(R.string.sign_up)
             visib.value = View.VISIBLE
             emailStr = ""
             passwordStr = ""
         }else
         {
             signIn = true
-            val str:SpannableString = SpannableString(Application.component.context().getString(R.string.sign_up_alt))
+            val str:SpannableString = SpannableString(accountCallback.getStr(R.string.sign_up_alt))
             str.setSpan(UnderlineSpan(),0,str.length,0)
             (view as AppCompatTextView).text = str
-            btnText.value = Application.component.context().getString(R.string.sign_in)
+            btnText.value = accountCallback.getStr(R.string.sign_in)
             visib.value = View.GONE
         }
     }

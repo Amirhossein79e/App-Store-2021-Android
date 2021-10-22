@@ -96,7 +96,6 @@
                 android:textSize="@dimen/text_size_large"
                 android:textColor="@color/md_white_1000"
                 android:textAllCaps="true"
-                android:text="U"
                 android:id="@+id/txt_word">
             </androidx.appcompat.widget.AppCompatTextView>
 

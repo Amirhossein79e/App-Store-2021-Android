@@ -123,7 +123,7 @@ class HomeFragment : Fragment(),HomeCallback {
             {
                 if (viewModel.appResponse.value?.responseCode == 1)
                 {
-                    recycler.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+                    recycler.layoutManager = LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.HORIZONTAL, false)
                     recycler.adapter = SubRecyclerAdapter(requireActivity(), viewModel.appResponse.value?.data!!, object : Callback
                         {
                             override fun notify(vararg obj: Any?)

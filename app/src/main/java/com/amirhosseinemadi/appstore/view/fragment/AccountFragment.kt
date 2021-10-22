@@ -150,6 +150,10 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
     }
 
+    override fun getStr(res: Int): String {
+        return ""
+    }
+
     override fun notify(vararg obj: Any?) {
         initView()
     }
