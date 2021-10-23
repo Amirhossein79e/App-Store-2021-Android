@@ -27,6 +27,9 @@ class SubRecyclerAdapter(private val context:Context, private  val list: List<Ap
 
         val appModel:AppModel = list.get(position)
         holder.linear.setOnClickListener { callback.notify() }
+
+        Picasso.get().load(ApiCaller.ICON_URL+appModel.packageName+".png").into(holder.img)
+
         if (PrefManager.getLang().equals("fa"))
         {
             holder.txt.text = appModel.nameFa
@@ -34,7 +37,6 @@ class SubRecyclerAdapter(private val context:Context, private  val list: List<Ap
         {
             holder.txt.text = appModel.nameEn
         }
-        Picasso.get().load(ApiCaller.ICON_URL+appModel.packageName+".png").into(holder.img)
 
     }
 

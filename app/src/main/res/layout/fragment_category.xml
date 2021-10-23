@@ -12,7 +12,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.CategoryFragment">
+    tools:context=".view.fragment.CategoryFragment"
+    android:background="@color/colorPrimary">
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -60,6 +61,37 @@
         app:layout_constraintBottom_toTopOf="@id/guide_bottom"
         android:id="@+id/recycler">
     </androidx.recyclerview.widget.RecyclerView>
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="@dimen/dp0"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintTop_toBottomOf="@id/guide_top"
+        android:layout_marginTop="@dimen/dp16"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/ic_connection_failed"
+        android:visibility="gone"
+        android:id="@+id/img">
+    </androidx.appcompat.widget.AppCompatImageView>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintBottom_toBottomOf="@id/img"
+        android:layout_marginStart="@dimen/dp24"
+        android:layout_marginEnd="@dimen/dp24"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_normal"
+        android:text="@string/not_found"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:id="@+id/txt">
+    </androidx.appcompat.widget.AppCompatTextView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

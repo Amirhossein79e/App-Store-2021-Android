@@ -32,4 +32,7 @@
     <string name="sign_out">خروح از حساب</string>
     <string name="sign_out_successfull">با موفقیت خارج شدید</string>
     <string name="welcome">خوش آمدید!</string>
+    <!-- App Strings -->
+    <string name="by">توسط</string>
+    <string name="not_found">هیچ اپلیکیشنی در این دسته پیدا نشد . دسته های دیگر را مشاهده کنید</string>
 </resources>

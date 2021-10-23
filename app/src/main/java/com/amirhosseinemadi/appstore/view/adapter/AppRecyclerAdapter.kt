@@ -10,31 +10,32 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.model.ApiCaller
-import com.amirhosseinemadi.appstore.model.entity.CategoryModel
+import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.squareup.picasso.Picasso
 
-class CategoryRecyclerAdapter(private val context:Context, private val list:List<CategoryModel>, private val callback:Callback) : RecyclerView.Adapter<CategoryRecyclerAdapter.ViewHolder>() {
-
+class AppRecyclerAdapter(private val context:Context, private val list:List<AppModel>, private val callback:Callback) : RecyclerView.Adapter<AppRecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view:View = LayoutInflater.from(context).inflate(R.layout.category_item,parent,false)
+        val view:View = LayoutInflater.from(context).inflate(R.layout.app_item,parent,false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val categoryModel:CategoryModel = list.get(position)
-        holder.layout.setOnClickListener { callback.notify(categoryModel.categoryEn) }
-        Picasso.get().load(ApiCaller.CATEGORY_URL+categoryModel.icon).into(holder.img)
+        val appModel:AppModel = list.get(position)
+        holder.linear.setOnClickListener { callback.notify(appModel.packageName) }
+        Picasso.get().load(ApiCaller.ICON_URL+appModel.packageName+".png").into(holder.img)
 
         if (PrefManager.getLang().equals("fa"))
         {
-            holder.txt.text = categoryModel.categoryFa
+            holder.txt.text = appModel.nameFa
+            holder.txtDev.text = context.getString(R.string.by)+" "+appModel.devFa
         }else
         {
-            holder.txt.text = categoryModel.categoryEn
+            holder.txt.text = appModel.nameEn
+            holder.txtDev.text = context.getString(R.string.by)+" "+appModel.devEn
         }
 
     }
@@ -44,11 +45,12 @@ class CategoryRecyclerAdapter(private val context:Context, private val list:List
     }
 
 
-    class ViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView){
 
+        val linear:ConstraintLayout = itemView.findViewById(R.id.linear)
         val img:AppCompatImageView = itemView.findViewById(R.id.img)
         val txt:AppCompatTextView = itemView.findViewById(R.id.txt)
-        val layout:ConstraintLayout = itemView.findViewById(R.id.linear)
+        val txtDev:AppCompatTextView = itemView.findViewById(R.id.txt_dev)
 
     }
 }

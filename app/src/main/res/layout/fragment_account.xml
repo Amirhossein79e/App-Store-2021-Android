@@ -117,10 +117,9 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/txt_word"
-                app:layout_constraintBottom_toBottomOf="@id/txt_word"
+                app:layout_constraintTop_toTopOf="@id/txt_user"
                 app:layout_constraintStart_toStartOf="@id/txt_user"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="@dimen/dp24"
                 android:textSize="@dimen/text_size_small"
                 android:text="@string/welcome"
                 android:id="@+id/txt_welcome">

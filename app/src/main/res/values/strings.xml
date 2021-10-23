@@ -31,4 +31,7 @@
     <string name="sign_out">Sign out</string>
     <string name="sign_out_successfull">Successfully Signed out</string>
     <string name="welcome">Welcome!</string>
+    <!-- App Strings -->
+    <string name="by">by</string>
+    <string name="not_found">Not found any app in this category . check other category</string>
 </resources>
