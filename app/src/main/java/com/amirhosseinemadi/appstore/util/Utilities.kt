@@ -3,6 +3,9 @@ package com.amirhosseinemadi.appstore.util
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.os.Build
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +22,10 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.customview.CustomSnack
+import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.google.android.material.snackbar.BaseTransientBottomBar
+import org.json.JSONObject
 import java.time.Duration
 import java.util.regex.Pattern
 
@@ -49,6 +54,24 @@ class Utilities {
             }
 
             return refactoredUid
+        }
+
+
+        public fun validateEmail(email:String) : Boolean
+        {
+            val pattern:Pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",Pattern.CASE_INSENSITIVE)
+            return pattern.matcher(email).find()
+        }
+
+
+        public fun validatePassword(password:String) : Boolean
+        {
+            var valid = false
+            if (password.length > 7)
+            {
+                valid = true
+            }
+            return valid
         }
 
 
@@ -133,27 +156,38 @@ class Utilities {
         }
 
 
-        public fun showErrorFragment(activity:Activity, callback:Callback)
+        public fun checkPackageInstalled(packageName:String) : Boolean
         {
-
-        }
-
-
-        public fun validateEmail(email:String) : Boolean
-        {
-            val pattern:Pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",Pattern.CASE_INSENSITIVE)
-            return pattern.matcher(email).find()
-        }
-
-
-        public fun validatePassword(password:String) : Boolean
-        {
-            var valid = false
-            if (password.length > 7)
+            try
             {
-                valid = true
+                Application.component.context().packageManager.getPackageInfo(packageName,PackageManager.GET_ACTIVITIES)
+                return true
+            }catch (exception:PackageManager.NameNotFoundException)
+            {
+                return false
             }
-            return valid
+        }
+
+
+        public fun getAllPackages() : List<JSONObject>
+        {
+            val list:List<PackageInfo> = Application.component.context().packageManager.getInstalledPackages(0)
+            val appList:MutableList<JSONObject> = ArrayList()
+            for (pInfo:PackageInfo in list)
+            {
+                val obj:JSONObject = JSONObject()
+                obj.put("packageName",pInfo.packageName)
+                obj.put("verName",pInfo.versionName)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                {
+                    obj.put("verCode", pInfo.longVersionCode)
+                }else
+                {
+                    obj.put("verCode", pInfo.versionCode)
+                }
+                appList.add(obj)
+            }
+            return appList
         }
 
     }

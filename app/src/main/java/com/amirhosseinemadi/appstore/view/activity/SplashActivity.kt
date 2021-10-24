@@ -47,7 +47,7 @@ class SplashActivity : AppCompatActivity() {
     {
         viewModel.error.observe(this,
             {
-                dialog = Utilities.dialogIcon(this,null,R.string.request_failed,R.string.request_failed_pos,R.string.request_failed_neg,true,true,{
+                dialog = Utilities.dialogIcon(this,null,R.string.request_failed,R.string.request_failed_pos,R.string.request_failed_neg,true,true,{ view ->
                     dialog.dismiss()
                     sync()
                 },{
@@ -107,71 +107,87 @@ class SplashActivity : AppCompatActivity() {
     {
         if (PrefManager.getFirst())
         {
-            viewModel.getInitResponse(uid, token)
-                .observe(this@SplashActivity,
-                    { t ->
-                        if (t?.responseCode == 1)
-                        {
-                            startActivity(Intent(this,IntroActivity::class.java))
-                            finish()
-                        }else
-                        {
-                            dialog = Utilities.dialogIcon(this,null, R.string.request_failed,R.string.request_failed_pos,R.string.request_failed_neg,true,true,{
-                                dialog.dismiss()
-                                viewModel.init(uid,token)
-                            },{
-                                dialog.dismiss()
+            viewModel.init(uid,token)
+            if (!viewModel.initResponse.hasObservers())
+            {
+                viewModel.initResponse
+                    .observe(this@SplashActivity,
+                        { t ->
+                            if (t?.responseCode == 1)
+                            {
+                                startActivity(Intent(this, IntroActivity::class.java))
                                 finish()
-                            })
-                            dialog.show()
-                        }
-                    })
+                            } else {
+                                dialog = Utilities.dialogIcon(this, null, R.string.request_failed, R.string.request_failed_pos, R.string.request_failed_neg, true, true,
+                                    {
+                                        dialog.dismiss()
+                                        viewModel.init(uid, token)
+                                    },
+                                    {
+                                        dialog.dismiss()
+                                        finish()
+                                    })
+                                dialog.show()
+                            }
+                        })
+            }
         }else
         {
-            viewModel.getSyncResponse(uid, token)
-                .observe(this,
-                    {
-                        if (it?.responseCode == 1)
+            viewModel.sync(uid,token)
+            if (!viewModel.syncResponse.hasObservers()) {
+                viewModel.syncResponse
+                    .observe(this,
                         {
-                            startActivity(Intent(this,MainActivity::class.java))
-                            finish()
-                        }else
-                        {
-                            dialog = Utilities.dialogIcon(this,null, R.string.request_failed,R.string.request_failed_pos,R.string.request_failed_neg,true,true,{
-                                dialog.dismiss()
-                                viewModel.sync(uid,token)
-                            },{
-                                dialog.dismiss()
+                            if (it?.responseCode == 1)
+                            {
+                                startActivity(Intent(this, MainActivity::class.java))
                                 finish()
-                            })
-                            dialog.show()
-                        }
-                    })
+                            } else
+                            {
+                                dialog = Utilities.dialogIcon(this, null, R.string.request_failed, R.string.request_failed_pos, R.string.request_failed_neg, true, true,
+                                    {
+                                        dialog.dismiss()
+                                        viewModel.sync(uid, token)
+                                    },
+                                    {
+                                        dialog.dismiss()
+                                        finish()
+                                    })
+                                dialog.show()
+                            }
+                        })
+            }
         }
     }
 
 
     private fun syncUser(access:String, token: String)
     {
-        viewModel.getSyncUserResponse(access, token)
-            .observe(this,
-                {
-                    if (it?.responseCode == 1)
+        viewModel.syncUser(access,token)
+        if (!viewModel.syncUserResponse.hasObservers())
+        {
+            viewModel.getSyncUserResponse(access, token)
+                .observe(this,
                     {
-                        startActivity(Intent(this,MainActivity::class.java))
-                        finish()
-                    }else
-                    {
-                        dialog = Utilities.dialogIcon(this,null, R.string.request_failed,R.string.request_failed_pos,R.string.request_failed_neg,true,true,{
-                            dialog.dismiss()
-                            viewModel.syncUser(access, token)
-                        },{
-                            dialog.dismiss()
+                        if (it?.responseCode == 1)
+                        {
+                            startActivity(Intent(this, MainActivity::class.java))
                             finish()
-                        })
-                        dialog.show()
-                    }
-                })
+                        } else
+                        {
+                            dialog = Utilities.dialogIcon(this, null, R.string.request_failed, R.string.request_failed_pos, R.string.request_failed_neg, true, true,
+                                {
+                                    dialog.dismiss()
+                                    viewModel.syncUser(access, token)
+                                },
+                                {
+                                    dialog.dismiss()
+                                    finish()
+                                })
+                            dialog.show()
+                        }
+                    })
+        }
     }
 
 

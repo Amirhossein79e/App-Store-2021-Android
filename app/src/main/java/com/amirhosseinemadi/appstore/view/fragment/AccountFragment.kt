@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentAccountBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
@@ -67,6 +68,9 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
                 LoginFragment(this).show(requireActivity().supportFragmentManager,"")
             }
+
+            accountBinding.recycler.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+            checkUpdate()
         }
     }
 
@@ -87,7 +91,9 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
                         }
                         when(it)
                         {
-                            "validateUser" -> { checkAccount() }
+                            "validateUser" -> { viewModel.validateUser(PrefManager.getAccess()!!) }
+
+                            "update" -> { viewModel.update(Utilities.getAllPackages(),false) }
                         }
                     }
 
@@ -119,8 +125,19 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
                                 }
                             }
                         }
+                        checkUpdate()
                     })
         }
+    }
+
+
+    private fun checkUpdate()
+    {
+        viewModel.getUpdateResponse(Utilities.getAllPackages(),PrefManager.checkSignIn())
+            .observe(viewLifecycleOwner,
+                {
+
+                })
     }
 
 

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.ApiCaller
+import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.model.entity.ResponseObject
 import com.amirhosseinemadi.appstore.model.entity.UserModel
 import com.amirhosseinemadi.appstore.util.PrefManager
@@ -17,6 +18,7 @@ import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.callback.AccountCallback
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
+import org.json.JSONObject
 
 class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
 
@@ -26,6 +28,7 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     val signUpResponse:MutableLiveData<ResponseObject<UserModel>>
     val signInResponse:MutableLiveData<ResponseObject<UserModel>>
     val validateResponse:MutableLiveData<ResponseObject<String>>
+    val updateResponse:MutableLiveData<ResponseObject<List<AppModel>>>
 
     var emailStr:String = ""
     var passwordStr:String = ""
@@ -42,6 +45,7 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
         signUpResponse = MutableLiveData()
         signInResponse = MutableLiveData()
         validateResponse = MutableLiveData()
+        updateResponse = MutableLiveData()
         signIn = true
     }
 
@@ -172,7 +176,6 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
 
             override fun onSuccess(t: ResponseObject<String>?) {
                 validateResponse.value = t
-                accountCallback.onHide()
             }
 
             override fun onError(e: Throwable?) {
@@ -181,6 +184,31 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
             }
         })
 
+    }
+
+
+    public fun update(packages:List<JSONObject>, isUser:Boolean)
+    {
+        apiCaller.getUpdates(packages,object : SingleObserver<ResponseObject<List<AppModel>>>
+        {
+            override fun onSubscribe(d: Disposable?) {
+                if (!isUser)
+                {
+                    accountCallback.onShow()
+                }
+            }
+
+            override fun onSuccess(t: ResponseObject<List<AppModel>>?) {
+                updateResponse.value = t
+                accountCallback.onHide()
+            }
+
+            override fun onError(e: Throwable?) {
+                error.value = "update"
+                accountCallback.onHide()
+            }
+
+        })
     }
 
 
@@ -202,6 +230,13 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     {
         validateUser(access)
         return validateResponse
+    }
+
+
+    public fun getUpdateResponse(packages: List<JSONObject>, isUser: Boolean) : MutableLiveData<ResponseObject<List<AppModel>>>
+    {
+        update(packages, isUser)
+        return updateResponse
     }
 
 }

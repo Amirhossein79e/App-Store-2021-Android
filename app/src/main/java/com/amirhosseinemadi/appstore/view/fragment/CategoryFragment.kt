@@ -106,9 +106,9 @@ class CategoryFragment() : Fragment(),CategoryCallback {
                         }
                         when(it)
                         {
-                            "category" -> { category() }
+                            "category" -> { viewModel.category() }
 
-                            else -> {  }
+                            else -> { viewModel.appByCategory(appList!!.size,it) }
                         }
                     }
 

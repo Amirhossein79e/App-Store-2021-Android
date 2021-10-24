@@ -74,7 +74,8 @@
         android:layout_marginTop="@dimen/dp24"
         app:cardCornerRadius="@dimen/dp16"
         app:cardBackgroundColor="@color/colorSecondary"
-        app:cardElevation="@dimen/dp24">
+        app:cardElevation="@dimen/dp24"
+        android:id="@+id/card">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -148,6 +149,18 @@
 
 
     </androidx.cardview.widget.CardView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="@dimen/dp0"
+        app:layout_constraintTop_toBottomOf="@id/card"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintBottom_toTopOf="@id/guide_bottom"
+        android:layout_marginTop="@dimen/dp32"
+        android:id="@+id/recycler">
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

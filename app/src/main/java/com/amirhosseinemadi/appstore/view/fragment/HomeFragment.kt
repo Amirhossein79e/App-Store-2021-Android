@@ -6,18 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentHomeBinding
-import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.model.entity.HomeCategoryModel
-import com.amirhosseinemadi.appstore.model.entity.ResponseObject
 import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.adapter.MainPagerAdapter
 import com.amirhosseinemadi.appstore.view.adapter.MainRecyclerAdapter
@@ -74,7 +70,7 @@ class HomeFragment : Fragment(),HomeCallback {
                         }
                         when(it)
                         {
-                            "home" -> { home() }
+                            "home" -> { viewModel.home() }
 
                             else ->
                             { if (recyclerList.get(it) != null)
