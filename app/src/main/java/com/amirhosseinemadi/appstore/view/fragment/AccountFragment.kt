@@ -8,10 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentAccountBinding
+import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
+import com.amirhosseinemadi.appstore.view.adapter.AppRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.bottomsheet.LoginFragment
 import com.amirhosseinemadi.appstore.view.callback.AccountCallback
 import com.amirhosseinemadi.appstore.view.callback.Callback
@@ -23,12 +26,15 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
     private lateinit var viewModel:AccountVm
     private lateinit var accountBinding:FragmentAccountBinding
     private lateinit var loading: Dialog
+    private var more:Boolean = true
+    private var appList:MutableList<AppModel>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View {
         viewModel = AccountVm(this)
         accountBinding = DataBindingUtil.inflate<FragmentAccountBinding>(inflater, R.layout.fragment_account,null,false).also { it.viewModel = viewModel }
         accountBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())
+        appList = ArrayList()
         initView()
         handleError()
         checkAccount()
@@ -69,9 +75,36 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
                 LoginFragment(this).show(requireActivity().supportFragmentManager,"")
             }
 
-            accountBinding.recycler.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+            accountBinding.txtWord.text = requireContext().getText(R.string.user).substring(0,1).uppercase()
             checkUpdate()
         }
+
+
+        accountBinding.recycler.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+        accountBinding.recycler.adapter = AppRecyclerAdapter(requireContext(),appList!!,object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+
+            }
+        })
+
+        accountBinding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener()
+        {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (appList!!.size % 10 == 0 && more && (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() >= appList!!.size-2 && !loading.isShowing)
+                {
+                    viewModel.update(appList!!.size,Utilities.getAllPackages(),false)
+                }
+            }
+        })
+
+
     }
 
 
@@ -93,7 +126,7 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
                         {
                             "validateUser" -> { viewModel.validateUser(PrefManager.getAccess()!!) }
 
-                            "update" -> { viewModel.update(Utilities.getAllPackages(),false) }
+                            "update" -> { viewModel.update(appList!!.size,Utilities.getAllPackages(),false) }
                         }
                     }
 
@@ -133,10 +166,29 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
     private fun checkUpdate()
     {
-        viewModel.getUpdateResponse(Utilities.getAllPackages(),PrefManager.checkSignIn())
+        viewModel.getUpdateResponse(0,Utilities.getAllPackages(),PrefManager.checkSignIn())
             .observe(viewLifecycleOwner,
                 {
-
+                    if (it.responseCode == 1)
+                    {
+                        if(it.data != null)
+                        {
+                            more = true
+                            appList?.addAll(it.data!!)
+                            accountBinding.recycler.adapter?.notifyItemRangeInserted(appList!!.size - it.data!!.size, it.data!!.size)
+                        }else
+                        {
+                            more = false
+                            if (appList?.size == 0)
+                            {
+                                accountBinding.img.visibility = View.VISIBLE
+                                accountBinding.txt.visibility = View.VISIBLE
+                            }
+                        }
+                    }else
+                    {
+                        Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!,BaseTransientBottomBar.LENGTH_SHORT)
+                    }
                 })
     }
 

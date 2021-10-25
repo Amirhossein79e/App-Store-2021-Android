@@ -14,14 +14,14 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import javax.inject.Inject
 
-class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
+class ApiCaller @Inject constructor(retrofit: Retrofit) {
 
     companion object
     {
-        public val SLIDER_URL:String = "https://bermoodaco.ir/picture/slider/"
-        public val CATEGORY_URL:String = "https://bermoodaco.ir/picture/"
-        public val ICON_URL:String = "https://bermoodaco.ir/picture/icon/"
-        public val IMAGE_URL:String = "https://bermoodaco.ir/picture/image/"
+        val SLIDER_URL:String = "https://bermoodaco.ir/picture/slider/"
+        val CATEGORY_URL:String = "https://bermoodaco.ir/picture/"
+        val ICON_URL:String = "https://bermoodaco.ir/picture/icon/"
+        val IMAGE_URL:String = "https://bermoodaco.ir/picture/image/"
     }
 
     private val INIT_TOKEN:Int = 100
@@ -201,9 +201,10 @@ class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
     }
 
 
-    public fun getAppsSearch(query:String, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    public fun getAppsSearch(offset: Int, query:String, observer:SingleObserver<ResponseObject<List<AppModel>>>)
     {
         val jsonObject: JSONObject = JSONObject()
+        jsonObject.put("offset",offset)
         jsonObject.put("query", query)
 
         service.getAppsSearch(GET_APPS_SEARCH, jsonObject.toString())
@@ -213,15 +214,19 @@ class ApiCaller @Inject constructor(private val retrofit: Retrofit) {
     }
 
 
-    public fun getUpdates(packages:List<JSONObject>, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    public fun getUpdates(offset:Int, packages:List<JSONObject>, observer:SingleObserver<ResponseObject<List<AppModel>>>)
     {
+        val jsonObject:JSONObject = JSONObject()
+
+        jsonObject.put("offset",offset)
         val jsonArray:JSONArray = JSONArray()
         packages.forEach()
         {
             jsonArray.put(it)
         }
+        jsonObject.put("packages",jsonArray)
 
-        service.getUpdates(GET_UPDATES, jsonArray.toString())
+        service.getUpdates(GET_UPDATES, jsonObject.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(observer)

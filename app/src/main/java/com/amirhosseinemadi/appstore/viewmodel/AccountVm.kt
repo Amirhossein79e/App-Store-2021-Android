@@ -22,8 +22,8 @@ import org.json.JSONObject
 
 class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
 
-    private var apiCaller: ApiCaller
-    var error:MutableLiveData<String>
+    private val apiCaller: ApiCaller
+    val error:MutableLiveData<String>
 
     val signUpResponse:MutableLiveData<ResponseObject<UserModel>>
     val signInResponse:MutableLiveData<ResponseObject<UserModel>>
@@ -50,7 +50,7 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    public fun btnClick(view:View)
+    fun btnClick(view:View)
     {
         if (signIn)
         {
@@ -98,7 +98,7 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    public fun signClick(view:View)
+    fun signClick(view:View)
     {
         if (signIn)
         {
@@ -122,7 +122,7 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    public fun signUp(email:String, password:String, username:String,token:String)
+    fun signUp(email:String, password:String, username:String,token:String)
     {
         apiCaller.signUpUser(email,password,username,token,object : SingleObserver<ResponseObject<UserModel>>
         {
@@ -144,7 +144,7 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    public fun signIn(email:String, password:String)
+    fun signIn(email:String, password:String)
     {
         apiCaller.signInUser(email,password,object : SingleObserver<ResponseObject<UserModel>>
         {
@@ -166,7 +166,7 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    public fun validateUser(access:String)
+    fun validateUser(access:String)
     {
         apiCaller.validateUser(access,object : SingleObserver<ResponseObject<String>>
         {
@@ -187,9 +187,9 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    public fun update(packages:List<JSONObject>, isUser:Boolean)
+    fun update(offset:Int, packages:List<JSONObject>, isUser:Boolean)
     {
-        apiCaller.getUpdates(packages,object : SingleObserver<ResponseObject<List<AppModel>>>
+        apiCaller.getUpdates(offset,packages,object : SingleObserver<ResponseObject<List<AppModel>>>
         {
             override fun onSubscribe(d: Disposable?) {
                 if (!isUser)
@@ -206,13 +206,14 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
             override fun onError(e: Throwable?) {
                 error.value = "update"
                 accountCallback.onHide()
+                println("!!!!!!!!!!!!!!!!!!!!!!!!!!!"+e?.message)
             }
 
         })
     }
 
 
-    public fun getSignUpResponse(email:String, password:String, username:String,token:String) : MutableLiveData<ResponseObject<UserModel>>
+    fun getSignUpResponse(email:String, password:String, username:String,token:String) : MutableLiveData<ResponseObject<UserModel>>
     {
         signUp(email, password, username, token)
         return signUpResponse
@@ -233,9 +234,9 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    public fun getUpdateResponse(packages: List<JSONObject>, isUser: Boolean) : MutableLiveData<ResponseObject<List<AppModel>>>
+    fun getUpdateResponse(offset: Int, packages: List<JSONObject>, isUser: Boolean) : MutableLiveData<ResponseObject<List<AppModel>>>
     {
-        update(packages, isUser)
+        update(offset, packages, isUser)
         return updateResponse
     }
 

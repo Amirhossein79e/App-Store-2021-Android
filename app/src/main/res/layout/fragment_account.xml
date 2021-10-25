@@ -74,7 +74,7 @@
         android:layout_marginTop="@dimen/dp24"
         app:cardCornerRadius="@dimen/dp16"
         app:cardBackgroundColor="@color/colorSecondary"
-        app:cardElevation="@dimen/dp24"
+        app:cardElevation="@dimen/dp16"
         android:id="@+id/card">
 
 
@@ -161,6 +161,36 @@
         android:layout_marginTop="@dimen/dp32"
         android:id="@+id/recycler">
     </androidx.recyclerview.widget.RecyclerView>
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="@dimen/dp0"
+        app:layout_constraintStart_toStartOf="@id/recycler"
+        app:layout_constraintEnd_toEndOf="@id/recycler"
+        app:layout_constraintTop_toTopOf="@id/recycler"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/ic_connection_failed"
+        android:visibility="gone"
+        android:id="@+id/img">
+    </androidx.appcompat.widget.AppCompatImageView>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintBottom_toBottomOf="@id/img"
+        android:layout_marginStart="@dimen/dp24"
+        android:layout_marginEnd="@dimen/dp24"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_normal"
+        android:text="@string/all_update"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:id="@+id/txt">
+    </androidx.appcompat.widget.AppCompatTextView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

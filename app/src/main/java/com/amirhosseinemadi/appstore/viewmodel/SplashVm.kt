@@ -11,8 +11,8 @@ import io.reactivex.rxjava3.disposables.Disposable
 
 class SplashVm : ViewModel() {
 
-    private var apiCaller:ApiCaller
-    var error:MutableLiveData<String>
+    private val apiCaller:ApiCaller
+    val error:MutableLiveData<String>
     val initResponse:MutableLiveData<ResponseObject<String>>
     val syncResponse:MutableLiveData<ResponseObject<String>>
     val syncUserResponse:MutableLiveData<ResponseObject<String>>

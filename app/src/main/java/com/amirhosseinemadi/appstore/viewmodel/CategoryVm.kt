@@ -27,7 +27,7 @@ class CategoryVm(private val categoryCallback:CategoryCallback) : ViewModel() {
     }
 
 
-    public fun category()
+    fun category()
     {
         apiCaller.getCategories(object : SingleObserver<ResponseObject<List<CategoryModel>>>
         {
@@ -49,9 +49,9 @@ class CategoryVm(private val categoryCallback:CategoryCallback) : ViewModel() {
     }
 
 
-    public fun appByCategory(offset:Int, category:String)
+    fun appByCategory(offset:Int, category:String)
     {
-        apiCaller.getApps(offset, object : SingleObserver<ResponseObject<List<AppModel>>>
+        apiCaller.getAppsByCategory(offset, category, object : SingleObserver<ResponseObject<List<AppModel>>>
         {
             override fun onSubscribe(d: Disposable?) {
                 categoryCallback.onShow()
@@ -71,14 +71,14 @@ class CategoryVm(private val categoryCallback:CategoryCallback) : ViewModel() {
     }
 
 
-    public fun getCategoryResponse(vararg obj:String) : MutableLiveData<ResponseObject<List<CategoryModel>>>
+    fun getCategoryResponse(vararg obj:String) : MutableLiveData<ResponseObject<List<CategoryModel>>>
     {
         category()
         return categoryResponse
     }
 
 
-    public fun getAppResponse(offset:Int, category: String) : MutableLiveData<ResponseObject<List<AppModel>>>
+    fun getAppResponse(offset:Int, category: String) : MutableLiveData<ResponseObject<List<AppModel>>>
     {
         appByCategory(offset,category)
         return appResponse

@@ -15,7 +15,7 @@ class Module(private val context: Context) {
 
 
     @Provides
-    public fun context() : Context
+    fun context() : Context
     {
         return context
     }
@@ -23,7 +23,7 @@ class Module(private val context: Context) {
 
     @Provides
     @Singleton
-    public fun retrofit() : Retrofit
+    fun retrofit() : Retrofit
     {
         val client:OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(CustomInterceptor())

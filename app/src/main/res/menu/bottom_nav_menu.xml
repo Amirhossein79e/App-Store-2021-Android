@@ -3,7 +3,7 @@
 
     <item android:id="@+id/item_home" android:title="Home" android:icon="@drawable/ic_home"> </item>
 
-    <item android:id="@+id/item_search" android:title="Search" android:icon="@drawable/ic_search"> </item>
+    <item android:id="@+id/item_search" android:title="Search" android:icon="@drawable/ic_search_bottom_nav"> </item>
 
     <item android:id="@+id/item_category" android:title="Category" android:icon="@drawable/ic_category"> </item>
 

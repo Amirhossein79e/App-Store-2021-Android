@@ -1,60 +1,122 @@
 package com.amirhosseinemadi.appstore.view.fragment
 
+import android.app.ActionBar
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SimpleCursorAdapter
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.appcompat.widget.SearchView
+import androidx.cursoradapter.widget.CursorAdapter
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirhosseinemadi.appstore.R
+import com.amirhosseinemadi.appstore.databinding.FragmentSearchBinding
+import com.amirhosseinemadi.appstore.model.entity.AppModel
+import com.amirhosseinemadi.appstore.util.Utilities
+import com.amirhosseinemadi.appstore.view.adapter.AppRecyclerAdapter
+import com.amirhosseinemadi.appstore.view.adapter.TitleRecyclerAdapter
+import com.amirhosseinemadi.appstore.view.callback.Callback
+import com.amirhosseinemadi.appstore.view.callback.SearchCallback
+import com.amirhosseinemadi.appstore.viewmodel.SearchVm
+import java.util.*
+import kotlin.collections.ArrayList
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class SearchFragment : Fragment(),SearchCallback {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var viewModel:SearchVm
+    private lateinit var searchBinding:FragmentSearchBinding
+    private lateinit var loading:Dialog
+    private var more:Boolean
+    private val appList:MutableList<AppModel>
+    private val titleList:MutableList<String>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    init
+    {
+        viewModel = SearchVm(this)
+        more = true
+        appList = ArrayList()
+        titleList = ArrayList()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        searchBinding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater,R.layout.fragment_search,container,false).also { it.viewModel = viewModel }
+        loading = Utilities.loadingDialog(requireContext())
+        searchBinding.lifecycleOwner = this
+        initView()
+        return searchBinding.root
+    }
+
+
+    private fun initView()
+    {
+        searchBinding.sch.setOnQueryTextListener(object : SearchView.OnQueryTextListener
+        {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                title(newText!!)
+                return false
+            }
+        })
+
+        searchBinding.recycler.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+        searchBinding.recycler.adapter = AppRecyclerAdapter(requireContext(),appList,object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+                TODO("Not yet implemented")
+            }
+        })
+        searchBinding.recyclerTitle.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+        searchBinding.recyclerTitle.adapter = TitleRecyclerAdapter(requireContext(),titleList,object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+
+    private fun title(title:String)
+    {
+        if (!viewModel.titleResponse.hasObservers())
+        {
+            viewModel.getTitleResponse(title)
+                .observe(viewLifecycleOwner,
+                    {
+                        titleList.clear()
+                        if (it.data != null)
+                        {
+                            titleList.addAll(it.data!!)
+                        }
+                        searchBinding.recyclerTitle.adapter?.notifyDataSetChanged()
+                    })
+        }else
+        {
+            viewModel.title(title)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+
+    override fun onShow() {
+        if (!loading.isShowing)
+        {
+            loading.show()
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onHide() {
+        if (loading.isShowing)
+        {
+            loading.dismiss()
+        }
     }
+
 }

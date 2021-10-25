@@ -8,7 +8,7 @@ class PrefManager() {
 
     companion object
     {
-        public fun setFirst(isFirst:Boolean)
+        fun setFirst(isFirst:Boolean)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             val editor:SharedPreferences.Editor = preferences.edit()
@@ -17,7 +17,7 @@ class PrefManager() {
         }
 
 
-        public fun getFirst() : Boolean
+        fun getFirst() : Boolean
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             val isFirst:Boolean = preferences.getBoolean("first",true)
@@ -25,7 +25,7 @@ class PrefManager() {
         }
 
 
-        public fun setLang(language:String)
+        fun setLang(language:String)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             val editor:SharedPreferences.Editor = preferences.edit()
@@ -34,15 +34,15 @@ class PrefManager() {
         }
 
 
-        public fun getLang() : String?
+        fun getLang() : String?
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
-            val lang:String? = preferences.getString("language","fa")
+            val lang:String? = preferences.getString("language","en")
             return lang
         }
 
 
-        public fun setToken(token: String)
+        fun setToken(token: String)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = preferences.edit()
@@ -51,7 +51,7 @@ class PrefManager() {
         }
 
 
-        public fun getToken() : String?
+        fun getToken() : String?
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             var token: String? = preferences.getString("token", null)
@@ -63,7 +63,7 @@ class PrefManager() {
         }
 
 
-        public fun setAccess(access: String?)
+        fun setAccess(access: String?)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = preferences.edit()
@@ -78,7 +78,7 @@ class PrefManager() {
         }
 
 
-        public fun getAccess() : String?
+        fun getAccess() : String?
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             var access: String? = preferences.getString("access", null)
@@ -90,7 +90,7 @@ class PrefManager() {
         }
 
 
-        public fun setUser(user: String?)
+        fun setUser(user: String?)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = preferences.edit()
@@ -105,7 +105,7 @@ class PrefManager() {
         }
 
 
-        public fun getUser() : String?
+        fun getUser() : String?
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             var user: String? = preferences.getString("user", null)
@@ -117,7 +117,7 @@ class PrefManager() {
         }
 
 
-        public fun checkSignIn() : Boolean
+        fun checkSignIn() : Boolean
         {
             return getUser() != null && getAccess() != null
         }

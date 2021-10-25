@@ -35,4 +35,7 @@
     <!-- App Strings -->
     <string name="by">توسط</string>
     <string name="not_found">هیچ اپلیکیشنی در این دسته پیدا نشد . دسته های دیگر را مشاهده کنید</string>
+    <string name="all_update">بروزرسانی موجود نیست . اپلیکیشن های شما بروز است !</string>
+    <!-- Search Strings -->
+    <string name="search">جستجو</string>
 </resources>

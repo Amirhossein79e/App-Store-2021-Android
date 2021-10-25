@@ -28,7 +28,7 @@ class HomeVm(private val homeCallback: HomeCallback) : ViewModel() {
     }
 
 
-    public fun home()
+    fun home()
     {
         apiCaller.getHome(object : SingleObserver<ResponseObject<HomeModel>>
         {
@@ -49,7 +49,7 @@ class HomeVm(private val homeCallback: HomeCallback) : ViewModel() {
     }
 
 
-    public fun app(category:String, callback: Callback?)
+    fun app(category:String, callback: Callback?)
     {
         apiCaller.getAppsByCategory(0,category,object : SingleObserver<ResponseObject<List<AppModel>>>
         {
@@ -70,14 +70,14 @@ class HomeVm(private val homeCallback: HomeCallback) : ViewModel() {
     }
 
 
-    public fun getHomeResponse(vararg str:String) : MutableLiveData<ResponseObject<HomeModel>>
+    fun getHomeResponse(vararg str:String) : MutableLiveData<ResponseObject<HomeModel>>
     {
         home()
         return homeResponse
     }
 
 
-    public fun getAppResponse(category:String) : MutableLiveData<ResponseObject<List<AppModel>>>
+    fun getAppResponse(category:String) : MutableLiveData<ResponseObject<List<AppModel>>>
     {
         app(category,null)
         return appResponse

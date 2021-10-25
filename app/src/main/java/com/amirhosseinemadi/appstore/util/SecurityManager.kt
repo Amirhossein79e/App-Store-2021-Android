@@ -24,7 +24,7 @@ class SecurityManager {
     companion object
     {
 
-        public fun encrypt(inputData:String) : Map<String,Any>
+        fun encrypt(inputData:String) : Map<String,Any>
         {
             val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
 
@@ -61,7 +61,7 @@ class SecurityManager {
         }
 
 
-        public fun decrypt(inputData:String, aesKey:ByteArray, iv:ByteArray?) : String
+        fun decrypt(inputData:String, aesKey:ByteArray, iv:ByteArray?) : String
         {
             val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
 
@@ -91,7 +91,7 @@ class SecurityManager {
         }
 
 
-        public fun decryptRaw(inputData:String, aesKey:ByteArray, iv:ByteArray?) : ByteArray
+        fun decryptRaw(inputData:String, aesKey:ByteArray, iv:ByteArray?) : ByteArray
         {
             val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
 
@@ -107,7 +107,7 @@ class SecurityManager {
         }
 
 
-        public fun storeDataKey(alias:String) : Any?
+        private fun storeDataKey(alias:String) : Any?
         {
             val keyStore:KeyStore = KeyStore.getInstance("AndroidKeyStore")
             keyStore.load(null)
@@ -168,7 +168,7 @@ class SecurityManager {
         }
 
 
-        public fun storeDataEncrypt(inputData: String,alias: String) : String
+        fun storeDataEncrypt(inputData: String,alias: String) : String
         {
             var finalString:String = ""
 
@@ -201,7 +201,7 @@ class SecurityManager {
         }
 
 
-        public fun storeDataDecrypt(inputData: String,alias: String) : String
+        fun storeDataDecrypt(inputData: String,alias: String) : String
         {
             var finalString:String = ""
 
@@ -237,7 +237,7 @@ class SecurityManager {
         }
 
 
-        public fun getDigest(inputData:String) : String
+        fun getDigest(inputData:String) : String
         {
             val digest:MessageDigest = MessageDigest.getInstance("SHA1")
 

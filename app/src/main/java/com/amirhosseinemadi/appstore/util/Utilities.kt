@@ -33,7 +33,7 @@ class Utilities {
 
     companion object
     {
-        public fun getUid() : String
+        fun getUid() : String
         {
             val uid: String = Settings.Secure.getString(Application.component.context().contentResolver, Settings.Secure.ANDROID_ID)
             var refactoredUid = ""
@@ -57,7 +57,7 @@ class Utilities {
         }
 
 
-        public fun validateEmail(email:String) : Boolean
+        fun validateEmail(email:String) : Boolean
         {
             val pattern:Pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",Pattern.CASE_INSENSITIVE)
             return pattern.matcher(email).find()
@@ -75,7 +75,7 @@ class Utilities {
         }
 
 
-        public fun underApiStatusBarHandle(activity: AppCompatActivity)
+        fun underApiStatusBarHandle(activity: AppCompatActivity)
         {
             when(activity.delegate.localNightMode)
             {
@@ -86,7 +86,7 @@ class Utilities {
         }
 
 
-        public fun loadingDialog(context: Context) : Dialog
+        fun loadingDialog(context: Context) : Dialog
         {
             val view:View = LayoutInflater.from(context).inflate(R.layout.dialog_loading,null)
             val dialog:Dialog = Dialog(context)
@@ -97,7 +97,7 @@ class Utilities {
         }
 
 
-        public fun dialogIcon(context:Context, @DrawableRes imgRes:Int?, @StringRes txtRes:Int, @StringRes posRes:Int?, @StringRes negRes:Int?, posVisibility:Boolean, negVisibility:Boolean, posListener:View.OnClickListener?, negListener:View.OnClickListener?) : Dialog
+        fun dialogIcon(context:Context, @DrawableRes imgRes:Int?, @StringRes txtRes:Int, @StringRes posRes:Int?, @StringRes negRes:Int?, posVisibility:Boolean, negVisibility:Boolean, posListener:View.OnClickListener?, negListener:View.OnClickListener?) : Dialog
         {
             val view:View = LayoutInflater.from(context).inflate(R.layout.dialog,null)
             val dialog:Dialog = Dialog(context)
@@ -150,7 +150,7 @@ class Utilities {
         }
 
 
-        public fun showSnack(viewGroup:ViewGroup, text:String, @BaseTransientBottomBar.Duration duration:Int)
+        fun showSnack(viewGroup:ViewGroup, text:String, @BaseTransientBottomBar.Duration duration:Int)
         {
             CustomSnack.make(viewGroup,duration).setText(text).show()
         }
@@ -169,7 +169,7 @@ class Utilities {
         }
 
 
-        public fun getAllPackages() : List<JSONObject>
+        fun getAllPackages() : List<JSONObject>
         {
             val list:List<PackageInfo> = Application.component.context().packageManager.getInstalledPackages(0)
             val appList:MutableList<JSONObject> = ArrayList()

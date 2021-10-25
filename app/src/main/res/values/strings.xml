@@ -34,4 +34,7 @@
     <!-- App Strings -->
     <string name="by">by</string>
     <string name="not_found">Not found any app in this category . check other category</string>
+    <string name="all_update">No update found . Your apps is up to date !</string>
+    <!-- Search Strings -->
+    <string name="search">Search</string>
 </resources>
