@@ -37,4 +37,5 @@
     <string name="all_update">No update found . Your apps is up to date !</string>
     <!-- Search Strings -->
     <string name="search">Search</string>
+    <string name="not_found_search">Your search didn\'t have any result</string>
 </resources>

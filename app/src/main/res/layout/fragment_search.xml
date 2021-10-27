@@ -76,7 +76,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/btn_voice"
-                android:layout_marginEnd="@dimen/dp16"
+                android:layout_marginEnd="@dimen/dp24"
                 app:iconifiedByDefault="false"
                 app:defaultQueryHint="@string/search"
                 app:queryBackground="@color/transparent"
@@ -96,6 +96,22 @@
                 app:tint="@color/colorOnPrimary"
                 android:id="@+id/btn_voice">
             </androidx.appcompat.widget.AppCompatImageView>
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/dp0"
+                app:layout_constraintTop_toTopOf="@id/sch"
+                app:layout_constraintBottom_toBottomOf="@id/sch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:lottie_rawRes="@raw/loading"
+                app:lottie_loop="true"
+                app:lottie_repeatMode="reverse"
+                app:lottie_autoPlay="false"
+                android:visibility="visible"
+                android:id="@+id/loading">
+            </com.airbnb.lottie.LottieAnimationView>
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -120,12 +136,40 @@
         app:layout_constraintStart_toEndOf="@id/guide_start"
         app:layout_constraintEnd_toStartOf="@id/guide_end"
         app:layout_constraintBottom_toTopOf="@id/guide_bottom"
-        android:layout_marginTop="@dimen/dp80"
+        android:layout_marginTop="@dimen/dp72"
         android:id="@+id/recycler">
     </androidx.recyclerview.widget.RecyclerView>
 
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="@dimen/dp0"
+        app:layout_constraintStart_toStartOf="@id/recycler"
+        app:layout_constraintEnd_toEndOf="@id/recycler"
+        app:layout_constraintTop_toBottomOf="@id/guide_top"
+        app:layout_constraintBottom_toTopOf="@id/guide_bottom"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/ic_connection_failed"
+        android:visibility="gone"
+        android:id="@+id/img">
+    </androidx.appcompat.widget.AppCompatImageView>
 
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintBottom_toBottomOf="@id/img"
+        android:layout_marginStart="@dimen/dp24"
+        android:layout_marginEnd="@dimen/dp24"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_normal"
+        android:text="@string/not_found_search"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:id="@+id/txt">
+    </androidx.appcompat.widget.AppCompatTextView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

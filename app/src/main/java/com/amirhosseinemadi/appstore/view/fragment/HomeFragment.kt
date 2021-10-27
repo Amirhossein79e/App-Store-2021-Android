@@ -120,22 +120,23 @@ class HomeFragment : Fragment(),HomeCallback {
                 if (viewModel.appResponse.value?.responseCode == 1)
                 {
                     recycler.layoutManager = LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.HORIZONTAL, false)
-                    recycler.adapter = SubRecyclerAdapter(requireActivity(), viewModel.appResponse.value?.data!!, object : Callback
-                        {
-                            override fun notify(vararg obj: Any?)
-                            {
 
-                            }
-                        })
+                        recycler.adapter = SubRecyclerAdapter(requireContext(), viewModel.appResponse.value?.data!!, object : Callback
+                            {
+                                override fun notify(vararg obj: Any?)
+                                {
+
+                                }
+                            })
                     i++
-                    if (i + 1 == viewModel.homeResponse.value?.data?.rows?.size)
+                    if (i == viewModel.homeResponse.value?.data?.rows?.size)
                     {
                         onHide()
                     }
-                    }else
-                    {
-                        Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),viewModel.appResponse.value?.message!!,BaseTransientBottomBar.LENGTH_SHORT)
-                    }
+                }else
+                {
+                    Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),viewModel.appResponse.value?.message!!,BaseTransientBottomBar.LENGTH_SHORT)
+                }
 
                 }
         })

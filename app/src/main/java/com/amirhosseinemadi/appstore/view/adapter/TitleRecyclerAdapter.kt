@@ -24,6 +24,15 @@ class TitleRecyclerAdapter(private val context:Context,private val list:List<Str
         val str:String = list.get(position)
         holder.txt.text = str
         holder.linear.setOnClickListener { callback.notify(str) }
+
+        if (position == list.size - 1)
+        {
+            holder.txtDivider.visibility = View.GONE
+        }else
+        {
+            holder.txtDivider.visibility = View.VISIBLE
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -34,6 +43,7 @@ class TitleRecyclerAdapter(private val context:Context,private val list:List<Str
     class ViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
 
         val txt:AppCompatTextView = itemView.findViewById(R.id.txt)
+        val txtDivider:AppCompatTextView = itemView.findViewById(R.id.txt_divider)
         val linear:ConstraintLayout = itemView.findViewById(R.id.linear)
 
     }

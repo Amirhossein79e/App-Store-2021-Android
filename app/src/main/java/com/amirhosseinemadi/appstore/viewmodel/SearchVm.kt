@@ -31,17 +31,15 @@ class SearchVm(private val searchCallback:SearchCallback) : ViewModel() {
         apiCaller.getTitlesSearch(query,object : SingleObserver<ResponseObject<List<String>>>
         {
             override fun onSubscribe(d: Disposable?) {
-                searchCallback.onShow()
+
             }
 
             override fun onSuccess(t: ResponseObject<List<String>>?) {
                 titleResponse.value = t
-                searchCallback.onHide()
             }
 
             override fun onError(e: Throwable?) {
                 error.value = "title"
-                searchCallback.onHide()
             }
 
         })

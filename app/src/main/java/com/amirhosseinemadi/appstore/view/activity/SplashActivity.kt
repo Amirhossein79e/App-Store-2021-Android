@@ -107,10 +107,9 @@ class SplashActivity : AppCompatActivity() {
     {
         if (PrefManager.getFirst())
         {
-            viewModel.init(uid,token)
             if (!viewModel.initResponse.hasObservers())
             {
-                viewModel.initResponse
+                viewModel.getInitResponse(uid,token)
                     .observe(this@SplashActivity,
                         { t ->
                             if (t?.responseCode == 1)
@@ -130,12 +129,15 @@ class SplashActivity : AppCompatActivity() {
                                 dialog.show()
                             }
                         })
+            }else
+            {
+                viewModel.init(uid,token)
             }
         }else
         {
-            viewModel.sync(uid,token)
-            if (!viewModel.syncResponse.hasObservers()) {
-                viewModel.syncResponse
+            if (!viewModel.syncResponse.hasObservers())
+            {
+                viewModel.getSyncResponse(uid,token)
                     .observe(this,
                         {
                             if (it?.responseCode == 1)
@@ -156,6 +158,9 @@ class SplashActivity : AppCompatActivity() {
                                 dialog.show()
                             }
                         })
+            }else
+            {
+                viewModel.sync(uid,token)
             }
         }
     }
@@ -163,7 +168,6 @@ class SplashActivity : AppCompatActivity() {
 
     private fun syncUser(access:String, token: String)
     {
-        viewModel.syncUser(access,token)
         if (!viewModel.syncUserResponse.hasObservers())
         {
             viewModel.getSyncUserResponse(access, token)
@@ -187,6 +191,9 @@ class SplashActivity : AppCompatActivity() {
                             dialog.show()
                         }
                     })
+        }else
+        {
+            viewModel.syncUser(access,token)
         }
     }
 

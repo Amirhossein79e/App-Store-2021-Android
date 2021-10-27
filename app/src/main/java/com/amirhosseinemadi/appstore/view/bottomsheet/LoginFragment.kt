@@ -65,10 +65,9 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
 
     override fun signUp(email: String, password: String, username: String, token: String) {
 
-        viewModel.signUp(email, password, username, token)
         if (!viewModel.signUpResponse.hasObservers())
         {
-            viewModel.signUpResponse
+            viewModel.getSignUpResponse(email, password, username, token)
                 .observe(viewLifecycleOwner,
                     {
                         when (it.responseCode)
@@ -88,16 +87,18 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
                             )
                         }
                     })
+        }else
+        {
+            viewModel.signUp(email, password, username, token)
         }
     }
 
 
     override fun signIn(email: String, password: String) {
 
-        viewModel.signIn(email,password)
         if (!viewModel.signInResponse.hasObservers())
         {
-            viewModel.signInResponse
+            viewModel.getSignInResponse(email, password)
                 .observe(viewLifecycleOwner,
                     {
                         when (it.responseCode)
@@ -117,6 +118,9 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
                             )
                         }
                     })
+        }else
+        {
+            viewModel.signIn(email,password)
         }
 
     }
