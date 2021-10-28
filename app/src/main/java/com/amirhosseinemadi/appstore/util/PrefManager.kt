@@ -42,6 +42,40 @@ class PrefManager() {
         }
 
 
+        fun setTheme(mode:String)
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val editor:SharedPreferences.Editor = preferences.edit()
+            editor.putString("theme",mode)
+            editor.commit()
+        }
+
+
+        fun getTheme() : String?
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val mode:String? = preferences.getString("theme","dark")
+            return mode
+        }
+
+
+        fun setUpdate(update:Boolean)
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val editor:SharedPreferences.Editor = preferences.edit()
+            editor.putBoolean("update",update)
+            editor.commit()
+        }
+
+
+        fun getUpdate() : Boolean
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val update:Boolean = preferences.getBoolean("update",true)
+            return update
+        }
+
+
         fun setToken(token: String)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)

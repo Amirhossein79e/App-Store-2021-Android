@@ -66,7 +66,8 @@ class SearchFragment : Fragment(),SearchCallback {
         ) {
             if (it.resultCode == AppCompatActivity.RESULT_OK)
             {
-                searchBinding.sch.setQuery(it.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).toString(),true)
+                fromTitle = false
+                searchBinding.sch.setQuery(it.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).toString().replace("[","").replace("]",""),true)
             }
         }
     }
@@ -91,6 +92,10 @@ class SearchFragment : Fragment(),SearchCallback {
         {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
+                if (searchBinding.sch.hasFocus())
+                {
+                    searchBinding.sch.clearFocus()
+                }
                 isNew = true
                 titleList.clear()
                 searchBinding.recyclerTitle.adapter?.notifyDataSetChanged()

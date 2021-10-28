@@ -1,6 +1,7 @@
 package com.amirhosseinemadi.appstore.view.fragment
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.amirhosseinemadi.appstore.databinding.FragmentAccountBinding
 import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
+import com.amirhosseinemadi.appstore.view.activity.SettingsActivity
 import com.amirhosseinemadi.appstore.view.adapter.AppRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.bottomsheet.LoginFragment
 import com.amirhosseinemadi.appstore.view.callback.AccountCallback
@@ -45,6 +47,15 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
     private fun initView()
     {
+        accountBinding.btnSettings.setOnClickListener {
+            startActivity(
+                Intent(
+                    requireContext(),
+                    SettingsActivity::class.java
+                )
+            )
+        }
+
         if (PrefManager.checkSignIn())
         {
             accountBinding.txtUser.text = PrefManager.getUser()

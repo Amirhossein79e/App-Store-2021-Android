@@ -14,9 +14,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:lottie_rawRes="@raw/loading"
-        app:lottie_repeatMode="restart"
+        app:lottie_repeatMode="reverse"
         app:lottie_autoPlay="true"
-        app:lottie_repeatCount="-1">
+        app:lottie_loop="true">
     </com.airbnb.lottie.LottieAnimationView>
 
 
