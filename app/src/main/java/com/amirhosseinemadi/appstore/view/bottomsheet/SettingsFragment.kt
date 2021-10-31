@@ -48,7 +48,7 @@ class SettingsFragment(private val mode:String, private val callback:Callback) :
         {
             settingBinding.txtLight.setCompoundDrawablesRelativeWithIntrinsicBounds(null,null,null,null)
             settingBinding.txtDark.setCompoundDrawablesRelativeWithIntrinsicBounds(null,null,ContextCompat.getDrawable(requireContext(),R.drawable.ic_check),null)
-        }else if(PrefManager.getLang().equals("light"))
+        }else if(PrefManager.getTheme().equals("light"))
         {
             settingBinding.txtDark.setCompoundDrawablesRelativeWithIntrinsicBounds(null,null,null,null)
             settingBinding.txtLight.setCompoundDrawablesRelativeWithIntrinsicBounds(null,null,ContextCompat.getDrawable(requireContext(),R.drawable.ic_check),null)

@@ -1,6 +1,5 @@
 package com.amirhosseinemadi.appstore.viewmodel
 
-import android.content.Context
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.view.View
@@ -61,11 +60,11 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
                     accountCallback.signIn(emailStr,passwordStr)
                 }else
                 {
-                    accountCallback.onMessage("رمز عبور حداقل ۸ رقم می باشد")
+                    accountCallback.onMessage(R.string.password_error)
                 }
             }else
             {
-                accountCallback.onMessage("ایمیل وارد شده صحیح نیست");
+                accountCallback.onMessage(R.string.email_error);
             }
         }else
         {
@@ -80,19 +79,19 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
                             accountCallback.signUp(emailStr, passwordStr, usernameStr, PrefManager.getToken()!!)
                         } else
                         {
-                            accountCallback.onMessage("رمز عبور با تکرار رمز عبور همخوانی ندارد")
+                            accountCallback.onMessage(R.string.password_error_repeat)
                         }
                     } else
                     {
-                        accountCallback.onMessage("رمز عبور حداقل ۸ رقم می باشد")
+                        accountCallback.onMessage(R.string.password_error)
                     }
                 }else
                 {
-                    accountCallback.onMessage("نام کاربری وارد شده صحیح نیست . نام کاربری حداقل دو کارکتر می باشد")
+                    accountCallback.onMessage(R.string.username_error)
                 }
             }else
             {
-                accountCallback.onMessage("ایمیل وارد شده صحیح نیست");
+                accountCallback.onMessage(R.string.email_error);
             }
         }
     }

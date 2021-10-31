@@ -12,7 +12,7 @@ interface AccountCallback {
 
     public fun signIn(email:String, password:String)
 
-    public fun onMessage(message:String)
+    public fun onMessage(@StringRes res:Int)
 
     public fun getStr(@StringRes res:Int) : String
 

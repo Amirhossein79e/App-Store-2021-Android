@@ -29,8 +29,12 @@
     <string name="sign_up">Sign up</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_out">Sign out</string>
-    <string name="sign_out_successfull">Successfully Signed out</string>
+    <string name="sign_out_successful">Successfully Signed out</string>
     <string name="welcome">Welcome!</string>
+    <string name="password_error">Password must be 8 characters at least</string>
+    <string name="email_error">Entered email not valid</string>
+    <string name="password_error_repeat">Password and repeat is not same</string>
+    <string name="username_error">Entered Username not correct . at least 2 characters</string>
     <!-- App Strings -->
     <string name="by">by</string>
     <string name="not_found">Not found any app in this category . check other category</string>
@@ -38,4 +42,11 @@
     <!-- Search Strings -->
     <string name="search">Search</string>
     <string name="not_found_search">Your search didn\'t have any result</string>
+    <string name="language">Language</string>
+    <string name="day_night">Day/Night</string>
+    <string name="update_checking">Update checking</string>
+    <string name="report_a_bug">Report a Bug</string>
+    <string name="dark">Dark mode</string>
+    <string name="light">Light mode</string>
+
 </resources>

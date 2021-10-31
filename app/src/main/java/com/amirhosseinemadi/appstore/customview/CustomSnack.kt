@@ -17,7 +17,6 @@ class CustomSnack(viewGroup:ViewGroup, view: View, contentViewCallback:com.googl
         {
             val inflater:LayoutInflater = LayoutInflater.from(viewGroup.context)
             val view:View = inflater.inflate(R.layout.snack,viewGroup,false)
-            view.setBackgroundColor(ContextCompat.getColor(viewGroup.context,R.color.transparent))
             val contentViewCallback:MyContentViewCallback = MyContentViewCallback(view)
             val customSnack:CustomSnack = CustomSnack(viewGroup,view,contentViewCallback)
             customSnack.getView().setPadding(0,0,0,0)

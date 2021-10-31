@@ -89,7 +89,7 @@
                                     android:textSize="@dimen/text_size_normal"
                                     android:gravity="start|center_vertical"
                                     app:drawableTint="@color/colorOnPrimary"
-                                    android:drawableEnd="@drawable/ic_check"
+                                    android:textColor="@color/md_grey_600"
                                     android:text="English"
                                     android:id="@+id/txt_en">
                                 </androidx.appcompat.widget.AppCompatTextView>
@@ -115,6 +115,7 @@
                                     android:textSize="@dimen/text_size_normal"
                                     android:gravity="end|center_vertical"
                                     app:drawableTint="@color/colorOnPrimary"
+                                    android:textColor="@color/md_grey_600"
                                     android:text="فارسی"
                                     android:id="@+id/txt_fa">
                                 </androidx.appcompat.widget.AppCompatTextView>
@@ -155,7 +156,7 @@
                                     android:textSize="@dimen/text_size_normal"
                                     android:gravity="start|center_vertical"
                                     app:drawableTint="@color/colorOnPrimary"
-                                    android:drawableEnd="@drawable/ic_check"
+                                    android:textColor="@color/md_grey_600"
                                     android:text="Dark mode"
                                     android:id="@+id/txt_dark">
                                 </androidx.appcompat.widget.AppCompatTextView>
@@ -194,6 +195,7 @@
                                     android:textSize="@dimen/text_size_normal"
                                     android:gravity="start|center_vertical"
                                     app:drawableTint="@color/colorOnPrimary"
+                                    android:textColor="@color/md_grey_600"
                                     android:text="Light mode"
                                     android:id="@+id/txt_light">
                                 </androidx.appcompat.widget.AppCompatTextView>

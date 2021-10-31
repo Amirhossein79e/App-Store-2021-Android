@@ -48,12 +48,8 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
     private fun initView()
     {
         accountBinding.btnSettings.setOnClickListener {
-            startActivity(
-                Intent(
-                    requireContext(),
-                    SettingsActivity::class.java
-                )
-            )
+            startActivity(Intent(requireContext(), SettingsActivity::class.java))
+            requireActivity().finish()
         }
 
         if (PrefManager.checkSignIn())
@@ -74,7 +70,7 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
                     LoginFragment(this).show(requireActivity().supportFragmentManager,"")
                 }
 
-                Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),requireContext().getString(R.string.sign_out_successfull),BaseTransientBottomBar.LENGTH_SHORT)
+                Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),requireContext().getString(R.string.sign_out_successful),BaseTransientBottomBar.LENGTH_SHORT)
             }
         }else
         {
@@ -226,7 +222,7 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
     }
 
-    override fun onMessage(message: String) {
+    override fun onMessage(res: Int) {
 
     }
 

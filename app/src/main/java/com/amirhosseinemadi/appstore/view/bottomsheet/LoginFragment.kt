@@ -126,8 +126,8 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
     }
 
 
-    override fun onMessage(message: String) {
-        Utilities.showSnack(loginBinding.coordinator,message,BaseTransientBottomBar.LENGTH_SHORT)
+    override fun onMessage(res: Int) {
+        Utilities.showSnack(loginBinding.coordinator,getString(res),BaseTransientBottomBar.LENGTH_SHORT)
     }
 
     override fun getStr(res: Int) : String {

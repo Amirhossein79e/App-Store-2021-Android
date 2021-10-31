@@ -1,5 +1,7 @@
 package com.amirhosseinemadi.appstore.view.activity
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.CompoundButton
@@ -38,6 +40,16 @@ class SettingsActivity : AppCompatActivity(),Callback {
 
         }
 
+        settingsBinding.bug.setOnClickListener {
+            val intent:Intent = Intent(Intent.ACTION_VIEW, Uri.parse("mailto:amirhossein79.e@gmail.com"))
+            startActivity(intent)
+        }
+
+        settingsBinding.imgBack.setOnClickListener{
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
+
         when(PrefManager.getLang())
         {
             "fa" -> { settingsBinding.txtLanguage.text = "فارسی" }
@@ -47,11 +59,18 @@ class SettingsActivity : AppCompatActivity(),Callback {
 
         when(PrefManager.getTheme())
         {
-            "dark" -> { settingsBinding.txtDayNight.text = "Dark" }
+            "dark" -> { settingsBinding.txtDayNight.text = getString(R.string.dark) }
 
-            "light" -> { settingsBinding.txtDayNight.text = "Light" }
+            "light" -> { settingsBinding.txtDayNight.text = getString(R.string.light) }
         }
     }
+
+
+    override fun onBackPressed() {
+        startActivity(Intent(this,MainActivity::class.java))
+        finish()
+    }
+
 
     override fun notify(vararg obj: Any?) {
         TODO("Not yet implemented")

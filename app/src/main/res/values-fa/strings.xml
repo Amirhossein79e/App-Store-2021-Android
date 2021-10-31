@@ -30,8 +30,12 @@
     <string name="sign_up">ایجاد حساب</string>
     <string name="sign_in">ورود به حساب</string>
     <string name="sign_out">خروح از حساب</string>
-    <string name="sign_out_successfull">با موفقیت خارج شدید</string>
+    <string name="sign_out_successful">با موفقیت خارج شدید</string>
     <string name="welcome">خوش آمدید!</string>
+    <string name="password_error">رمز عبور حداقل ۸ رقم می باشد</string>
+    <string name="email_error">ایمیل وارد شده صحیح نیست</string>
+    <string name="password_error_repeat">رمز عبور با تکرار رمز عبور همخوانی ندارد</string>
+    <string name="username_error">نام کاربری وارد شده صحیح نیست . نام کاربری حداقل دو کارکتر می باشد</string>
     <!-- App Strings -->
     <string name="by">توسط</string>
     <string name="not_found">هیچ اپلیکیشنی در این دسته پیدا نشد . دسته های دیگر را مشاهده کنید</string>
@@ -39,4 +43,11 @@
     <!-- Search Strings -->
     <string name="search">جستجو</string>
     <string name="not_found_search">جستجوی شما هیچ نتیجه ای نداشت</string>
+    <string name="language">زبان</string>
+    <string name="day_night">شب/روز</string>
+    <string name="update_checking">بررسی خودکار بروزرسانی</string>
+    <string name="report_a_bug">گذارش اشکال</string>
+    <string name="dark">حالت تاریک</string>
+    <string name="light">حالت روشن</string>
+
 </resources>

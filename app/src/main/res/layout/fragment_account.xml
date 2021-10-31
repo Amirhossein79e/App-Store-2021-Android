@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.04"
+        app:layout_constraintGuide_begin="40dp"
         android:id="@+id/guide_top">
     </androidx.constraintlayout.widget.Guideline>
 
@@ -54,9 +54,9 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/guide_top"
-        app:layout_constraintBottom_toBottomOf="@id/guide_top"
-        app:layout_constraintEnd_toEndOf="@id/guide_end"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="@dimen/dp4"
         android:src="@drawable/ic_settings"
         android:background="@drawable/btn_selector"
         android:backgroundTint="@color/transparent"
@@ -67,7 +67,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btn_settings"
+        app:layout_constraintTop_toBottomOf="@id/guide_top"
         app:layout_constraintStart_toEndOf="@id/guide_start"
         app:layout_constraintEnd_toStartOf="@id/guide_end"
         android:minHeight="@dimen/dp72"

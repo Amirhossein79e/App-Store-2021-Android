@@ -46,14 +46,14 @@
 
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="@dimen/dp24"
-        android:layout_height="@dimen/dp24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/dp8"
-        android:layout_marginStart="@dimen/dp8"
+        android:padding="@dimen/dp8"
         app:srcCompat="@drawable/ic_back"
-        app:tint="@color/colorOnPrimary">
+        app:tint="@color/colorOnPrimary"
+        android:id="@+id/img_back">
     </androidx.appcompat.widget.AppCompatImageView>
 
 
@@ -94,7 +94,7 @@
                     android:drawableStart="@drawable/ic_language"
                     android:drawableTint="@color/colorOnPrimary"
                     android:drawablePadding="@dimen/dp8"
-                    android:text="Language">
+                    android:text="@string/language">
                 </androidx.appcompat.widget.AppCompatTextView>
 
 
@@ -145,7 +145,7 @@
                     android:drawableStart="@drawable/ic_day_night"
                     android:drawableTint="@color/colorOnPrimary"
                     android:drawablePadding="@dimen/dp8"
-                    android:text="Day/Night">
+                    android:text="@string/day_night">
                 </androidx.appcompat.widget.AppCompatTextView>
 
 
@@ -197,7 +197,7 @@
                     android:drawableStart="@drawable/ic_update"
                     android:drawableTint="@color/colorOnPrimary"
                     android:drawablePadding="@dimen/dp8"
-                    android:text="Update checking">
+                    android:text="@string/update_checking">
                 </androidx.appcompat.widget.AppCompatTextView>
 
 
@@ -246,7 +246,7 @@
                     android:drawableStart="@drawable/ic_bug"
                     android:drawableTint="@color/colorOnPrimary"
                     android:drawablePadding="@dimen/dp8"
-                    android:text="Report a Bug">
+                    android:text="@string/report_a_bug">
                 </androidx.appcompat.widget.AppCompatTextView>
 
 
