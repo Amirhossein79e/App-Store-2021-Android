@@ -46,7 +46,9 @@ class SettingsActivity : AppCompatActivity(),Callback {
         }
 
         settingsBinding.imgBack.setOnClickListener{
-            startActivity(Intent(this,MainActivity::class.java))
+            val intent:Intent = Intent(this,MainActivity::class.java)
+            intent.putExtra("key","settings")
+            startActivity(intent)
             finish()
         }
 
@@ -67,7 +69,9 @@ class SettingsActivity : AppCompatActivity(),Callback {
 
 
     override fun onBackPressed() {
-        startActivity(Intent(this,MainActivity::class.java))
+        val intent:Intent = Intent(this,MainActivity::class.java)
+        intent.putExtra("key","settings")
+        startActivity(intent)
         finish()
     }
 
@@ -75,4 +79,6 @@ class SettingsActivity : AppCompatActivity(),Callback {
     override fun notify(vararg obj: Any?) {
         TODO("Not yet implemented")
     }
+
+
 }

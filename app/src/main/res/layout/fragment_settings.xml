@@ -87,9 +87,10 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
                                     android:textSize="@dimen/text_size_normal"
+                                    android:textAlignment="viewStart"
                                     android:gravity="start|center_vertical"
                                     app:drawableTint="@color/colorOnPrimary"
-                                    android:textColor="@color/md_grey_600"
+                                    style="@style/txt_style"
                                     android:text="English"
                                     android:id="@+id/txt_en">
                                 </androidx.appcompat.widget.AppCompatTextView>
@@ -112,10 +113,11 @@
                                     app:layout_constraintTop_toBottomOf="@id/txt_divider_one"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     android:layout_marginTop="@dimen/dp8"
+                                    android:textAlignment="viewStart"
                                     android:textSize="@dimen/text_size_normal"
-                                    android:gravity="end|center_vertical"
+                                    android:gravity="start|center_vertical"
                                     app:drawableTint="@color/colorOnPrimary"
-                                    android:textColor="@color/md_grey_600"
+                                    style="@style/txt_style"
                                     android:text="فارسی"
                                     android:id="@+id/txt_fa">
                                 </androidx.appcompat.widget.AppCompatTextView>
@@ -143,7 +145,7 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:srcCompat="@drawable/ic_dark"
                                     app:tint="@color/colorOnPrimary"
-                                    android:rotation="145"
+                                    android:rotation="180"
                                     android:id="@+id/img_dark">
                                 </androidx.appcompat.widget.AppCompatImageView>
 
@@ -156,8 +158,8 @@
                                     android:textSize="@dimen/text_size_normal"
                                     android:gravity="start|center_vertical"
                                     app:drawableTint="@color/colorOnPrimary"
-                                    android:textColor="@color/md_grey_600"
-                                    android:text="Dark mode"
+                                    style="@style/txt_style"
+                                    android:text="@string/dark"
                                     android:id="@+id/txt_dark">
                                 </androidx.appcompat.widget.AppCompatTextView>
 
@@ -195,8 +197,8 @@
                                     android:textSize="@dimen/text_size_normal"
                                     android:gravity="start|center_vertical"
                                     app:drawableTint="@color/colorOnPrimary"
-                                    android:textColor="@color/md_grey_600"
-                                    android:text="Light mode"
+                                    style="@style/txt_style"
+                                    android:text="@string/light"
                                     android:id="@+id/txt_light">
                                 </androidx.appcompat.widget.AppCompatTextView>
 

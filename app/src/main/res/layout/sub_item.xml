@@ -4,9 +4,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="@dimen/dp16"
-    app:cardElevation="@dimen/dp1"
-    app:cardBackgroundColor="@color/colorSecondary"
-    android:layout_margin="@dimen/dp8">
+    app:cardElevation="@dimen/dp0"
+    android:layout_marginTop="@dimen/dp8"
+    android:layout_marginBottom="@dimen/dp4"
+    app:cardBackgroundColor="@color/transparent">
 
 
     <LinearLayout
@@ -22,14 +23,14 @@
 
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="@dimen/dp64"
-            android:layout_height="@dimen/dp64"
+            android:layout_width="@dimen/dp56"
+            android:layout_height="@dimen/dp56"
             android:id="@+id/img">
         </androidx.appcompat.widget.AppCompatImageView>
 
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="@dimen/dp80"
+            android:layout_width="@dimen/dp72"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
             android:textSize="@dimen/text_size_small"

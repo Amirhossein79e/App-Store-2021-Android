@@ -41,6 +41,11 @@
     </style>
 
 
+    <style name="txt_style" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/md_grey_600</item>
+    </style>
+
+
     <style name="bottom_sheet_theme" parent="Theme.Design.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/bottom_sheet_modal_style</item>
     </style>

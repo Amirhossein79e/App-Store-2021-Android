@@ -45,6 +45,18 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    override fun onStart() {
+        super.onStart()
+        if (intent.extras != null && intent.extras!!.getString("key") != null)
+        {
+            mainBinding.bottomNav.selectedItemId = R.id.item_account
+        }else
+        {
+            mainBinding.bottomNav.selectedItemId = R.id.item_home
+        }
+    }
+
+
     private fun initView()
     {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
@@ -54,7 +66,6 @@ class MainActivity : AppCompatActivity() {
 
         mainBinding.cardBottomNav.setBackgroundResource(R.drawable.bottom_nav_card_background)
         mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
-        mainBinding.bottomNav.selectedItemId = R.id.item_home
     }
 
 

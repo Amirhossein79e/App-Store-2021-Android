@@ -10,6 +10,7 @@ import android.net.Network
 import android.net.NetworkRequest
 import android.net.Uri
 import android.provider.Settings
+import androidx.appcompat.app.AppCompatDelegate
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities

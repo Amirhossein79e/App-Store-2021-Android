@@ -19,15 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.04"
-            android:id="@+id/guide_top">
-        </androidx.constraintlayout.widget.Guideline>
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.89"
             android:id="@+id/guide_bottom">
         </androidx.constraintlayout.widget.Guideline>
@@ -36,7 +27,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp0"
-            app:layout_constraintTop_toBottomOf="@id/guide_top"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/guide_bottom">
 
 
@@ -48,6 +39,15 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.02"
+                        android:id="@+id/guide_top">
+                    </androidx.constraintlayout.widget.Guideline>
 
 
                     <androidx.constraintlayout.widget.Guideline
@@ -71,7 +71,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp0"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/guide_top"
                         app:layout_constraintDimensionRatio="2:1"
                         android:orientation="horizontal"
                         android:clipToPadding="false"
@@ -82,11 +82,10 @@
 
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="@dimen/dp0"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@id/guide_start"
-                        app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintTop_toBottomOf="@id/pager"
+                        android:layout_marginTop="@dimen/dp16"
                         android:nestedScrollingEnabled="false"
                         android:id="@+id/recycler">
                     </androidx.recyclerview.widget.RecyclerView>

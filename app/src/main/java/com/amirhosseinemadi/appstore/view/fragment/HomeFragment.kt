@@ -30,6 +30,7 @@ class HomeFragment : Fragment(),HomeCallback {
     private lateinit var loading:Dialog
     private lateinit var snapHelper:PagerSnapHelper
     private lateinit var recyclerList: HashMap<String,RecyclerView>
+    private var subBoolean: Boolean = true
     private var i:Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -119,7 +120,15 @@ class HomeFragment : Fragment(),HomeCallback {
             {
                 if (viewModel.appResponse.value?.responseCode == 1)
                 {
-                    recycler.layoutManager = LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.HORIZONTAL, false)
+                    if (subBoolean)
+                    {
+                        recycler.layoutManager = LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.HORIZONTAL, false).also { it.stackFromEnd = true }
+                        subBoolean = false
+                    }else
+                    {
+                        recycler.layoutManager = LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.HORIZONTAL, true)
+                        subBoolean = true
+                    }
 
                         recycler.adapter = SubRecyclerAdapter(requireContext(), viewModel.appResponse.value?.data!!, object : Callback
                             {

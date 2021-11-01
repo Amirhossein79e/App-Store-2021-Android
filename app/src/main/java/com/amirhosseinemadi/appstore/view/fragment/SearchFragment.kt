@@ -39,7 +39,7 @@ import kotlin.collections.ArrayList
 
 class SearchFragment : Fragment(),SearchCallback {
 
-    private lateinit var viewModel:SearchVm
+    private val viewModel:SearchVm
     private lateinit var searchBinding:FragmentSearchBinding
     private lateinit var loading:Dialog
     private var more:Boolean
@@ -66,7 +66,7 @@ class SearchFragment : Fragment(),SearchCallback {
         ) {
             if (it.resultCode == AppCompatActivity.RESULT_OK)
             {
-                fromTitle = false
+                fromTitle = true
                 searchBinding.sch.setQuery(it.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).toString().replace("[","").replace("]",""),true)
             }
         }

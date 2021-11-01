@@ -10,4 +10,7 @@ class HomeCategoryModel {
     @SerializedName("categoryName")
     var categoryName:String? = ""
 
+    @SerializedName("categoryNameEn")
+    var categoryNameEn:String? = ""
+
 }
