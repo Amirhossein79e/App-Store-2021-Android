@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
             R.id.item_search -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,SearchFragment()).commit()
 
-            R.id.item_category -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,CategoryFragment()).commit()
+            R.id.item_category -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,CategoryFragment()).addToBackStack("category").commit()
 
             R.id.item_account -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,AccountFragment()).commit()
         }

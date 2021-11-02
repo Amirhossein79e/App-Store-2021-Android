@@ -30,7 +30,6 @@ class HomeFragment : Fragment(),HomeCallback {
     private lateinit var loading:Dialog
     private lateinit var snapHelper:PagerSnapHelper
     private lateinit var recyclerList: HashMap<String,RecyclerView>
-    private var subBoolean: Boolean = true
     private var i:Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -76,7 +75,7 @@ class HomeFragment : Fragment(),HomeCallback {
                             else ->
                             { if (recyclerList.get(it) != null)
                                 {
-                                    app(it,recyclerList.get(it)!!)
+                                    app(it,recyclerList.get(it)!!,recyclerList.get(it)!!.childCount-1)
                                 }
                             }
                         }
@@ -101,7 +100,7 @@ class HomeFragment : Fragment(),HomeCallback {
                             override fun notify(vararg obj: Any?)
                             {
                                 recyclerList.set(obj[0] as String,obj[1] as RecyclerView)
-                                app(obj[0] as String,recyclerList.get(obj[0])!!)
+                                app(obj[0] as String,recyclerList.get(obj[0])!!,obj[2] as Int)
                             }
                         })
                     }else
@@ -112,7 +111,7 @@ class HomeFragment : Fragment(),HomeCallback {
     }
 
 
-    private fun app(category:String, recycler:RecyclerView)
+    private fun app(category:String, recycler:RecyclerView, position:Int)
     {
         viewModel.app(category,object : Callback
         {
@@ -120,14 +119,14 @@ class HomeFragment : Fragment(),HomeCallback {
             {
                 if (viewModel.appResponse.value?.responseCode == 1)
                 {
-                    if (subBoolean)
+                    if (position %2 == 0)
                     {
-                        recycler.layoutManager = LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.HORIZONTAL, false).also { it.stackFromEnd = true }
-                        subBoolean = false
+                        val layoutManager:LinearLayoutManager = LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.HORIZONTAL, true)
+                        recycler.layoutManager = layoutManager
                     }else
                     {
-                        recycler.layoutManager = LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.HORIZONTAL, true)
-                        subBoolean = true
+                        val layoutManager:LinearLayoutManager = LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.HORIZONTAL, false)
+                        recycler.layoutManager = layoutManager
                     }
 
                         recycler.adapter = SubRecyclerAdapter(requireContext(), viewModel.appResponse.value?.data!!, object : Callback

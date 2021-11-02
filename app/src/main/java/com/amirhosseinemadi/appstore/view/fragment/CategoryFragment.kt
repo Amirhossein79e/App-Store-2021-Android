@@ -51,6 +51,9 @@ class CategoryFragment() : Fragment(),CategoryCallback {
             category()
         }else
         {
+            categoryBinding.imgBack.visibility = View.VISIBLE
+            categoryBinding.imgBack.setOnClickListener { parentFragmentManager.beginTransaction().replace(R.id.frame,
+                parentFragmentManager.findFragmentByTag(parentFragmentManager.getBackStackEntryAt(0).name)!!,null).commit() }
             appByCategory(0,category!!)
         }
 
@@ -181,5 +184,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
             dialog.dismiss()
         }
     }
+
+
 
 }
