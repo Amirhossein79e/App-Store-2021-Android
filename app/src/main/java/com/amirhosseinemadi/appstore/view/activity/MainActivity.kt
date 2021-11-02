@@ -14,10 +14,13 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.MenuItem
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.ActivityMainBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding:ActivityMainBinding
     private lateinit var dialog:Dialog
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = MainVm()
@@ -49,7 +53,12 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         if (intent.extras != null && intent.extras!!.getString("key") != null)
         {
-            mainBinding.bottomNav.selectedItemId = R.id.item_account
+            when(intent.extras!!.getString("key"))
+            {
+                "settings" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
+
+                "update" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
+            }
         }else
         {
             mainBinding.bottomNav.selectedItemId = R.id.item_home
@@ -66,6 +75,8 @@ class MainActivity : AppCompatActivity() {
 
         mainBinding.cardBottomNav.setBackgroundResource(R.drawable.bottom_nav_card_background)
         mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
+
+
     }
 
 

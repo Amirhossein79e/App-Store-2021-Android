@@ -3,6 +3,7 @@
     package="com.amirhosseinemadi.appstore">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SET_ALARM"> </uses-permission>
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <application
@@ -14,14 +15,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppStore">
-        <activity android:name=".view.activity.SettingsActivity"></activity>
-        <activity android:name=".view.activity.IntroActivity"></activity>
 
         <service android:name=".common.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
             </intent-filter>
         </service>
+
+        <receiver android:name=".common.UpdateChecker">
+            <intent-filter>
+                <action android:name="com.amirhosseinemadi.appstore.UPDATE"> </action>
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".view.activity.SplashActivity">
             <intent-filter>
@@ -30,7 +35,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.MainActivity"></activity>
+
+        <activity android:name=".view.activity.IntroActivity"> </activity>
+
+        <activity android:name=".view.activity.MainActivity"> </activity>
+
+        <activity android:name=".view.activity.SettingsActivity"> </activity>
+
     </application>
 
 </manifest>

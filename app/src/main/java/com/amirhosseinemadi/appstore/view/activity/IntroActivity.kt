@@ -1,5 +1,7 @@
 package com.amirhosseinemadi.appstore.view.activity
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.amirhosseinemadi.appstore.R
+import com.amirhosseinemadi.appstore.common.UpdateChecker
 import com.amirhosseinemadi.appstore.databinding.ActivityIntroBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
@@ -51,6 +54,9 @@ class IntroActivity : AppCompatActivity() {
         }else
         {
             PrefManager.setFirst(false)
+            val alarmManager:AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+            val pendingIntent:PendingIntent = PendingIntent.getBroadcast(this,0, Intent(this,UpdateChecker::class.java),PendingIntent.FLAG_UPDATE_CURRENT)
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),1000*60*60*24*3,pendingIntent)
             startActivity(Intent(this,MainActivity::class.java))
             finish()
         }

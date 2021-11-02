@@ -28,6 +28,7 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentSearchBinding
 import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.util.Utilities
+import com.amirhosseinemadi.appstore.view.activity.MainActivity
 import com.amirhosseinemadi.appstore.view.adapter.AppRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.adapter.TitleRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.callback.Callback

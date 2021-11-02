@@ -54,7 +54,7 @@ class MainRecyclerAdapter(private val context:Context, private val list: List<Ho
             {
                 holder.cardBack.setBackgroundResource(R.drawable.main_item_card_background_alt)
             }
-            //(holder.recycler.layoutParams as FrameLayout.LayoutParams).marginStart = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,4f,metrics).toInt()
+            (holder.recycler.layoutParams as FrameLayout.LayoutParams).marginStart = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,4f,metrics).toInt()
             (holder.txt.layoutParams as ConstraintLayout.LayoutParams).startToEnd = R.id.guide_left_txt
             cardParams.width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,0f,metrics).toInt()
             cardParams.startToEnd = R.id.guide_left
@@ -68,7 +68,7 @@ class MainRecyclerAdapter(private val context:Context, private val list: List<Ho
             {
                 holder.cardBack.setBackgroundResource(R.drawable.main_item_card_background)
             }
-            //(holder.recycler.layoutParams as FrameLayout.LayoutParams).marginEnd = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,4f,metrics).toInt()
+            (holder.recycler.layoutParams as FrameLayout.LayoutParams).marginEnd = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,4f,metrics).toInt()
             (holder.txt.layoutParams as ConstraintLayout.LayoutParams).startToEnd = R.id.guide_left_txt
             cardParams.width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,0f,metrics).toInt()
             cardParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID

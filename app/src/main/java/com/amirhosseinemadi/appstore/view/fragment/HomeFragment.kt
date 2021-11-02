@@ -15,6 +15,7 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentHomeBinding
 import com.amirhosseinemadi.appstore.model.entity.HomeCategoryModel
 import com.amirhosseinemadi.appstore.util.Utilities
+import com.amirhosseinemadi.appstore.view.activity.MainActivity
 import com.amirhosseinemadi.appstore.view.adapter.MainPagerAdapter
 import com.amirhosseinemadi.appstore.view.adapter.MainRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.adapter.SubRecyclerAdapter

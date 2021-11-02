@@ -1,5 +1,6 @@
 package com.amirhosseinemadi.appstore.common
 
+import android.app.AlarmManager
 import android.app.Application
 import android.app.Dialog
 import android.content.Context
@@ -30,11 +31,24 @@ class Application : Application() {
     override fun onCreate() {
         super.onCreate()
         component = DaggerComponent.builder().module(Module(applicationContext)).build()
+
         when(PrefManager.getTheme())
         {
-            "dark" -> { AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) }
+            "dark" ->
+            {
+                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES)
+                {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+            }
 
-            "light" -> { AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) }
+            "light" ->
+            {
+                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO)
+                {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
         }
     }
 

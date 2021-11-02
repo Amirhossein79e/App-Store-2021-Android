@@ -15,6 +15,7 @@ import com.amirhosseinemadi.appstore.databinding.FragmentCategoryBinding
 import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.model.entity.ResponseObject
 import com.amirhosseinemadi.appstore.util.Utilities
+import com.amirhosseinemadi.appstore.view.activity.MainActivity
 import com.amirhosseinemadi.appstore.view.adapter.AppRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.adapter.CategoryRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.callback.Callback
@@ -30,6 +31,11 @@ class CategoryFragment() : Fragment(),CategoryCallback {
     private var category:String? = null
     private var more:Boolean = true
     private var appList:MutableList<AppModel>? = null
+
+    init
+    {
+
+    }
 
     constructor(category:String) : this()
     {
@@ -52,9 +58,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
         }else
         {
             categoryBinding.imgBack.visibility = View.VISIBLE
-            categoryBinding.imgBack.setOnClickListener { parentFragmentManager.beginTransaction().replace(R.id.frame,
-                parentFragmentManager.findFragmentByTag(parentFragmentManager.getBackStackEntryAt(0).name)!!,null).commit() }
-            appByCategory(0,category!!)
+            categoryBinding.imgBack.setOnClickListener {}
         }
 
         return categoryBinding.root

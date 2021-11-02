@@ -10,6 +10,7 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentLoginBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
+import com.amirhosseinemadi.appstore.view.activity.MainActivity
 import com.amirhosseinemadi.appstore.view.callback.AccountCallback
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.amirhosseinemadi.appstore.viewmodel.AccountVm

@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/txt"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/dp20"
+        android:layout_marginBottom="@dimen/dp24"
         app:cardElevation="@dimen/dp12"
         android:id="@+id/card_back">
 

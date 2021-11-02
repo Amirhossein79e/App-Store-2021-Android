@@ -42,6 +42,23 @@ class PrefManager() {
         }
 
 
+        fun setTime(time:Long)
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val editor:SharedPreferences.Editor = preferences.edit()
+            editor.putLong("time",time)
+            editor.commit()
+        }
+
+
+        fun getTime() : Long
+        {
+            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
+            val time:Long = preferences.getLong("time",0)
+            return time
+        }
+
+
         fun setTheme(mode:String)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
