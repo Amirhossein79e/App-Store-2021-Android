@@ -25,10 +25,7 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.ActivityMainBinding
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
-import com.amirhosseinemadi.appstore.view.fragment.AccountFragment
-import com.amirhosseinemadi.appstore.view.fragment.CategoryFragment
-import com.amirhosseinemadi.appstore.view.fragment.HomeFragment
-import com.amirhosseinemadi.appstore.view.fragment.SearchFragment
+import com.amirhosseinemadi.appstore.view.fragment.*
 import com.amirhosseinemadi.appstore.viewmodel.MainVm
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
@@ -74,8 +71,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainBinding.cardBottomNav.setBackgroundResource(R.drawable.bottom_nav_card_background)
-        mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
-
+        supportFragmentManager.beginTransaction().replace(R.id.frame,AppFragment(),"").commit()
+        //mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
 
     }
 

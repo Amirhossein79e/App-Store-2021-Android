@@ -26,18 +26,23 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 
 class AccountFragment : Fragment(),AccountCallback,Callback {
 
-    private lateinit var viewModel:AccountVm
+    private val viewModel:AccountVm
     private lateinit var accountBinding:FragmentAccountBinding
     private lateinit var loading: Dialog
-    private var more:Boolean = true
-    private var appList:MutableList<AppModel>? = null
+    private var more:Boolean
+    private var appList:MutableList<AppModel>
+
+    init
+    {
+        viewModel = AccountVm(this)
+        more = true
+        appList = ArrayList()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View {
-        viewModel = AccountVm(this)
         accountBinding = DataBindingUtil.inflate<FragmentAccountBinding>(inflater, R.layout.fragment_account,null,false).also { it.viewModel = viewModel }
         accountBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())
-        appList = ArrayList()
         initView()
         handleError()
         checkAccount()

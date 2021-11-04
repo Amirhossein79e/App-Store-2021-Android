@@ -43,4 +43,7 @@ class AppModel {
     @SerializedName("size")
     var size:String? = ""
 
+    @SerializedName("rate")
+    var rate:Float? = null
+
 }
