@@ -67,18 +67,4 @@ class SearchVm(private val searchCallback:SearchCallback) : ViewModel() {
         })
     }
 
-
-    fun getTitleResponse(query:String) : MutableLiveData<ResponseObject<List<String>>>
-    {
-        title(query)
-        return titleResponse
-    }
-
-
-    fun getAppResponse(offset:Int, query: String) : MutableLiveData<ResponseObject<List<AppModel>>>
-    {
-        app(offset,query)
-        return appResponse
-    }
-
 }

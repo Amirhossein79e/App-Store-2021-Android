@@ -71,8 +71,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainBinding.cardBottomNav.setBackgroundResource(R.drawable.bottom_nav_card_background)
-        supportFragmentManager.beginTransaction().replace(R.id.frame,AppFragment(),"").commit()
-        //mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
+        //supportFragmentManager.beginTransaction().replace(R.id.frame,AppFragment(),"").commit()
+        mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
 
     }
 

@@ -70,19 +70,4 @@ class CategoryVm(private val categoryCallback:CategoryCallback) : ViewModel() {
         })
     }
 
-
-    fun getCategoryResponse(vararg obj:String) : MutableLiveData<ResponseObject<List<CategoryModel>>>
-    {
-        category()
-        return categoryResponse
-    }
-
-
-    fun getAppResponse(offset:Int, category: String) : MutableLiveData<ResponseObject<List<AppModel>>>
-    {
-        appByCategory(offset,category)
-        return appResponse
-    }
-
-
 }

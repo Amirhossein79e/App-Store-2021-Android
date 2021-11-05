@@ -29,6 +29,8 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
         loginBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())
         handleError()
+        signUp()
+        signIn()
 
         return loginBinding.root
     }
@@ -40,6 +42,56 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
             {
                 Utilities.showSnack(loginBinding.coordinator, requireContext().getString(R.string.request_failed),BaseTransientBottomBar.LENGTH_SHORT)
             })
+    }
+
+
+    private fun signUp()
+    {
+        viewModel.signUpResponse
+            .observe(viewLifecycleOwner,
+                {
+                    when (it.responseCode)
+                    {
+                        1 ->
+                        {
+                            PrefManager.setUser(it.data?.userName!!)
+                            PrefManager.setAccess(it.data?.access!!)
+                            callback.notify()
+                            dismiss()
+                        }
+
+                        else -> Utilities.showSnack(
+                            loginBinding.coordinator,
+                            it.message!!,
+                            BaseTransientBottomBar.LENGTH_SHORT
+                        )
+                    }
+                })
+    }
+
+
+    private fun signIn()
+    {
+        viewModel.signInResponse
+            .observe(viewLifecycleOwner,
+                {
+                    when (it.responseCode)
+                    {
+                        1 ->
+                        {
+                            PrefManager.setUser(it.data?.userName!!)
+                            PrefManager.setAccess(it.data?.access!!)
+                            callback.notify()
+                            dismiss()
+                        }
+
+                        else -> Utilities.showSnack(
+                            loginBinding.coordinator,
+                            it.message!!,
+                            BaseTransientBottomBar.LENGTH_SHORT
+                        )
+                    }
+                })
     }
 
 
@@ -66,63 +118,14 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
 
     override fun signUp(email: String, password: String, username: String, token: String) {
 
-        if (!viewModel.signUpResponse.hasObservers())
-        {
-            viewModel.getSignUpResponse(email, password, username, token)
-                .observe(viewLifecycleOwner,
-                    {
-                        when (it.responseCode)
-                        {
-                            1 ->
-                            {
-                                PrefManager.setUser(it.data?.userName!!)
-                                PrefManager.setAccess(it.data?.access!!)
-                                callback.notify()
-                                dismiss()
-                            }
+        viewModel.signUp(email, password, username, token)
 
-                            else -> Utilities.showSnack(
-                                loginBinding.coordinator,
-                                it.message!!,
-                                BaseTransientBottomBar.LENGTH_SHORT
-                            )
-                        }
-                    })
-        }else
-        {
-            viewModel.signUp(email, password, username, token)
-        }
     }
 
 
     override fun signIn(email: String, password: String) {
 
-        if (!viewModel.signInResponse.hasObservers())
-        {
-            viewModel.getSignInResponse(email, password)
-                .observe(viewLifecycleOwner,
-                    {
-                        when (it.responseCode)
-                        {
-                            1 ->
-                            {
-                                PrefManager.setUser(it.data?.userName!!)
-                                PrefManager.setAccess(it.data?.access!!)
-                                callback.notify()
-                                dismiss()
-                            }
-
-                            else -> Utilities.showSnack(
-                                loginBinding.coordinator,
-                                it.message!!,
-                                BaseTransientBottomBar.LENGTH_SHORT
-                            )
-                        }
-                    })
-        }else
-        {
-            viewModel.signIn(email,password)
-        }
+        viewModel.signIn(email,password)
 
     }
 

@@ -17,9 +17,9 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
     private val apiCaller:ApiCaller
     val error:MutableLiveData<String>
     val appResponse:MutableLiveData<ResponseObject<AppModel>>
-    val commentResponse:MutableLiveData<ResponseObject<CommentModel>>
-    val submitResponse:MutableLiveData<String>
-    val deleteResponse:MutableLiveData<String>
+    val commentResponse:MutableLiveData<ResponseObject<List<CommentModel>>>
+    val submitResponse:MutableLiveData<ResponseObject<String>>
+    val deleteResponse:MutableLiveData<ResponseObject<String>>
 
     init
     {
@@ -54,6 +54,69 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
     }
 
 
+    private fun comment(offset:Int, access:String, packageName:String)
+    {
+        apiCaller.getComments(access,packageName,offset,object : SingleObserver<ResponseObject<List<CommentModel>>>
+        {
+            override fun onSubscribe(d: Disposable?) {
+                appCallback.onShow()
+            }
 
+            override fun onSuccess(t: ResponseObject<List<CommentModel>>?) {
+                commentResponse.value = t
+                appCallback.onHide()
+            }
+
+            override fun onError(e: Throwable?) {
+                error.value = "comment"
+                appCallback.onHide()
+            }
+
+        })
+    }
+
+
+    private fun submitComment(access:String, detail:String, rate:Float, packageName:String)
+    {
+        apiCaller.submitComment(access, detail, rate, packageName, object : SingleObserver<ResponseObject<String>>
+        {
+            override fun onSubscribe(d: Disposable?) {
+                appCallback.onShow()
+            }
+
+            override fun onSuccess(t: ResponseObject<String>?) {
+                submitResponse.value = t
+                appCallback.onHide()
+            }
+
+            override fun onError(e: Throwable?) {
+                error.value = "submit"
+                appCallback.onHide()
+            }
+
+        })
+    }
+
+
+    private fun deleteComment(access:String, packageName:String)
+    {
+        apiCaller.deleteComment(access, packageName, object : SingleObserver<ResponseObject<String>>
+        {
+            override fun onSubscribe(d: Disposable?) {
+                appCallback.onShow()
+            }
+
+            override fun onSuccess(t: ResponseObject<String>?) {
+                deleteResponse.value = t
+                appCallback.onHide()
+            }
+
+            override fun onError(e: Throwable?) {
+                error.value = "submit"
+                appCallback.onHide()
+            }
+
+        })
+    }
 
 }

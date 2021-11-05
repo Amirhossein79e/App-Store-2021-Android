@@ -54,7 +54,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
 
         if (category == null)
         {
-            category()
+            categoryInit()
         }else
         {
             categoryBinding.imgBack.visibility = View.VISIBLE
@@ -124,9 +124,10 @@ class CategoryFragment() : Fragment(),CategoryCallback {
     }
 
 
-    private fun category()
+    private fun categoryInit()
     {
-        viewModel.getCategoryResponse()
+        viewModel.category()
+        viewModel.categoryResponse
             .observe(viewLifecycleOwner,
                 {
                     if (it.responseCode == 1)
@@ -148,7 +149,8 @@ class CategoryFragment() : Fragment(),CategoryCallback {
 
     private fun appByCategory(offset:Int, category:String)
     {
-        viewModel.getAppResponse(offset,category)
+        viewModel.appByCategory(offset,category)
+        viewModel.appResponse
             .observe(viewLifecycleOwner,
                 {
                     if (it.responseCode == 1)

@@ -71,6 +71,8 @@ class SearchFragment : Fragment(),SearchCallback {
                 searchBinding.sch.setQuery(it.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).toString().replace("[","").replace("]",""),true)
             }
         }
+        titleInit()
+        appInit()
     }
 
 
@@ -100,7 +102,7 @@ class SearchFragment : Fragment(),SearchCallback {
                 isNew = true
                 titleList.clear()
                 searchBinding.recyclerTitle.adapter?.notifyDataSetChanged()
-                app(0,query!!)
+                viewModel.app(0,query!!)
                 return false
             }
 
@@ -108,7 +110,7 @@ class SearchFragment : Fragment(),SearchCallback {
 
                 if (newText != null && newText.length > 1 && !fromTitle)
                 {
-                    title(newText)
+                    viewModel.title(newText)
                 }else
                 {
                     fromTitle = false
@@ -142,7 +144,7 @@ class SearchFragment : Fragment(),SearchCallback {
                 super.onScrolled(recyclerView, dx, dy)
                 if (appList.size % 10 == 0 && more && (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() >= appList.size-2 && !loading.isShowing)
                 {
-                    app(appList.size,searchBinding.sch.query.toString())
+                    viewModel.app(appList.size,searchBinding.sch.query.toString())
                 }
             }
         })
@@ -177,7 +179,7 @@ class SearchFragment : Fragment(),SearchCallback {
                                     requireActivity().supportFragmentManager.beginTransaction()
                                         .remove(fragment).commit()
                                 }
-                                app(appList.size,searchBinding.sch.query.toString())
+                                viewModel.app(appList.size,searchBinding.sch.query.toString())
                             }
                         }), "error").commit()
                 }else
@@ -199,11 +201,9 @@ class SearchFragment : Fragment(),SearchCallback {
     }
 
 
-    private fun title(title:String)
+    private fun titleInit()
     {
-        if (!viewModel.titleResponse.hasObservers())
-        {
-            viewModel.getTitleResponse(title)
+            viewModel.titleResponse
                 .observe(viewLifecycleOwner,
                     {
                         if (it.responseCode == 1)
@@ -218,18 +218,12 @@ class SearchFragment : Fragment(),SearchCallback {
                             Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!,BaseTransientBottomBar.LENGTH_SHORT)
                         }
                     })
-        }else
-        {
-            viewModel.title(title)
-        }
     }
 
 
-    private fun app(offset:Int, title:String)
+    private fun appInit()
     {
-        if (!viewModel.appResponse.hasObservers())
-        {
-            viewModel.getAppResponse(offset,title)
+            viewModel.appResponse
                 .observe(viewLifecycleOwner,
                     {
                         if (it.responseCode == 1)
@@ -265,10 +259,6 @@ class SearchFragment : Fragment(),SearchCallback {
                             Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!,BaseTransientBottomBar.LENGTH_SHORT)
                         }
                     })
-        }else
-        {
-            viewModel.app(offset,title)
-        }
     }
 
 

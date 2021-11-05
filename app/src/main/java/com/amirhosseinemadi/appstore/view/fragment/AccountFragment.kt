@@ -45,7 +45,7 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
         loading = Utilities.loadingDialog(requireContext())
         initView()
         handleError()
-        checkAccount()
+        checkAccountInit()
 
         return accountBinding.root
     }
@@ -148,11 +148,12 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
     }
 
 
-    private fun checkAccount()
+    private fun checkAccountInit()
     {
         if (PrefManager.checkSignIn())
         {
-            viewModel.getValidateResponse(PrefManager.getAccess()!!)
+            viewModel.validateUser(PrefManager.getAccess()!!)
+            viewModel.validateResponse
                 .observe(viewLifecycleOwner,
                     {
                         when(it.responseCode)
@@ -179,7 +180,8 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
     private fun checkUpdate()
     {
-        viewModel.getUpdateResponse(0,Utilities.getAllPackages(),PrefManager.checkSignIn())
+        viewModel.update(0,Utilities.getAllPackages(),PrefManager.checkSignIn())
+        viewModel.updateResponse
             .observe(viewLifecycleOwner,
                 {
                     if (it.responseCode == 1)
@@ -187,12 +189,12 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
                         if(it.data != null)
                         {
                             more = true
-                            appList?.addAll(it.data!!)
-                            accountBinding.recycler.adapter?.notifyItemRangeInserted(appList!!.size - it.data!!.size, it.data!!.size)
+                            appList.addAll(it.data!!)
+                            accountBinding.recycler.adapter?.notifyItemRangeInserted(appList.size - it.data!!.size, it.data!!.size)
                         }else
                         {
                             more = false
-                            if (appList?.size == 0)
+                            if (appList.size == 0)
                             {
                                 accountBinding.img.visibility = View.VISIBLE
                                 accountBinding.txt.visibility = View.VISIBLE

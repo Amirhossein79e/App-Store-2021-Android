@@ -76,11 +76,4 @@ class HomeVm(private val homeCallback: HomeCallback) : ViewModel() {
         return homeResponse
     }
 
-
-    fun getAppResponse(category:String) : MutableLiveData<ResponseObject<List<AppModel>>>
-    {
-        app(category,null)
-        return appResponse
-    }
-
 }

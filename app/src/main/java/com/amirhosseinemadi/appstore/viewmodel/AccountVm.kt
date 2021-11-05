@@ -22,23 +22,23 @@ import org.json.JSONObject
 class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
 
     private val apiCaller: ApiCaller
-    val error:MutableLiveData<String>
+    val error: MutableLiveData<String>
 
-    val signUpResponse:MutableLiveData<ResponseObject<UserModel>>
-    val signInResponse:MutableLiveData<ResponseObject<UserModel>>
-    val validateResponse:MutableLiveData<ResponseObject<String>>
-    val updateResponse:MutableLiveData<ResponseObject<List<AppModel>>>
+    val signUpResponse: MutableLiveData<ResponseObject<UserModel>>
+    val signInResponse: MutableLiveData<ResponseObject<UserModel>>
+    val validateResponse: MutableLiveData<ResponseObject<String>>
+    val updateResponse: MutableLiveData<ResponseObject<List<AppModel>>>
 
-    var emailStr:String = ""
-    var passwordStr:String = ""
-    var usernameStr:String = ""
-    var passwordReStr:String = ""
-    val visib:MutableLiveData<Int> = MutableLiveData<Int>().also{ it.value = View.GONE }
-    val btnText:MutableLiveData<String> = MutableLiveData<String>().also{ it.value = accountCallback.getStr(R.string.sign_in) }
-    private var signIn:Boolean
+    var emailStr: String = ""
+    var passwordStr: String = ""
+    var usernameStr: String = ""
+    var passwordReStr: String = ""
+    val visib: MutableLiveData<Int> = MutableLiveData<Int>().also { it.value = View.GONE }
+    val btnText: MutableLiveData<String> =
+        MutableLiveData<String>().also { it.value = accountCallback.getStr(R.string.sign_in) }
+    private var signIn: Boolean
 
-    init
-    {
+    init {
         apiCaller = Application.component.apiCaller()
         error = MutableLiveData()
         signUpResponse = MutableLiveData()
@@ -49,71 +49,58 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    fun btnClick(view:View)
-    {
-        if (signIn)
-        {
-            if (Utilities.validateEmail(emailStr))
-            {
-                if (Utilities.validatePassword(passwordStr))
-                {
-                    accountCallback.signIn(emailStr,passwordStr)
-                }else
-                {
+    fun btnClick(view: View) {
+        if (signIn) {
+            if (Utilities.validateEmail(emailStr)) {
+                if (Utilities.validatePassword(passwordStr)) {
+                    accountCallback.signIn(emailStr, passwordStr)
+                } else {
                     accountCallback.onMessage(R.string.password_error)
                 }
-            }else
-            {
+            } else {
                 accountCallback.onMessage(R.string.email_error);
             }
-        }else
-        {
-            if (Utilities.validateEmail(emailStr))
-            {
-                if (usernameStr.length > 2)
-                {
-                    if (Utilities.validatePassword(passwordStr))
-                    {
-                        if (passwordStr.equals(passwordReStr))
-                        {
-                            accountCallback.signUp(emailStr, passwordStr, usernameStr, PrefManager.getToken()!!)
-                        } else
-                        {
+        } else {
+            if (Utilities.validateEmail(emailStr)) {
+                if (usernameStr.length > 2) {
+                    if (Utilities.validatePassword(passwordStr)) {
+                        if (passwordStr.equals(passwordReStr)) {
+                            accountCallback.signUp(
+                                emailStr,
+                                passwordStr,
+                                usernameStr,
+                                PrefManager.getToken()!!
+                            )
+                        } else {
                             accountCallback.onMessage(R.string.password_error_repeat)
                         }
-                    } else
-                    {
+                    } else {
                         accountCallback.onMessage(R.string.password_error)
                     }
-                }else
-                {
+                } else {
                     accountCallback.onMessage(R.string.username_error)
                 }
-            }else
-            {
+            } else {
                 accountCallback.onMessage(R.string.email_error);
             }
         }
     }
 
 
-    fun signClick(view:View)
-    {
-        if (signIn)
-        {
+    fun signClick(view: View) {
+        if (signIn) {
             signIn = false
-            val str:SpannableString = SpannableString(accountCallback.getStr(R.string.sign_in_alt))
-            str.setSpan(UnderlineSpan(),0,str.length,0)
+            val str: SpannableString = SpannableString(accountCallback.getStr(R.string.sign_in_alt))
+            str.setSpan(UnderlineSpan(), 0, str.length, 0)
             (view as AppCompatTextView).text = str
             btnText.value = accountCallback.getStr(R.string.sign_up)
             visib.value = View.VISIBLE
             emailStr = ""
             passwordStr = ""
-        }else
-        {
+        } else {
             signIn = true
-            val str:SpannableString = SpannableString(accountCallback.getStr(R.string.sign_up_alt))
-            str.setSpan(UnderlineSpan(),0,str.length,0)
+            val str: SpannableString = SpannableString(accountCallback.getStr(R.string.sign_up_alt))
+            str.setSpan(UnderlineSpan(), 0, str.length, 0)
             (view as AppCompatTextView).text = str
             btnText.value = accountCallback.getStr(R.string.sign_in)
             visib.value = View.GONE
@@ -121,32 +108,33 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    fun signUp(email:String, password:String, username:String,token:String)
-    {
-        apiCaller.signUpUser(email,password,username,token,object : SingleObserver<ResponseObject<UserModel>>
-        {
-            override fun onSubscribe(d: Disposable?) {
-                accountCallback.onShow()
-            }
+    fun signUp(email: String, password: String, username: String, token: String) {
+        apiCaller.signUpUser(
+            email,
+            password,
+            username,
+            token,
+            object : SingleObserver<ResponseObject<UserModel>> {
+                override fun onSubscribe(d: Disposable?) {
+                    accountCallback.onShow()
+                }
 
-            override fun onSuccess(t: ResponseObject<UserModel>?) {
-                signUpResponse.value = t
-                accountCallback.onHide()
-            }
+                override fun onSuccess(t: ResponseObject<UserModel>?) {
+                    signUpResponse.value = t
+                    accountCallback.onHide()
+                }
 
-            override fun onError(e: Throwable?) {
-                error.value = "signUp"
-                accountCallback.onHide()
-            }
+                override fun onError(e: Throwable?) {
+                    error.value = "signUp"
+                    accountCallback.onHide()
+                }
 
-        })
+            })
     }
 
 
-    fun signIn(email:String, password:String)
-    {
-        apiCaller.signInUser(email,password,object : SingleObserver<ResponseObject<UserModel>>
-        {
+    fun signIn(email: String, password: String) {
+        apiCaller.signInUser(email, password, object : SingleObserver<ResponseObject<UserModel>> {
             override fun onSubscribe(d: Disposable?) {
                 accountCallback.onShow()
             }
@@ -165,10 +153,8 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    fun validateUser(access:String)
-    {
-        apiCaller.validateUser(access,object : SingleObserver<ResponseObject<String>>
-        {
+    fun validateUser(access: String) {
+        apiCaller.validateUser(access, object : SingleObserver<ResponseObject<String>> {
             override fun onSubscribe(d: Disposable?) {
                 accountCallback.onShow()
             }
@@ -186,57 +172,29 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     }
 
 
-    fun update(offset:Int, packages:List<JSONObject>, isUser:Boolean)
-    {
-        apiCaller.getUpdates(offset,packages,object : SingleObserver<ResponseObject<List<AppModel>>>
-        {
-            override fun onSubscribe(d: Disposable?) {
-                if (!isUser)
-                {
-                    accountCallback.onShow()
+    fun update(offset: Int, packages: List<JSONObject>, isUser: Boolean) {
+        apiCaller.getUpdates(
+            offset,
+            packages,
+            object : SingleObserver<ResponseObject<List<AppModel>>> {
+                override fun onSubscribe(d: Disposable?) {
+                    if (!isUser) {
+                        accountCallback.onShow()
+                    }
                 }
-            }
 
-            override fun onSuccess(t: ResponseObject<List<AppModel>>?) {
-                updateResponse.value = t
-                accountCallback.onHide()
-            }
+                override fun onSuccess(t: ResponseObject<List<AppModel>>?) {
+                    updateResponse.value = t
+                    accountCallback.onHide()
+                }
 
-            override fun onError(e: Throwable?) {
-                error.value = "update"
-                accountCallback.onHide()
-                println("!!!!!!!!!!!!!!!!!!!!!!!!!!!"+e?.message)
-            }
+                override fun onError(e: Throwable?) {
+                    error.value = "update"
+                    accountCallback.onHide()
+                    println("!!!!!!!!!!!!!!!!!!!!!!!!!!!" + e?.message)
+                }
 
-        })
-    }
-
-
-    fun getSignUpResponse(email:String, password:String, username:String,token:String) : MutableLiveData<ResponseObject<UserModel>>
-    {
-        signUp(email, password, username, token)
-        return signUpResponse
-    }
-
-
-    public fun getSignInResponse(email:String, password:String) : MutableLiveData<ResponseObject<UserModel>>
-    {
-        signIn(email, password)
-        return signInResponse
-    }
-
-
-    public fun getValidateResponse(access: String) : MutableLiveData<ResponseObject<String>>
-    {
-        validateUser(access)
-        return validateResponse
-    }
-
-
-    fun getUpdateResponse(offset: Int, packages: List<JSONObject>, isUser: Boolean) : MutableLiveData<ResponseObject<List<AppModel>>>
-    {
-        update(offset, packages, isUser)
-        return updateResponse
+            })
     }
 
 }

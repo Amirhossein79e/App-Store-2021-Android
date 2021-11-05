@@ -26,22 +26,27 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 
 class HomeFragment : Fragment(),HomeCallback {
 
-    private lateinit var viewModel:HomeVm
+    private val viewModel:HomeVm
     private lateinit var homeBinding:FragmentHomeBinding
     private lateinit var loading:Dialog
     private lateinit var snapHelper:PagerSnapHelper
     private lateinit var recyclerList: HashMap<String,RecyclerView>
-    private var i:Int = 0
+    private var i:Int
+
+    init
+    {
+        viewModel = HomeVm(this)
+        i = 0
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        viewModel = HomeVm(this)
         homeBinding = DataBindingUtil.inflate<FragmentHomeBinding>(inflater,R.layout.fragment_home,container,false).also { it.viewModel = viewModel }
         homeBinding.root.layoutParams = ConstraintLayout.LayoutParams(container?.layoutParams)
         homeBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())
         initView()
         handleError()
-        home()
+        homeInit()
 
         return homeBinding.root
     }
@@ -87,10 +92,11 @@ class HomeFragment : Fragment(),HomeCallback {
     }
 
 
-    private fun home()
+    private fun homeInit()
     {
         recyclerList = HashMap()
-        viewModel.getHomeResponse()
+        viewModel.home()
+        viewModel.homeResponse
             .observe(viewLifecycleOwner,
                 {
                     if(it.responseCode == 1)

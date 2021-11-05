@@ -18,9 +18,16 @@ import com.amirhosseinemadi.appstore.databinding.FragmentIntroBinding
 class IntroFragment() : Fragment() {
 
     private lateinit var introBinding: FragmentIntroBinding
-    private var imgRes:Int? = null
-    private var txtTitleRes:Int? = null
-    private var txtSubRes:Int? = null
+    private var imgRes:Int
+    private var txtTitleRes:Int
+    private var txtSubRes:Int
+
+    init
+    {
+        imgRes = 0
+        txtTitleRes = 0
+        txtSubRes = 0
+    }
 
     constructor(@DrawableRes imgRes:Int, @StringRes txtTitleRes:Int, @StringRes txtSubRes:Int) : this()
     {
