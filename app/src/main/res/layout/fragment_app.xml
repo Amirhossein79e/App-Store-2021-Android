@@ -1,137 +1,492 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="view_model"
             type="com.amirhosseinemadi.appstore.viewmodel.AppVm" />
     </data>
 
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
 
 
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.89"
-        android:id="@+id/bottom">
-    </androidx.constraintlayout.widget.Guideline>
-
-
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dp0"
-    tools:context=".view.fragment.AppFragment"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/bottom">
-
-
-    <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:elevation="@dimen/dp0">
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.89">
+        </androidx.constraintlayout.widget.Guideline>
 
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp0"
+            app:layout_constraintBottom_toTopOf="@id/bottom"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".view.fragment.AppFragment">
+
+
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-                app:contentScrim="@color/colorPrimary">
+                app:elevation="@dimen/dp0">
 
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true"
+                    app:contentScrim="@color/colorPrimary"
+                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_collapseMode="parallax"
+                        app:layout_collapseParallaxMultiplier="1">
+
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp0"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintDimensionRatio="2:0.8"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:id="@+id/img_top">
+                        </androidx.appcompat.widget.AppCompatImageView>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp40"
+                        app:contentInsetEnd="@dimen/dp0"
+                        app:contentInsetStart="@dimen/dp0"
+                        app:layout_collapseMode="pin">
+
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/img_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/dp8"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_back"
+                            app:tint="@color/md_white_1000">
+                        </androidx.appcompat.widget.AppCompatImageView>
+
+
+                    </androidx.appcompat.widget.Toolbar>
+
+
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="1">
+                    android:layout_height="match_parent">
 
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="match_parent"
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guide_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.05">
+                    </androidx.constraintlayout.widget.Guideline>
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guide_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.95">
+                    </androidx.constraintlayout.widget.Guideline>
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guide_first"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.275">
+                    </androidx.constraintlayout.widget.Guideline>
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guide_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.50">
+                    </androidx.constraintlayout.widget.Guideline>
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guide_third"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.725">
+                    </androidx.constraintlayout.widget.Guideline>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_img"
+                        android:layout_width="@dimen/dp0"
                         android:layout_height="@dimen/dp0"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintDimensionRatio="2:0.8"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/background_top_two">
-                    </androidx.appcompat.widget.AppCompatImageView>
+                        app:layout_constraintEnd_toStartOf="@id/guide_first"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:layout_marginTop="@dimen/dp12"
+                        android:layout_marginBottom="@dimen/dp32"
+                        app:cardBackgroundColor="@color/transparent"
+                        app:cardCornerRadius="@dimen/dp16"
+                        app:cardElevation="@dimen/dp0"
+                        android:layout_marginEnd="@dimen/dp12">
+
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/img"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        </androidx.appcompat.widget.AppCompatImageView>
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp16"
+                        app:layout_constraintBottom_toBottomOf="@id/card_img"
+                        app:layout_constraintStart_toEndOf="@id/card_img"
+                        app:layout_constraintTop_toTopOf="@id/card_img">
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txt_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_large_normal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+                        </androidx.appcompat.widget.AppCompatTextView>
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp24"
+                            android:textSize="10sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:id="@+id/txt_dev">
+                        </androidx.appcompat.widget.AppCompatTextView>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="@dimen/dp0"
+                        app:layout_constraintEnd_toStartOf="@id/guide_first"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintTop_toBottomOf="@id/card_img"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:layout_marginBottom="@dimen/dp32"
+                        app:cardBackgroundColor="@color/colorSecondary"
+                        app:cardCornerRadius="@dimen/dp16"
+                        app:cardElevation="@dimen/dp8"
+                        android:layout_marginEnd="@dimen/dp8"
+                        android:id="@+id/card_rate">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/img_rate"
+                                android:layout_width="@dimen/dp32"
+                                android:layout_height="@dimen/dp32"
+                                app:srcCompat="@drawable/ic_rate"
+                                app:tint="@color/colorOnPrimary">
+                            </androidx.appcompat.widget.AppCompatImageView>
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txt_rate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:textSize="@dimen/text_size_small_normal">
+                            </androidx.appcompat.widget.AppCompatTextView>
+
+
+                        </LinearLayout>
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="@dimen/dp0"
+                        app:layout_constraintTop_toTopOf="@id/card_rate"
+                        app:layout_constraintEnd_toStartOf="@id/guide_second"
+                        app:layout_constraintStart_toEndOf="@id/guide_first"
+                        app:layout_constraintBottom_toBottomOf="@id/card_rate"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:layout_marginEnd="@dimen/dp6"
+                        android:layout_marginStart="@dimen/dp4"
+                        app:cardBackgroundColor="@color/colorSecondary"
+                        app:cardCornerRadius="@dimen/dp16"
+                        app:cardElevation="@dimen/dp8">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/img_size"
+                                android:layout_width="@dimen/dp32"
+                                android:layout_height="@dimen/dp32"
+                                app:srcCompat="@drawable/ic_size"
+                                app:tint="@color/colorOnPrimary">
+                            </androidx.appcompat.widget.AppCompatImageView>
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txt_size"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:textSize="@dimen/text_size_small_normal">
+                            </androidx.appcompat.widget.AppCompatTextView>
+
+
+                        </LinearLayout>
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="@dimen/dp0"
+                        app:layout_constraintTop_toTopOf="@id/card_rate"
+                        app:layout_constraintEnd_toStartOf="@id/guide_third"
+                        app:layout_constraintStart_toEndOf="@id/guide_second"
+                        app:layout_constraintBottom_toBottomOf="@id/card_rate"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:layout_marginStart="@dimen/dp6"
+                        android:layout_marginEnd="@dimen/dp4"
+                        app:cardBackgroundColor="@color/colorSecondary"
+                        app:cardCornerRadius="@dimen/dp12"
+                        app:cardElevation="@dimen/dp8">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/img_ver"
+                                android:layout_width="@dimen/dp32"
+                                android:layout_height="@dimen/dp32"
+                                app:srcCompat="@drawable/ic_update"
+                                app:tint="@color/colorOnPrimary">
+                            </androidx.appcompat.widget.AppCompatImageView>
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txt_ver"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:textSize="@dimen/text_size_small_normal"
+                                android:maxLines="1"
+                                android:ellipsize="end">
+                            </androidx.appcompat.widget.AppCompatTextView>
+
+
+                        </LinearLayout>
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="@dimen/dp0"
+                        app:layout_constraintTop_toTopOf="@id/card_rate"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        app:layout_constraintBottom_toBottomOf="@id/card_rate"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:layout_marginStart="@dimen/dp8"
+                        app:cardBackgroundColor="@color/colorSecondary"
+                        app:cardCornerRadius="@dimen/dp16"
+                        app:cardElevation="@dimen/dp8">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/img_category"
+                                android:layout_width="@dimen/dp32"
+                                android:layout_height="@dimen/dp32"
+                                app:srcCompat="@drawable/ic_update"
+                                app:tint="@color/colorOnPrimary">
+                            </androidx.appcompat.widget.AppCompatImageView>
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txt_category"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:textSize="@dimen/text_size_small_normal">
+                            </androidx.appcompat.widget.AppCompatTextView>
+
+
+                        </LinearLayout>
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/card_rate"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:orientation="horizontal"
+                        android:id="@+id/linear_btn">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="@dimen/dp0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginBottom="@dimen/dp8"
+                            style="@style/btn_style"
+                            android:textSize="@dimen/text_size_normal"
+                            android:text="Install"
+                            android:id="@+id/btn_install">
+                        </androidx.appcompat.widget.AppCompatButton>
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="@dimen/dp0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginBottom="@dimen/dp8"
+                            style="@style/btn_style"
+                            android:textSize="@dimen/text_size_normal"
+                            android:text="Uninstall"
+                            android:visibility="gone"
+                            android:id="@+id/btn_uninstall">
+                        </androidx.appcompat.widget.AppCompatButton>
+
+
+                    </LinearLayout>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="@dimen/dp0"
+                        app:layout_constraintTop_toBottomOf="@id/linear_btn"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        app:layout_constraintDimensionRatio="3:1.5"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:id="@+id/recycler">
+                    </androidx.recyclerview.widget.RecyclerView>
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        app:layout_constraintTop_toBottomOf="@id/recycler"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:paddingStart="@dimen/dp8"
+                        android:paddingEnd="@dimen/dp8"
+                        android:textSize="@dimen/text_size_small_normal"
+                        android:id="@+id/txt_detail">
+                    </androidx.appcompat.widget.AppCompatTextView>
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        app:layout_constraintTop_toBottomOf="@id/txt_detail"
+                        android:paddingStart="@dimen/dp8"
+                        android:paddingEnd="@dimen/dp8"
+                        android:paddingTop="@dimen/dp4"
+                        android:paddingBottom="@dimen/dp4"
+                        android:textSize="@dimen/text_size_normal"
+                        android:gravity="center"
+                        android:textColor="@color/colorOnPrimary"
+                        android:textStyle="bold"
+                        android:text="@string/more"
+                        android:id="@+id/txt_more">
+                    </androidx.appcompat.widget.AppCompatTextView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                <androidx.appcompat.widget.Toolbar
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp40"
-                    app:contentInsetStart="@dimen/dp0"
-                    app:contentInsetEnd="@dimen/dp0"
-                    app:layout_collapseMode="pin">
+            </androidx.core.widget.NestedScrollView>
 
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:padding="@dimen/dp8"
-                    app:srcCompat="@drawable/ic_back"
-                    app:tint="@color/md_white_1000"
-                    android:id="@+id/img_back">
-                </androidx.appcompat.widget.AppCompatImageView>
-
-
-                </androidx.appcompat.widget.Toolbar>
-
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <androidx.constraintlayout.widget.Guideline
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.05"
-                android:id="@+id/guide_start">
-            </androidx.constraintlayout.widget.Guideline>
-
-
-            <androidx.constraintlayout.widget.Guideline
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.95"
-                android:id="@+id/guide_end">
-            </androidx.constraintlayout.widget.Guideline>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.core.widget.NestedScrollView>
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,7 +3,7 @@
 
     <color name="colorPrimary">#212B30</color>
     <color name="colorPrimaryVariant">#212B30</color>
-    <color name="colorOnPrimary">@color/md_pink_400</color>
+    <color name="colorOnPrimary">@color/md_blue_A200</color>
     <color name="colorSecondary">@color/md_blue_grey_900</color>
     <color name="rippleColor">#2979FF</color>
 

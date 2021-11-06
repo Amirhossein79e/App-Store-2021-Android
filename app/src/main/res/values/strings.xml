@@ -48,5 +48,7 @@
     <string name="report_a_bug">Report a Bug</string>
     <string name="dark">Dark mode</string>
     <string name="light">Light mode</string>
+    <string name="detail">Detail...</string>
+    <string name="more">more</string>
 
 </resources>

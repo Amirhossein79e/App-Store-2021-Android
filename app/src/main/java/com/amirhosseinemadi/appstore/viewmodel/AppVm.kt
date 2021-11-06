@@ -32,7 +32,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
     }
 
 
-    private fun app(packageName:String)
+    fun app(packageName:String)
     {
         apiCaller.getApp(packageName,object : SingleObserver<ResponseObject<AppModel>>
         {
@@ -54,7 +54,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
     }
 
 
-    private fun comment(offset:Int, access:String, packageName:String)
+    fun comment(offset:Int, access:String, packageName:String)
     {
         apiCaller.getComments(access,packageName,offset,object : SingleObserver<ResponseObject<List<CommentModel>>>
         {
@@ -76,7 +76,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
     }
 
 
-    private fun submitComment(access:String, detail:String, rate:Float, packageName:String)
+    fun submitComment(access:String, detail:String, rate:Float, packageName:String)
     {
         apiCaller.submitComment(access, detail, rate, packageName, object : SingleObserver<ResponseObject<String>>
         {
@@ -98,7 +98,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
     }
 
 
-    private fun deleteComment(access:String, packageName:String)
+    fun deleteComment(access:String, packageName:String)
     {
         apiCaller.deleteComment(access, packageName, object : SingleObserver<ResponseObject<String>>
         {

@@ -26,7 +26,7 @@ class SubRecyclerAdapter(private val context:Context, private  val list: List<Ap
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val appModel:AppModel = list.get(position)
-        holder.linear.setOnClickListener { callback.notify() }
+        holder.linear.setOnClickListener { callback.notify(appModel.packageName) }
 
         Picasso.get().load(ApiCaller.ICON_URL+appModel.packageName+".png").into(holder.img)
 

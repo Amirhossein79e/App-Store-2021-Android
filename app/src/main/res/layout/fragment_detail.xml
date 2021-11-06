@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05"
+        android:id="@+id/guide_start">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95"
+        android:id="@+id/guide_end">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/dp24"
+        android:id="@+id/guide_top">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98"
+        android:id="@+id/guide_bottom">
+    </androidx.constraintlayout.widget.Guideline>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/bottom_sheet_toggle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        android:layout_marginTop="@dimen/dp12">
+    </androidx.appcompat.widget.AppCompatTextView>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_large_normal"
+        app:layout_constraintTop_toBottomOf="@id/guide_top"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        android:layout_marginStart="@dimen/dp16"
+        style="@style/txt_style"
+        android:text="@string/detail"
+        android:id="@+id/txt_detail">
+    </androidx.appcompat.widget.AppCompatTextView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/dp0"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/txt_detail"
+        app:layout_constraintStart_toEndOf="@id/guide_start"
+        app:layout_constraintEnd_toStartOf="@id/guide_end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp16"
+        app:cardBackgroundColor="@color/colorSecondary"
+        app:cardCornerRadius="@dimen/dp16"
+        app:cardElevation="@dimen/dp0">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp16"
+            android:textSize="@dimen/text_size_small_normal"
+            style="@style/txt_style"
+            android:id="@+id/txt">
+        </androidx.appcompat.widget.AppCompatTextView>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

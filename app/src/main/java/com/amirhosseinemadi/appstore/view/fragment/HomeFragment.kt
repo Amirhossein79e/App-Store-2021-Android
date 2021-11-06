@@ -140,7 +140,7 @@ class HomeFragment : Fragment(),HomeCallback {
                             {
                                 override fun notify(vararg obj: Any?)
                                 {
-
+                                    requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String)).commit()
                                 }
                             })
                     i++

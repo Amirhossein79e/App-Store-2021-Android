@@ -49,5 +49,7 @@
     <string name="report_a_bug">گذارش اشکال</string>
     <string name="dark">حالت تاریک</string>
     <string name="light">حالت روشن</string>
+    <string name="detail">توضیحات ...</string>
+    <string name="more">بیشتر</string>
 
 </resources>
