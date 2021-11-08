@@ -8,9 +8,10 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.model.ApiCaller
+import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.squareup.picasso.Picasso
 
-class MainPagerAdapter(private val context:Context,private val list:List<String>) : RecyclerView.Adapter<MainPagerAdapter.ViewHolder>() {
+class MainPagerAdapter(private val context:Context,private val list:List<String>,private val callback:Callback) : RecyclerView.Adapter<MainPagerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view:View = LayoutInflater.from(context).inflate(R.layout.pager_item,parent,false)
@@ -18,13 +19,11 @@ class MainPagerAdapter(private val context:Context,private val list:List<String>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val str:String = list.get(position)
         Picasso.get().load(ApiCaller.SLIDER_URL+list.get(position)+".png").into(holder.img)
-    }
+        holder.img.setOnClickListener { callback.notify(str) }
 
-
-    override fun onViewAttachedToWindow(holder: ViewHolder) {
-        super.onViewAttachedToWindow(holder)
-        holder.itemView.animate().translationY(1.1f).setDuration(300).start()
     }
 
 

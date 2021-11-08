@@ -13,7 +13,7 @@
         app:layout_constraintDimensionRatio="1.1:2"
         app:cardBackgroundColor="@color/colorSecondary"
         app:cardCornerRadius="@dimen/dp8"
-        app:cardElevation="@dimen/dp1">
+        app:cardElevation="@dimen/dp0">
 
 
         <androidx.appcompat.widget.AppCompatImageView

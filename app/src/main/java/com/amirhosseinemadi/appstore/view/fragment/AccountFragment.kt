@@ -94,11 +94,11 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
 
         accountBinding.recycler.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
-        accountBinding.recycler.adapter = AppRecyclerAdapter(requireContext(),appList!!,object : Callback
+        accountBinding.recycler.adapter = AppRecyclerAdapter(requireContext(),appList,object : Callback
         {
             override fun notify(vararg obj: Any?)
             {
-
+                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String)).commit()
             }
         })
 
@@ -110,9 +110,9 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (appList!!.size % 10 == 0 && more && (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() >= appList!!.size-2 && !loading.isShowing)
+                if (appList.size % 10 == 0 && more && (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() >= appList!!.size-2 && !loading.isShowing)
                 {
-                    viewModel.update(appList!!.size,Utilities.getAllPackages(),false)
+                    viewModel.update(appList.size,Utilities.getAllPackages(),false)
                 }
             }
         })

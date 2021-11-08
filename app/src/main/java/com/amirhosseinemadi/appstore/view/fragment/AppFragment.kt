@@ -1,11 +1,16 @@
 package com.amirhosseinemadi.appstore.view.fragment
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +26,7 @@ import com.amirhosseinemadi.appstore.view.bottomsheet.DetailFragment
 import com.amirhosseinemadi.appstore.view.callback.AppCallback
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.amirhosseinemadi.appstore.viewmodel.AppVm
+import com.google.android.material.chip.Chip
 import com.squareup.picasso.Picasso
 import kotlin.random.Random
 
@@ -29,6 +35,7 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
     private val viewModel:AppVm
     private lateinit var appBinding:FragmentAppBinding
     private lateinit var loading:Dialog
+    private lateinit var metrics:DisplayMetrics
 
     init
     {
@@ -49,6 +56,14 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
 
     private fun initView()
     {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        {
+            requireContext().display?.getRealMetrics(metrics)
+        }else
+        {
+            metrics = requireContext().resources.displayMetrics
+        }
+
         Picasso.get().load(ApiCaller.ICON_URL+packageName+".png").into(appBinding.img)
 
         appBinding.recycler.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
@@ -83,7 +98,7 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
                         }
                         when(it)
                         {
-
+                            "app" -> {viewModel.app(packageName)}
                         }
                     }
 
@@ -106,18 +121,18 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
                         {
                             appBinding.txtName.text = t.data!!.nameEn
                             appBinding.txtDev.text = "by "+t.data!!.devEn
-                            appBinding.txtCategory.text = t.data!!.category
+                            appBinding.txtCategory.text = t.data!!.categoryEn
                         }else
                         {
                             appBinding.txtName.text = t.data!!.nameFa
                             appBinding.txtDev.text = "توسط "+t.data!!.devFa
-                            appBinding.txtCategory.text = t.data!!.category
+                            appBinding.txtCategory.text = t.data!!.categoryFa
                         }
 
-                        Picasso.get().load(ApiCaller.CATEGORY_URL+t.data!!.category+".png").into(appBinding.imgCategory)
+                        Picasso.get().load(ApiCaller.CATEGORY_URL+t.data!!.categoryIcon).into(appBinding.imgCategory)
                         appBinding.txtRate.text = String.format("%d.1f",t.data!!.rate)
                         appBinding.txtSize.text = t.data!!.size
-                        appBinding.txtVer.text = "v "+t.data!!.verName
+                        appBinding.txtVer.text = t.data!!.verName
 
                         if (t.data!!.detail!!.length < 120)
                         {
@@ -131,6 +146,19 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
                             DetailFragment(t.data!!.detail!!).show(parentFragmentManager,null)
                         }
 
+                        for (str:String in t.data!!.tag!!.split(","))
+                        {
+                            val chip:Chip = Chip(requireContext())
+                            chip.setChipBackgroundColorResource(R.color.colorOnPrimary)
+                            chip.setRippleColorResource(R.color.rippleColor)
+                            chip.setTextColor(ContextCompat.getColor(requireContext(),R.color.md_white_1000))
+                            chip.text = str
+                            chip.setOnClickListener { requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,SearchFragment(str),null).commit() }
+
+                            appBinding.linearChip.addView(chip)
+
+                            (chip.layoutParams as LinearLayout.LayoutParams).marginEnd = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,8f,metrics).toInt()
+                        }
                     }else
                     {
 

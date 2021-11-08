@@ -50,5 +50,6 @@
     <string name="light">Light mode</string>
     <string name="detail">Detail...</string>
     <string name="more">more</string>
+    <string name="about_app">About app</string>
 
 </resources>

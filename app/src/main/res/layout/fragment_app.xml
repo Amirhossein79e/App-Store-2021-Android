@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:fitsSystemWindows="true"
                     app:contentScrim="@color/colorPrimary"
-                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -223,7 +223,7 @@
                         android:layout_marginBottom="@dimen/dp32"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp16"
-                        app:cardElevation="@dimen/dp8"
+                        app:cardElevation="@dimen/dp0"
                         android:layout_marginEnd="@dimen/dp8"
                         android:id="@+id/card_rate">
 
@@ -237,8 +237,8 @@
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/img_rate"
-                                android:layout_width="@dimen/dp32"
-                                android:layout_height="@dimen/dp32"
+                                android:layout_width="@dimen/dp24"
+                                android:layout_height="@dimen/dp24"
                                 app:srcCompat="@drawable/ic_rate"
                                 app:tint="@color/colorOnPrimary">
                             </androidx.appcompat.widget.AppCompatImageView>
@@ -248,8 +248,8 @@
                                 android:id="@+id/txt_rate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/dp8"
-                                android:textSize="@dimen/text_size_small_normal">
+                                android:layout_marginTop="@dimen/dp12"
+                                android:textSize="@dimen/text_size_small">
                             </androidx.appcompat.widget.AppCompatTextView>
 
 
@@ -271,7 +271,7 @@
                         android:layout_marginStart="@dimen/dp4"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp16"
-                        app:cardElevation="@dimen/dp8">
+                        app:cardElevation="@dimen/dp0">
 
 
                         <LinearLayout
@@ -283,8 +283,8 @@
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/img_size"
-                                android:layout_width="@dimen/dp32"
-                                android:layout_height="@dimen/dp32"
+                                android:layout_width="@dimen/dp24"
+                                android:layout_height="@dimen/dp24"
                                 app:srcCompat="@drawable/ic_size"
                                 app:tint="@color/colorOnPrimary">
                             </androidx.appcompat.widget.AppCompatImageView>
@@ -294,8 +294,8 @@
                                 android:id="@+id/txt_size"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/dp8"
-                                android:textSize="@dimen/text_size_small_normal">
+                                android:layout_marginTop="@dimen/dp12"
+                                android:textSize="@dimen/text_size_small">
                             </androidx.appcompat.widget.AppCompatTextView>
 
 
@@ -317,7 +317,7 @@
                         android:layout_marginEnd="@dimen/dp4"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp12"
-                        app:cardElevation="@dimen/dp8">
+                        app:cardElevation="@dimen/dp0">
 
 
                         <LinearLayout
@@ -329,8 +329,8 @@
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/img_ver"
-                                android:layout_width="@dimen/dp32"
-                                android:layout_height="@dimen/dp32"
+                                android:layout_width="@dimen/dp24"
+                                android:layout_height="@dimen/dp24"
                                 app:srcCompat="@drawable/ic_update"
                                 app:tint="@color/colorOnPrimary">
                             </androidx.appcompat.widget.AppCompatImageView>
@@ -340,8 +340,8 @@
                                 android:id="@+id/txt_ver"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/dp8"
-                                android:textSize="@dimen/text_size_small_normal"
+                                android:layout_marginTop="@dimen/dp12"
+                                android:textSize="@dimen/text_size_small"
                                 android:maxLines="1"
                                 android:ellipsize="end">
                             </androidx.appcompat.widget.AppCompatTextView>
@@ -363,7 +363,7 @@
                         android:layout_marginStart="@dimen/dp8"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp16"
-                        app:cardElevation="@dimen/dp8">
+                        app:cardElevation="@dimen/dp0">
 
 
                         <LinearLayout
@@ -375,10 +375,8 @@
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/img_category"
-                                android:layout_width="@dimen/dp32"
-                                android:layout_height="@dimen/dp32"
-                                app:srcCompat="@drawable/ic_update"
-                                app:tint="@color/colorOnPrimary">
+                                android:layout_width="@dimen/dp24"
+                                android:layout_height="@dimen/dp24">
                             </androidx.appcompat.widget.AppCompatImageView>
 
 
@@ -386,8 +384,8 @@
                                 android:id="@+id/txt_category"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/dp8"
-                                android:textSize="@dimen/text_size_small_normal">
+                                android:layout_marginTop="@dimen/dp12"
+                                android:textSize="@dimen/text_size_small">
                             </androidx.appcompat.widget.AppCompatTextView>
 
 
@@ -444,6 +442,7 @@
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintDimensionRatio="3:1.5"
                         android:layout_marginTop="@dimen/dp16"
+                        android:nestedScrollingEnabled="false"
                         android:id="@+id/recycler">
                     </androidx.recyclerview.widget.RecyclerView>
 
@@ -454,7 +453,20 @@
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintTop_toBottomOf="@id/recycler"
-                        android:layout_marginTop="@dimen/dp24"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:textSize="@dimen/text_size_large_normal"
+                        android:text="@string/about_app"
+                        android:id="@+id/txt_detail_title">
+                    </androidx.appcompat.widget.AppCompatTextView>
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        app:layout_constraintTop_toBottomOf="@id/txt_detail_title"
+                        android:layout_marginTop="@dimen/dp8"
                         android:paddingStart="@dimen/dp8"
                         android:paddingEnd="@dimen/dp8"
                         android:textSize="@dimen/text_size_small_normal"
@@ -479,6 +491,18 @@
                         android:text="@string/more"
                         android:id="@+id/txt_more">
                     </androidx.appcompat.widget.AppCompatTextView>
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/txt_more"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:orientation="horizontal"
+                        android:id="@+id/linear_chip">
+                    </LinearLayout>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

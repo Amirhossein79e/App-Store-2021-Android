@@ -28,6 +28,15 @@ class AppModel {
     @SerializedName("category")
     var category:String? = ""
 
+    @SerializedName("category_icon")
+    var categoryIcon:String? = ""
+
+    @SerializedName("category_en")
+    var categoryEn:String? = ""
+
+    @SerializedName("category_fa")
+    var categoryFa:String? = ""
+
     @SerializedName("tag")
     var tag:String? = ""
 

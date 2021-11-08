@@ -70,8 +70,6 @@ class MainActivity : AppCompatActivity() {
             Utilities.underApiStatusBarHandle(this)
         }
 
-        mainBinding.cardBottomNav.setBackgroundResource(R.drawable.bottom_nav_card_background)
-        //supportFragmentManager.beginTransaction().replace(R.id.frame,AppFragment(),"").commit()
         mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
 
     }

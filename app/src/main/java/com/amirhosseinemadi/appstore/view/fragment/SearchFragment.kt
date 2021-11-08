@@ -38,7 +38,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchFragment : Fragment(),SearchCallback {
+class SearchFragment() : Fragment(),SearchCallback {
 
     private val viewModel:SearchVm
     private lateinit var searchBinding:FragmentSearchBinding
@@ -48,6 +48,7 @@ class SearchFragment : Fragment(),SearchCallback {
     private var isNew:Boolean
     private val appList:MutableList<AppModel>
     private val titleList:MutableList<String>
+    private var queryText:String? = null
     private lateinit var activityResultLauncher:ActivityResultLauncher<Intent>
 
     init
@@ -60,6 +61,10 @@ class SearchFragment : Fragment(),SearchCallback {
         titleList = ArrayList()
     }
 
+    constructor(query:String) : this()
+    {
+        queryText = query
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,8 +76,6 @@ class SearchFragment : Fragment(),SearchCallback {
                 searchBinding.sch.setQuery(it.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).toString().replace("[","").replace("]",""),true)
             }
         }
-        titleInit()
-        appInit()
     }
 
 
@@ -83,7 +86,21 @@ class SearchFragment : Fragment(),SearchCallback {
         handleError()
         initView()
 
+        titleInit()
+        appInit()
+
         return searchBinding.root
+    }
+
+
+    override fun onResume()
+    {
+        super.onResume()
+        if (queryText != null)
+        {
+            fromTitle = true
+            searchBinding.sch.setQuery(queryText,true)
+        }
     }
 
 
@@ -130,7 +147,7 @@ class SearchFragment : Fragment(),SearchCallback {
         {
             override fun notify(vararg obj: Any?)
             {
-
+                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String)).commit()
             }
         })
 

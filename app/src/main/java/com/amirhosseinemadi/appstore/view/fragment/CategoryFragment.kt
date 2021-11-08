@@ -32,10 +32,6 @@ class CategoryFragment() : Fragment(),CategoryCallback {
     private var more:Boolean = true
     private var appList:MutableList<AppModel>? = null
 
-    init
-    {
-
-    }
 
     constructor(category:String) : this()
     {
@@ -57,6 +53,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
             categoryInit()
         }else
         {
+            appByCategory(appList!!.size,category!!)
             categoryBinding.imgBack.visibility = View.VISIBLE
             categoryBinding.imgBack.setOnClickListener {}
         }
@@ -75,7 +72,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
             {
                 override fun notify(vararg obj: Any?)
                 {
-
+                    requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String)).commit()
                 }
             })
 

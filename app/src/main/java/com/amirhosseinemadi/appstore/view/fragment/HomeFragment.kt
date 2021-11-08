@@ -15,7 +15,6 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentHomeBinding
 import com.amirhosseinemadi.appstore.model.entity.HomeCategoryModel
 import com.amirhosseinemadi.appstore.util.Utilities
-import com.amirhosseinemadi.appstore.view.activity.MainActivity
 import com.amirhosseinemadi.appstore.view.adapter.MainPagerAdapter
 import com.amirhosseinemadi.appstore.view.adapter.MainRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.adapter.SubRecyclerAdapter
@@ -101,7 +100,13 @@ class HomeFragment : Fragment(),HomeCallback {
                 {
                     if(it.responseCode == 1)
                     {
-                        homeBinding.pager.adapter = MainPagerAdapter(requireContext(), it.data?.slider as List<String>)
+                        homeBinding.pager.adapter = MainPagerAdapter(requireContext(), it.data?.slider as List<String>, object : Callback
+                        {
+                            override fun notify(vararg obj: Any?)
+                            {
+                                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String)).commit()
+                            }
+                        })
                         homeBinding.recycler.adapter = MainRecyclerAdapter(requireContext(),it.data?.rows as List<HomeCategoryModel>, object : Callback
                         {
                             override fun notify(vararg obj: Any?)

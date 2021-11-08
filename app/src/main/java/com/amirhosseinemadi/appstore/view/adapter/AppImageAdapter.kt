@@ -53,7 +53,6 @@ class AppImageAdapter(private val context:Context, private val packageName:Strin
         }
 
         Picasso.get().load(ApiCaller.IMAGE_URL+packageName+".$str.jpg").into(holder.img)
-        println(ApiCaller.IMAGE_URL+packageName+".$str.jpg")
 
     }
 

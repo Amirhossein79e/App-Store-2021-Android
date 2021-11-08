@@ -51,5 +51,6 @@
     <string name="light">حالت روشن</string>
     <string name="detail">توضیحات ...</string>
     <string name="more">بیشتر</string>
+    <string name="about_app">درباره اپلیکیشن</string>
 
 </resources>
