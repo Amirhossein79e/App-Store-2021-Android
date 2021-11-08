@@ -20,8 +20,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.cursoradapter.widget.CursorAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
@@ -106,6 +108,12 @@ class SearchFragment() : Fragment(),SearchCallback {
 
     private fun initView()
     {
+        if (queryText != null)
+        {
+            searchBinding.imgBack.visibility = View.VISIBLE
+            (searchBinding.card.layoutParams as ConstraintLayout.LayoutParams).topToBottom = R.id.img_back
+        }
+
         searchBinding.btnVoice.setOnClickListener(this::voiceCLick)
 
         searchBinding.sch.setOnQueryTextListener(object : SearchView.OnQueryTextListener
@@ -147,7 +155,7 @@ class SearchFragment() : Fragment(),SearchCallback {
         {
             override fun notify(vararg obj: Any?)
             {
-                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String)).commit()
+                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String),"appFragment").addToBackStack("appFragment").commit()
             }
         })
 
@@ -173,6 +181,16 @@ class SearchFragment() : Fragment(),SearchCallback {
             {
                 fromTitle = true
                 searchBinding.sch.setQuery(obj[0] as String,true)
+            }
+        })
+
+        searchBinding.imgBack.setOnClickListener { backPressed() }
+
+        Utilities.onBackPressed(searchBinding.root, object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+                backPressed()
             }
         })
     }
@@ -276,6 +294,23 @@ class SearchFragment() : Fragment(),SearchCallback {
                             Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!,BaseTransientBottomBar.LENGTH_SHORT)
                         }
                     })
+    }
+
+
+    private fun backPressed()
+    {
+        if (parentFragmentManager.backStackEntryCount > 0)
+        {
+            val backStack: FragmentManager.BackStackEntry = parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount - 1)
+            val fragment: Fragment? = parentFragmentManager.findFragmentByTag(backStack.name)
+
+            when (backStack.name)
+            {
+                "appFragment" -> { parentFragmentManager.beginTransaction().remove(this@SearchFragment).commit() }
+
+                else -> requireActivity().finish()
+            }
+        }
     }
 
 

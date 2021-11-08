@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -104,7 +105,7 @@ class HomeFragment : Fragment(),HomeCallback {
                         {
                             override fun notify(vararg obj: Any?)
                             {
-                                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String)).commit()
+                                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String),"appFragment").addToBackStack("appFragment").commit()
                             }
                         })
                         homeBinding.recycler.adapter = MainRecyclerAdapter(requireContext(),it.data?.rows as List<HomeCategoryModel>, object : Callback
@@ -145,7 +146,7 @@ class HomeFragment : Fragment(),HomeCallback {
                             {
                                 override fun notify(vararg obj: Any?)
                                 {
-                                    requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String)).commit()
+                                    requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String),"appFragment").addToBackStack("appFragment").commit()
                                 }
                             })
                     i++

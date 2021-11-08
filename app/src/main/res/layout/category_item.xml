@@ -6,7 +6,6 @@
     android:layout_marginTop="@dimen/dp8"
     android:layout_marginBottom="@dimen/dp8"
     app:cardBackgroundColor="@color/colorSecondary"
-    android:foreground="@drawable/ripple_effect_foreground"
     app:cardCornerRadius="@dimen/dp16"
     app:cardElevation="@dimen/dp1">
 

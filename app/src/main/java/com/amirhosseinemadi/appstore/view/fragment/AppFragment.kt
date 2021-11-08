@@ -10,8 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentFactory
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirhosseinemadi.appstore.R
@@ -40,6 +43,7 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
     init
     {
         viewModel = AppVm(this)
+        metrics = DisplayMetrics()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -58,7 +62,7 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
         {
-            requireContext().display?.getRealMetrics(metrics)
+            requireActivity().display!!.getRealMetrics(metrics)
         }else
         {
             metrics = requireContext().resources.displayMetrics
@@ -78,6 +82,19 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
 
             4 -> { appBinding.imgTop.setImageResource(R.drawable.background_top_four) }
         }
+
+        appBinding.imgBack.setOnClickListener {
+            backPressed()
+            Toast.makeText(requireContext(),"BACK",Toast.LENGTH_SHORT).show()
+        }
+
+        Utilities.onBackPressed(appBinding.root, object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+                backPressed()
+            }
+        })
     }
 
 
@@ -130,7 +147,7 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
                         }
 
                         Picasso.get().load(ApiCaller.CATEGORY_URL+t.data!!.categoryIcon).into(appBinding.imgCategory)
-                        appBinding.txtRate.text = String.format("%d.1f",t.data!!.rate)
+                        appBinding.txtRate.text = String.format("%.1f",t.data!!.rate)
                         appBinding.txtSize.text = t.data!!.size
                         appBinding.txtVer.text = t.data!!.verName
 
@@ -153,7 +170,7 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
                             chip.setRippleColorResource(R.color.rippleColor)
                             chip.setTextColor(ContextCompat.getColor(requireContext(),R.color.md_white_1000))
                             chip.text = str
-                            chip.setOnClickListener { requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,SearchFragment(str),null).commit() }
+                            chip.setOnClickListener { requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,SearchFragment(str),"searchFragment").addToBackStack("searchFragment").commit() }
 
                             appBinding.linearChip.addView(chip)
 
@@ -164,6 +181,31 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
 
                     }
                 })
+    }
+
+
+    private fun backPressed()
+    {
+        if (parentFragmentManager.backStackEntryCount > 0)
+        {
+            val backStack: FragmentManager.BackStackEntry = parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount - 1)
+            val fragment: Fragment? = parentFragmentManager.findFragmentByTag(backStack.name)
+
+            when (backStack.name)
+            {
+                "homeInit" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
+
+                "searchInit" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
+
+                "categoryInit" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
+
+                "accountInit" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
+
+                "searchFragment" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
+
+                else -> { requireActivity().finish() }
+            }
+        }
     }
 
 

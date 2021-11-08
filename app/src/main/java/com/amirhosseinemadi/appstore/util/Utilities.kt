@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,6 +83,21 @@ class Utilities {
                 AppCompatDelegate.MODE_NIGHT_NO -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = true
 
                 else -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = false
+            }
+        }
+
+
+        fun onBackPressed(view:View, callback:Callback)
+        {
+            view.isFocusableInTouchMode = true
+            view.requestFocus()
+            view.setOnKeyListener { v, keyCode, event ->
+
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP)
+                {
+                    callback.notify()
+                }
+                false
             }
         }
 

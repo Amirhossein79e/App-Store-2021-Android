@@ -56,9 +56,6 @@ class MainActivity : AppCompatActivity() {
 
                 "update" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
             }
-        }else
-        {
-            mainBinding.bottomNav.selectedItemId = R.id.item_home
         }
     }
 
@@ -71,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
-
+        //mainBinding.bottomNav.selectedItemId = R.id.item_home
     }
 
 
@@ -79,13 +76,13 @@ class MainActivity : AppCompatActivity() {
     {
         when(item.itemId)
         {
-            R.id.item_home -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,HomeFragment()).commit()
+            R.id.item_home -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,HomeFragment(),"homeInit").addToBackStack("homeInit").commit()
 
-            R.id.item_search -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,SearchFragment()).commit()
+            R.id.item_search -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,SearchFragment(),"searchInit").addToBackStack("searchInit").commit()
 
-            R.id.item_category -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,CategoryFragment()).addToBackStack("category").commit()
+            R.id.item_category -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,CategoryFragment(),"categoryInit").addToBackStack("categoryInit").commit()
 
-            R.id.item_account -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,AccountFragment()).commit()
+            R.id.item_account -> supportFragmentManager.beginTransaction().replace(mainBinding.frame.id,AccountFragment(),"accountInit").addToBackStack("accountInit").commit()
         }
 
         item.isChecked = true
@@ -133,6 +130,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 0)
+        {
+            super.onBackPressed()
+        }
     }
 
 

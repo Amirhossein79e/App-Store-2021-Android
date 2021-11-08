@@ -52,6 +52,19 @@
     </androidx.constraintlayout.widget.Guideline>
 
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="@dimen/dp8"
+        app:srcCompat="@drawable/ic_back"
+        app:tint="@color/colorOnPrimary"
+        android:visibility="gone"
+        android:id="@+id/img_back">
+    </androidx.appcompat.widget.AppCompatImageView>
+
+
     <androidx.cardview.widget.CardView
         android:layout_width="@dimen/dp0"
         android:layout_height="wrap_content"
@@ -136,7 +149,7 @@
         app:layout_constraintStart_toEndOf="@id/guide_start"
         app:layout_constraintEnd_toStartOf="@id/guide_end"
         app:layout_constraintBottom_toTopOf="@id/guide_bottom"
-        android:layout_marginTop="@dimen/dp72"
+        android:layout_marginTop="@dimen/dp80"
         android:id="@+id/recycler">
     </androidx.recyclerview.widget.RecyclerView>
 

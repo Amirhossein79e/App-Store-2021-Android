@@ -72,7 +72,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
             {
                 override fun notify(vararg obj: Any?)
                 {
-                    requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String)).commit()
+                    requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(obj[0] as String),"appFragment").addToBackStack("appFragment").commit()
                 }
             })
 
