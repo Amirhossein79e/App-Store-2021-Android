@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="view_model"
+            type="com.amirhosseinemadi.appstore.viewmodel.AppVm" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05"
+            android:id="@+id/guide_start">
+        </androidx.constraintlayout.widget.Guideline>
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95"
+            android:id="@+id/guide_end">
+        </androidx.constraintlayout.widget.Guideline>
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/dp24"
+            android:id="@+id/guide_top">
+        </androidx.constraintlayout.widget.Guideline>
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.98"
+            android:id="@+id/guide_bottom">
+        </androidx.constraintlayout.widget.Guideline>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/bottom_sheet_toggle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_start"
+            app:layout_constraintEnd_toStartOf="@id/guide_end"
+            android:layout_marginTop="@dimen/dp12">
+        </androidx.appcompat.widget.AppCompatTextView>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_large_normal"
+            app:layout_constraintTop_toBottomOf="@id/guide_top"
+            app:layout_constraintStart_toEndOf="@id/guide_start"
+            android:layout_marginStart="@dimen/dp8"
+            style="@style/txt_style"
+            android:text="@string/user_comments"
+            android:id="@+id/txt_detail">
+        </androidx.appcompat.widget.AppCompatTextView>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="@dimen/dp0"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/txt_detail"
+            app:layout_constraintStart_toEndOf="@id/guide_start"
+            app:layout_constraintEnd_toStartOf="@id/guide_end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp8"
+            android:id="@+id/recycler">
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/guide_top"
+            app:layout_constraintStart_toEndOf="@id/guide_start"
+            app:layout_constraintEnd_toStartOf="@id/guide_end"
+            android:layout_marginTop="@dimen/dp16"
+            android:numStars="5"
+            android:stepSize="1"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:progressTint="@color/md_yellow_A400"
+            android:progressBackgroundTint="@color/colorOnPrimary"
+            android:rating="@={view_model.rate}"
+            android:visibility="gone"
+            android:id="@+id/rating_bar">
+        </androidx.appcompat.widget.AppCompatRatingBar>
+
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp120"
+            app:layout_constraintTop_toBottomOf="@id/rating_bar"
+            app:layout_constraintStart_toEndOf="@id/guide_start"
+            app:layout_constraintEnd_toStartOf="@id/guide_end"
+            android:layout_marginTop="@dimen/dp24"
+            android:gravity="top|start"
+            style="@style/edt_style"
+            android:hint="@string/rate_comment_hint"
+            android:text="@={view_model.comment}"
+            android:visibility="gone"
+            android:id="@+id/txt_comment">
+        </androidx.appcompat.widget.AppCompatEditText>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/txt_comment"
+            app:layout_constraintStart_toEndOf="@id/guide_start"
+            app:layout_constraintEnd_toStartOf="@id/guide_end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="@dimen/dp40"
+            android:layout_marginBottom="@dimen/dp16"
+            style="@style/btn_style"
+            android:textSize="@dimen/text_size_normal"
+            android:text="@string/submit"
+            android:visibility="gone"
+            android:id="@+id/btn">
+        </androidx.appcompat.widget.AppCompatButton>
+
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:rotation="180"
+            android:id="@+id/coordinator">
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

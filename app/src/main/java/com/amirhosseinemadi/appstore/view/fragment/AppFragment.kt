@@ -10,33 +10,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
+import androidx.appcompat.widget.AppCompatRatingBar
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentAppBinding
 import com.amirhosseinemadi.appstore.model.ApiCaller
-import com.amirhosseinemadi.appstore.model.entity.AppModel
-import com.amirhosseinemadi.appstore.model.entity.ResponseObject
+import com.amirhosseinemadi.appstore.model.entity.CommentModel
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.adapter.AppImageAdapter
+import com.amirhosseinemadi.appstore.view.bottomsheet.CommentFragment
 import com.amirhosseinemadi.appstore.view.bottomsheet.DetailFragment
 import com.amirhosseinemadi.appstore.view.callback.AppCallback
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.amirhosseinemadi.appstore.viewmodel.AppVm
 import com.google.android.material.chip.Chip
-import com.google.firebase.messaging.ktx.remoteMessage
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.squareup.picasso.Picasso
 import kotlin.random.Random
 
-class AppFragment(private val packageName:String) : Fragment(),AppCallback {
+class AppFragment() : Fragment(),AppCallback {
 
-    private val viewModel:AppVm
+    private var viewModel:AppVm
+    private var packageName:String
     private lateinit var appBinding:FragmentAppBinding
     private lateinit var loading:Dialog
     private lateinit var metrics:DisplayMetrics
@@ -44,8 +44,16 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
     init
     {
         viewModel = AppVm(this)
-        metrics = DisplayMetrics()
+        packageName = ""
     }
+
+    constructor(packageName:String) : this()
+    {
+        viewModel = AppVm(this)
+        metrics = DisplayMetrics()
+        this.packageName = packageName
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         appBinding = DataBindingUtil.inflate<FragmentAppBinding>(inflater,R.layout.fragment_app,container,false).also { it.viewModel = viewModel }
@@ -53,7 +61,7 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
         loading = Utilities.loadingDialog(requireContext())
         initView()
         handleError()
-        app()
+        appInit()
 
         return appBinding.root
     }
@@ -124,7 +132,7 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
     }
 
 
-    private fun app()
+    private fun appInit()
     {
         viewModel.app(packageName)
         viewModel.appResponse
@@ -163,6 +171,10 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
                             DetailFragment(t.data!!.detail!!).show(parentFragmentManager,null)
                         }
 
+                        appBinding.cardCategory.setOnClickListener {
+                            requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,CategoryFragment(t.data!!.category!!),"appCategoryFragment").addToBackStack("appCategoryFragment").commit()
+                        }
+
                         for (str:String in t.data!!.tag!!.split(","))
                         {
                             val chip:Chip = Chip(requireContext())
@@ -176,11 +188,91 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
 
                             (chip.layoutParams as LinearLayout.LayoutParams).marginEnd = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,8f,metrics).toInt()
                         }
+
+                        commentInit(0,PrefManager.getAccess(),packageName)
+
                     }else
                     {
-
+                        Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),t.message!!, BaseTransientBottomBar.LENGTH_SHORT)
                     }
                 })
+    }
+
+
+    private fun commentInit(offset:Int, access:String?, packageName:String)
+    {
+        viewModel.comment(offset,access,packageName)
+        viewModel.commentResponse.observe(viewLifecycleOwner,
+            {
+                if (it.responseCode == 1)
+                {
+                    if (it.data != null && it.data!!.size > 0)
+                    {
+                        appBinding.txtMoreComment.setOnClickListener() { CommentFragment(packageName).show(parentFragmentManager,null) }
+                        appBinding.txtMoreComment.visibility = View.VISIBLE
+
+                        if (it.data!!.size >= 3)
+                        {
+                            for (i: Int in 0 until 3)
+                            {
+                                inflateComments(it.data!!,i)
+                            }
+                        }else
+                        {
+                            for (i: Int in it.data!!.indices)
+                            {
+                                inflateComments(it.data!!,i)
+                            }
+                        }
+                    }else
+                    {
+                        appBinding.txtNoCommentApp.visibility = View.VISIBLE
+                    }
+                }else
+                {
+                    Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!, BaseTransientBottomBar.LENGTH_SHORT)
+                }
+            })
+    }
+
+
+    private fun deleteComment(access:String, packageName:String)
+    {
+        viewModel.deleteComment(access, packageName)
+        viewModel.deleteResponse.observe(viewLifecycleOwner,
+            {
+                if (it.responseCode == 1)
+                {
+                    commentInit(0,access,packageName)
+                }else
+                {
+                    Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!, BaseTransientBottomBar.LENGTH_SHORT)
+                }
+            })
+    }
+
+
+    private fun inflateComments(list:List<CommentModel>, i:Int)
+    {
+        val view:View = layoutInflater.inflate(R.layout.comment_item,appBinding.linearComment,false)
+        view.findViewById<AppCompatTextView>(R.id.txt_name).text = list.get(i).username
+        view.findViewById<AppCompatTextView>(R.id.txt_comment).text = list.get(i).detail
+        view.findViewById<AppCompatRatingBar>(R.id.rating_bar).rating = list.get(i).rate!!
+
+        if (list.get(i).isAccess == 1)
+        {
+            view.findViewById<AppCompatTextView>(R.id.txt_delete).let {
+                it.visibility = View.VISIBLE
+                it.setOnClickListener {
+                    Utilities.dialogIcon(requireContext(),null,R.string.sure_delete,R.string.yes,R.string.no,true,true,
+                        {
+                            deleteComment(PrefManager.getAccess()!!,packageName)
+                        },null).show()
+                }
+            }
+        }
+
+        appBinding.linearComment.addView(view)
     }
 
 

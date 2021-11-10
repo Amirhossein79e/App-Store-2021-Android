@@ -1,5 +1,6 @@
 package com.amirhosseinemadi.appstore.viewmodel
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.amirhosseinemadi.appstore.model.ApiCaller
 import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.model.entity.CommentModel
 import com.amirhosseinemadi.appstore.model.entity.ResponseObject
+import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.view.callback.AppCallback
 import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
@@ -21,6 +23,9 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
     val submitResponse:MutableLiveData<ResponseObject<String>>
     val deleteResponse:MutableLiveData<ResponseObject<String>>
 
+    val rate:MutableLiveData<Float>
+    val comment:MutableLiveData<String>
+
     init
     {
         apiCaller = Application.component.apiCaller()
@@ -29,6 +34,8 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
         commentResponse = MutableLiveData()
         submitResponse = MutableLiveData()
         deleteResponse = MutableLiveData()
+        rate = MutableLiveData<Float>().also{ it.value = 1f }
+        comment = MutableLiveData<String>().also { it.value = "" }
     }
 
 
@@ -54,7 +61,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
     }
 
 
-    fun comment(offset:Int, access:String, packageName:String)
+    fun comment(offset:Int, access:String?, packageName:String)
     {
         apiCaller.getComments(access,packageName,offset,object : SingleObserver<ResponseObject<List<CommentModel>>>
         {

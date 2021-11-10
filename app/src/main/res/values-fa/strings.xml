@@ -43,6 +43,7 @@
     <!-- Search Strings -->
     <string name="search">جستجو</string>
     <string name="not_found_search">جستجوی شما هیچ نتیجه ای نداشت</string>
+    <!-- Settings Strings -->
     <string name="language">زبان</string>
     <string name="day_night">شب/روز</string>
     <string name="update_checking">بررسی خودکار بروزرسانی</string>
@@ -54,5 +55,10 @@
     <string name="about_app">درباره اپلیکیشن</string>
     <string name="user_comments">نظرات کاربران</string>
     <string name="no_comments">نظری ثبت نشده !</string>
+    <!-- Comments Strings -->
+    <string name="delete">حدف</string>
+    <string name="sure_delete">Are you sure about this ?</string>
+    <string name="submit">ثبت دیدگاه</string>
+    <string name="rate_comment_hint">دیدگاه شما (اگر این قسمت را خالی رها کنید امتیاز شما ثبت می شود)</string>
 
 </resources>

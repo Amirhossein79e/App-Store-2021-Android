@@ -233,7 +233,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getComments(access:String, packageName:String, offset:Int, observer:SingleObserver<ResponseObject<List<CommentModel>>>)
+    public fun getComments(access:String?, packageName:String, offset:Int, observer:SingleObserver<ResponseObject<List<CommentModel>>>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("access", access)

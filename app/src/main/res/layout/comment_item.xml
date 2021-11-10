@@ -5,20 +5,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="@dimen/dp8"
     android:layout_marginBottom="@dimen/dp8"
+    android:layout_marginStart="@dimen/dp2"
+    android:layout_marginEnd="@dimen/dp2"
     app:cardBackgroundColor="@color/colorSecondary"
     app:cardCornerRadius="@dimen/dp16"
-    app:cardElevation="@dimen/dp1">
+    app:cardElevation="@dimen/dp4">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp16">
+        android:padding="@dimen/dp8">
 
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_account"
@@ -34,48 +36,51 @@
             app:layout_constraintBottom_toBottomOf="@id/img"
             android:layout_marginStart="@dimen/dp8"
             android:textSize="@dimen/text_size_small_normal"
-            android:text="Amirhossein79"
             android:id="@+id/txt_name">
         </androidx.appcompat.widget.AppCompatTextView>
 
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            app:layout_constraintTop_toTopOf="@id/img"
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/img"
-            app:srcCompat="@drawable/ic_star"
-            app:tint="@color/md_yellow_A400"
-            android:id="@+id/img_star">
-        </androidx.appcompat.widget.AppCompatImageView>
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="@dimen/dp0"
-            android:layout_height="@dimen/dp0"
-            app:layout_constraintTop_toTopOf="@id/img_star"
-            app:layout_constraintStart_toStartOf="@id/img_star"
-            app:layout_constraintEnd_toEndOf="@id/img_star"
-            app:layout_constraintBottom_toBottomOf="@id/img_star"
-            android:paddingTop="@dimen/dp2"
-            android:gravity="center"
-            android:textColor="@color/md_yellow_A400"
-            android:textSize="@dimen/text_size_small_normal"
-            app:fontFamily="@font/shabnam_bold"
-            android:id="@+id/txt_rate">
-        </androidx.appcompat.widget.AppCompatTextView>
+            android:layout_marginEnd="@dimen/dp4"
+            android:stepSize="1"
+            android:progressTint="@color/md_yellow_A400"
+            android:progressBackgroundTint="@color/colorOnPrimary"
+            android:rating="4"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:id="@+id/rating_bar">
+        </androidx.appcompat.widget.AppCompatRatingBar>
 
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="@dimen/dp0"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/img_star"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img"
+            app:layout_constraintStart_toEndOf="@id/img"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="@dimen/text_size_small_normal"
-            android:layout_marginTop="@dimen/dp12"
+            android:textSize="@dimen/text_size_small"
+            android:layout_marginTop="@dimen/dp24"
             android:id="@+id/txt_comment">
+        </androidx.appcompat.widget.AppCompatTextView>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/txt_comment"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/dp8"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_small_normal"
+            android:textColor="@color/md_white_1000"
+            android:background="@drawable/btn_selector"
+            android:padding="@dimen/dp4"
+            android:text="@string/delete"
+            android:visibility="gone"
+            android:id="@+id/txt_delete">
         </androidx.appcompat.widget.AppCompatTextView>
 
 

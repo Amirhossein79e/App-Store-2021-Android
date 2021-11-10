@@ -219,11 +219,11 @@
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintTop_toBottomOf="@id/card_img"
                         app:layout_constraintDimensionRatio="1:1"
-                        android:layout_marginTop="@dimen/dp24"
+                        android:layout_marginTop="@dimen/dp16"
                         android:layout_marginBottom="@dimen/dp32"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp16"
-                        app:cardElevation="@dimen/dp0"
+                        app:cardElevation="@dimen/dp4"
                         android:layout_marginEnd="@dimen/dp8"
                         android:id="@+id/card_rate">
 
@@ -271,7 +271,7 @@
                         android:layout_marginStart="@dimen/dp4"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp16"
-                        app:cardElevation="@dimen/dp0">
+                        app:cardElevation="@dimen/dp4">
 
 
                         <LinearLayout
@@ -317,7 +317,7 @@
                         android:layout_marginEnd="@dimen/dp4"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp12"
-                        app:cardElevation="@dimen/dp0">
+                        app:cardElevation="@dimen/dp4">
 
 
                         <LinearLayout
@@ -363,7 +363,8 @@
                         android:layout_marginStart="@dimen/dp8"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp16"
-                        app:cardElevation="@dimen/dp0">
+                        app:cardElevation="@dimen/dp4"
+                        android:id="@+id/card_category">
 
 
                         <LinearLayout
@@ -401,7 +402,7 @@
                         app:layout_constraintTop_toBottomOf="@id/card_rate"
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
-                        android:layout_marginTop="@dimen/dp24"
+                        android:layout_marginTop="@dimen/dp16"
                         android:orientation="horizontal"
                         android:id="@+id/linear_btn">
 
@@ -499,7 +500,7 @@
                         app:layout_constraintTop_toBottomOf="@id/txt_more"
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
-                        android:layout_marginTop="@dimen/dp16"
+                        android:layout_marginTop="@dimen/dp8"
                         android:orientation="horizontal"
                         android:id="@+id/linear_chip">
                     </LinearLayout>
@@ -531,22 +532,43 @@
                         android:textSize="@dimen/text_size_normal"
                         android:textColor="@color/colorOnPrimary"
                         android:text="@string/no_comments"
+                        android:visibility="gone"
                         android:id="@+id/txt_no_comment_app">
                     </androidx.appcompat.widget.AppCompatTextView>
 
 
                     <LinearLayout
                         android:layout_width="@dimen/dp0"
-                        android:layout_height="@dimen/dp0"
+                        android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@id/txt_comment_app"
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginTop="@dimen/dp16"
-                        android:layout_marginBottom="@dimen/dp16"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:layout_marginBottom="@dimen/dp8"
                         android:orientation="vertical"
                         android:id="@+id/linear_comment">
                     </LinearLayout>
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        app:layout_constraintTop_toBottomOf="@id/linear_comment"
+                        android:paddingStart="@dimen/dp8"
+                        android:paddingEnd="@dimen/dp8"
+                        android:paddingTop="@dimen/dp4"
+                        android:paddingBottom="@dimen/dp4"
+                        android:textSize="@dimen/text_size_normal"
+                        android:gravity="center"
+                        android:textColor="@color/colorOnPrimary"
+                        android:textStyle="bold"
+                        android:text="@string/more"
+                        android:visibility="gone"
+                        android:id="@+id/txt_more_comment">
+                    </androidx.appcompat.widget.AppCompatTextView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -556,5 +578,15 @@
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:rotation="180"
+            android:id="@+id/coordinator">
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
