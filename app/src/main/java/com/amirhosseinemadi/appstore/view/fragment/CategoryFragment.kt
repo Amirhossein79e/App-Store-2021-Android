@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,7 +57,8 @@ class CategoryFragment() : Fragment(),CategoryCallback {
         {
             appByCategory(appList!!.size,category!!)
             categoryBinding.imgBack.visibility = View.VISIBLE
-            categoryBinding.imgBack.setOnClickListener {}
+            categoryBinding.imgBack.setOnClickListener { backPressed() }
+            (categoryBinding.recycler.layoutParams as ConstraintLayout.LayoutParams).topToBottom = R.id.img_back
         }
 
         return categoryBinding.root
@@ -91,6 +94,14 @@ class CategoryFragment() : Fragment(),CategoryCallback {
                 }
             })
         }
+
+        Utilities.onBackPressed(categoryBinding.root,object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+                backPressed()
+            }
+        })
     }
 
 
@@ -133,7 +144,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
                         {
                             override fun notify(vararg obj: Any?)
                             {
-                                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,CategoryFragment(obj[0] as String)).commit()
+                                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,CategoryFragment(obj[0] as String),"appCategoryFragment").addToBackStack("appCategoryFragment").commit()
                             }
                         })
                     }else
@@ -171,6 +182,35 @@ class CategoryFragment() : Fragment(),CategoryCallback {
                         Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!,BaseTransientBottomBar.LENGTH_SHORT)
                     }
                 })
+    }
+
+
+    private fun backPressed() {
+        if (parentFragmentManager.backStackEntryCount > 0)
+        {
+            val backStack: FragmentManager.BackStackEntry = parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount - 1)
+
+            when (backStack.name)
+            {
+                "appCategoryFragment" ->
+                {
+                    parentFragmentManager.popBackStack(parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount - 1).name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                }
+
+                "categoryInit" ->
+                {
+                    requireActivity().finish()
+                }
+
+                else ->
+                {
+                    requireActivity().finish()
+                }
+            }
+        } else
+        {
+            requireActivity().finish()
+        }
     }
 
 

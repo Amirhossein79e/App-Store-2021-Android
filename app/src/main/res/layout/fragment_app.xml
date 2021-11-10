@@ -505,6 +505,50 @@
                     </LinearLayout>
 
 
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/linear_chip"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:textSize="@dimen/text_size_large_normal"
+                        android:text="@string/user_comments"
+                        android:id="@+id/txt_comment_app">
+                    </androidx.appcompat.widget.AppCompatTextView>
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/txt_comment_app"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginTop="@dimen/dp32"
+                        android:layout_marginBottom="@dimen/dp16"
+                        android:gravity="center"
+                        android:textSize="@dimen/text_size_normal"
+                        android:textColor="@color/colorOnPrimary"
+                        android:text="@string/no_comments"
+                        android:id="@+id/txt_no_comment_app">
+                    </androidx.appcompat.widget.AppCompatTextView>
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="@dimen/dp0"
+                        app:layout_constraintTop_toBottomOf="@id/txt_comment_app"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:layout_marginBottom="@dimen/dp16"
+                        android:orientation="vertical"
+                        android:id="@+id/linear_comment">
+                    </LinearLayout>
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

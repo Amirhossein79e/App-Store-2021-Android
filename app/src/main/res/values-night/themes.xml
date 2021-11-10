@@ -13,7 +13,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimary</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <!-- Customize your theme here. -->
-        <item name="android:fontFamily">@font/shabnam_light</item>
+        <item name="android:fontFamily">@font/shabnam</item>
         <item name="rippleColor">@color/md_blue_A400</item>
         <item name="bottomSheetDialogTheme">@style/bottom_sheet_theme</item>
     </style>

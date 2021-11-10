@@ -52,8 +52,6 @@ class MainActivity : AppCompatActivity() {
         {
             when(intent.extras!!.getString("key"))
             {
-                "settings" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
-
                 "update" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
             }
         }
@@ -68,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
-        //mainBinding.bottomNav.selectedItemId = R.id.item_home
+        mainBinding.bottomNav.selectedItemId = R.id.item_home
     }
 
 

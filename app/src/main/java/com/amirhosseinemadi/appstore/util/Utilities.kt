@@ -97,6 +97,7 @@ class Utilities {
                 {
                     callback.notify()
                 }
+
                 false
             }
         }

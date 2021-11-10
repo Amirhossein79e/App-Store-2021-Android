@@ -52,5 +52,7 @@
     <string name="detail">توضیحات ...</string>
     <string name="more">بیشتر</string>
     <string name="about_app">درباره اپلیکیشن</string>
+    <string name="user_comments">نظرات کاربران</string>
+    <string name="no_comments">نظری ثبت نشده !</string>
 
 </resources>

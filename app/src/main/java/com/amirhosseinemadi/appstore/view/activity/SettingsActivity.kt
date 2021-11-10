@@ -69,9 +69,6 @@ class SettingsActivity : AppCompatActivity(),Callback {
 
 
     override fun onBackPressed() {
-        val intent:Intent = Intent(this,MainActivity::class.java)
-        intent.putExtra("key","settings")
-        startActivity(intent)
         finish()
     }
 

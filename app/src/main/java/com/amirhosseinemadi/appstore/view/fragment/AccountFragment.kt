@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
@@ -55,7 +56,6 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
     {
         accountBinding.btnSettings.setOnClickListener {
             startActivity(Intent(requireContext(), SettingsActivity::class.java))
-            requireActivity().finish()
         }
 
         if (PrefManager.checkSignIn())
@@ -117,6 +117,13 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
             }
         })
 
+        Utilities.onBackPressed(accountBinding.root,object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+                backPressed()
+            }
+        })
 
     }
 
@@ -205,6 +212,12 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
                         Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!,BaseTransientBottomBar.LENGTH_SHORT)
                     }
                 })
+    }
+
+
+    private fun backPressed()
+    {
+        requireActivity().finish()
     }
 
 

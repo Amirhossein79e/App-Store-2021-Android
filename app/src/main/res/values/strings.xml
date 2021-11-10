@@ -51,5 +51,7 @@
     <string name="detail">Detail...</string>
     <string name="more">more</string>
     <string name="about_app">About app</string>
+    <string name="user_comments">User Comments</string>
+    <string name="no_comments">No Comment submitted !</string>
 
 </resources>

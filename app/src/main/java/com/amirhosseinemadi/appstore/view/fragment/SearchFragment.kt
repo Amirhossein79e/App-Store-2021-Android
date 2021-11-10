@@ -302,14 +302,21 @@ class SearchFragment() : Fragment(),SearchCallback {
         if (parentFragmentManager.backStackEntryCount > 0)
         {
             val backStack: FragmentManager.BackStackEntry = parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount - 1)
-            val fragment: Fragment? = parentFragmentManager.findFragmentByTag(backStack.name)
 
-            when (backStack.name)
+            when(backStack.name)
             {
-                "appFragment" -> { parentFragmentManager.beginTransaction().remove(this@SearchFragment).commit() }
+                "searchFragment" ->
+                {
+                    parentFragmentManager.popBackStack(parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount-1).name,FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                }
 
-                else -> requireActivity().finish()
+                "searchInit" -> { requireActivity().finish() }
+
+                else -> { requireActivity().finish() }
             }
+        }else
+        {
+            requireActivity().finish()
         }
     }
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.amirhosseinemadi.appstore.view.callback.HomeCallback
 import com.amirhosseinemadi.appstore.viewmodel.HomeVm
 import com.google.android.material.snackbar.BaseTransientBottomBar
+import okhttp3.internal.Util
 
 class HomeFragment : Fragment(),HomeCallback {
 
@@ -57,6 +59,14 @@ class HomeFragment : Fragment(),HomeCallback {
         LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false).also { homeBinding.pager.layoutManager = it }
         snapHelper = PagerSnapHelper().also { it.attachToRecyclerView(homeBinding.pager) }
         LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false).also { homeBinding.recycler.layoutManager = it }
+
+        Utilities.onBackPressed(homeBinding.root,object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+                backPressed()
+            }
+        })
     }
 
 
@@ -161,6 +171,12 @@ class HomeFragment : Fragment(),HomeCallback {
 
                 }
         })
+    }
+
+
+    private fun backPressed()
+    {
+        requireActivity().finish()
     }
 
 

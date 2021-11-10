@@ -30,6 +30,7 @@ import com.amirhosseinemadi.appstore.view.callback.AppCallback
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.amirhosseinemadi.appstore.viewmodel.AppVm
 import com.google.android.material.chip.Chip
+import com.google.firebase.messaging.ktx.remoteMessage
 import com.squareup.picasso.Picasso
 import kotlin.random.Random
 
@@ -85,7 +86,6 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
 
         appBinding.imgBack.setOnClickListener {
             backPressed()
-            Toast.makeText(requireContext(),"BACK",Toast.LENGTH_SHORT).show()
         }
 
         Utilities.onBackPressed(appBinding.root, object : Callback
@@ -188,23 +188,10 @@ class AppFragment(private val packageName:String) : Fragment(),AppCallback {
     {
         if (parentFragmentManager.backStackEntryCount > 0)
         {
-            val backStack: FragmentManager.BackStackEntry = parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount - 1)
-            val fragment: Fragment? = parentFragmentManager.findFragmentByTag(backStack.name)
-
-            when (backStack.name)
-            {
-                "homeInit" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
-
-                "searchInit" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
-
-                "categoryInit" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
-
-                "accountInit" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
-
-                "searchFragment" -> { parentFragmentManager.beginTransaction().remove(this@AppFragment).commit() }
-
-                else -> { requireActivity().finish() }
-            }
+            parentFragmentManager.popBackStack(parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount-1).name,FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }else
+        {
+            requireActivity().finish()
         }
     }
 
