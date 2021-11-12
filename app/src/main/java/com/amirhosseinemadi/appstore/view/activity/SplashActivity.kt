@@ -83,13 +83,13 @@ class SplashActivity : AppCompatActivity() {
                         {
                             task.exception?.printStackTrace()
                             fDialog = Utilities.dialogIcon(this,null,R.string.request_failed,R.string.request_failed_pos,R.string.request_failed_neg,true,true,{
-                                dialog.dismiss()
+                                fDialog.dismiss()
                                 sync()
                             },{
-                                dialog.dismiss()
+                                fDialog.dismiss()
                                 finish()
                             })
-                            dialog.show()
+                            fDialog.show()
                         }
                     }
         }else

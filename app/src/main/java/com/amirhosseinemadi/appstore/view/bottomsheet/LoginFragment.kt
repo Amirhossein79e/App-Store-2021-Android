@@ -56,8 +56,8 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
                         {
                             PrefManager.setUser(it.data?.userName!!)
                             PrefManager.setAccess(it.data?.access!!)
-                            callback.notify()
                             dismiss()
+                            callback.notify()
                         }
 
                         else -> Utilities.showSnack(
@@ -81,8 +81,8 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
                         {
                             PrefManager.setUser(it.data?.userName!!)
                             PrefManager.setAccess(it.data?.access!!)
-                            callback.notify()
                             dismiss()
+                            callback.notify()
                         }
 
                         else -> Utilities.showSnack(

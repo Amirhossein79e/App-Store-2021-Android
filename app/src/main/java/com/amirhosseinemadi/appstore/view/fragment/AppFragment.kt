@@ -25,6 +25,7 @@ import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.adapter.AppImageAdapter
 import com.amirhosseinemadi.appstore.view.bottomsheet.CommentFragment
 import com.amirhosseinemadi.appstore.view.bottomsheet.DetailFragment
+import com.amirhosseinemadi.appstore.view.bottomsheet.LoginFragment
 import com.amirhosseinemadi.appstore.view.callback.AppCallback
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.amirhosseinemadi.appstore.viewmodel.AppVm
@@ -40,6 +41,8 @@ class AppFragment() : Fragment(),AppCallback {
     private lateinit var appBinding:FragmentAppBinding
     private lateinit var loading:Dialog
     private lateinit var metrics:DisplayMetrics
+    private lateinit var commentList:MutableList<CommentModel>
+    private lateinit var deleteDialog:Dialog
 
     init
     {
@@ -52,6 +55,7 @@ class AppFragment() : Fragment(),AppCallback {
         viewModel = AppVm(this)
         metrics = DisplayMetrics()
         this.packageName = packageName
+        commentList = ArrayList()
     }
 
 
@@ -92,6 +96,10 @@ class AppFragment() : Fragment(),AppCallback {
             4 -> { appBinding.imgTop.setImageResource(R.drawable.background_top_four) }
         }
 
+
+        appBinding.btnSubmitComment.setOnClickListener(this::commentClick)
+
+
         appBinding.imgBack.setOnClickListener {
             backPressed()
         }
@@ -103,6 +111,54 @@ class AppFragment() : Fragment(),AppCallback {
                 backPressed()
             }
         })
+    }
+
+
+    private fun commentClick(view:View)
+    {
+        if (PrefManager.checkSignIn())
+        {
+            openCommentSubmit()
+        }else
+        {
+            LoginFragment(object : Callback
+            {
+                override fun notify(vararg obj: Any?)
+                {
+                    openCommentSubmit()
+                }
+            }).show(parentFragmentManager,null)
+        }
+    }
+
+
+    private fun openCommentSubmit()
+    {
+        if (commentList.size > 0 && commentList.get(0).isAccess == 1)
+        {
+            CommentFragment(commentList.get(0), packageName, object : Callback
+            {
+                override fun notify(vararg obj: Any?)
+                {
+                    if(obj[0] != null && (obj[0] as String).equals("delete"))
+                    {
+                        appBinding.linearComment.removeViewAt(0)
+                    }else
+                    {
+                        commentInit(0,PrefManager.getAccess(),packageName)
+                    }
+                }
+            }).show(parentFragmentManager, null)
+        }else
+        {
+            CommentFragment(null,packageName,object : Callback
+            {
+                override fun notify(vararg obj: Any?)
+                {
+                    commentInit(0,PrefManager.getAccess(),packageName)
+                }
+            }).show(parentFragmentManager,null)
+        }
     }
 
 
@@ -206,6 +262,13 @@ class AppFragment() : Fragment(),AppCallback {
             {
                 if (it.responseCode == 1)
                 {
+                    commentList.clear()
+                    if(it.data != null)
+                    {
+                        commentList.addAll(it.data!!)
+                    }
+                    appBinding.linearComment.removeAllViews()
+
                     if (it.data != null && it.data!!.size > 0)
                     {
                         appBinding.txtMoreComment.setOnClickListener() { CommentFragment(packageName).show(parentFragmentManager,null) }
@@ -264,10 +327,12 @@ class AppFragment() : Fragment(),AppCallback {
             view.findViewById<AppCompatTextView>(R.id.txt_delete).let {
                 it.visibility = View.VISIBLE
                 it.setOnClickListener {
-                    Utilities.dialogIcon(requireContext(),null,R.string.sure_delete,R.string.yes,R.string.no,true,true,
+                    deleteDialog = Utilities.dialogIcon(requireContext(),null,R.string.sure_delete,R.string.yes,R.string.no,true,true,
                         {
                             deleteComment(PrefManager.getAccess()!!,packageName)
-                        },null).show()
+                            deleteDialog.dismiss()
+                        },null)
+                    deleteDialog.show()
                 }
             }
         }

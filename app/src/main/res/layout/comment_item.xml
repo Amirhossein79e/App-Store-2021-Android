@@ -49,7 +49,6 @@
             android:stepSize="1"
             android:progressTint="@color/md_yellow_A400"
             android:progressBackgroundTint="@color/colorOnPrimary"
-            android:rating="4"
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:id="@+id/rating_bar">
         </androidx.appcompat.widget.AppCompatRatingBar>
@@ -59,16 +58,18 @@
             android:layout_width="@dimen/dp0"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/img"
-            app:layout_constraintStart_toEndOf="@id/img"
+            app:layout_constraintStart_toStartOf="@id/txt_name"
             app:layout_constraintEnd_toEndOf="parent"
+            android:paddingEnd="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8"
             android:textSize="@dimen/text_size_small"
-            android:layout_marginTop="@dimen/dp24"
+            android:layout_marginTop="@dimen/dp16"
             android:id="@+id/txt_comment">
         </androidx.appcompat.widget.AppCompatTextView>
 
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/txt_comment"
             app:layout_constraintEnd_toEndOf="parent"

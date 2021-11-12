@@ -19,6 +19,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.02"
+            android:id="@+id/guide_top">
+        </androidx.constraintlayout.widget.Guideline>
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.89"
             android:id="@+id/guide_bottom">
         </androidx.constraintlayout.widget.Guideline>
@@ -27,7 +36,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp0"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_top"
             app:layout_constraintBottom_toTopOf="@id/guide_bottom">
 
 
@@ -39,15 +48,6 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-
-                    <androidx.constraintlayout.widget.Guideline
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_percent="0.03"
-                        android:id="@+id/guide_top">
-                    </androidx.constraintlayout.widget.Guideline>
 
 
                     <androidx.constraintlayout.widget.Guideline
@@ -71,12 +71,12 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp0"
-                        app:layout_constraintTop_toBottomOf="@id/guide_top"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintDimensionRatio="2:1"
                         android:orientation="horizontal"
                         android:clipToPadding="false"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
+                        android:paddingStart="@dimen/dp12"
+                        android:paddingEnd="@dimen/dp12"
                         android:id="@+id/pager">
                     </androidx.recyclerview.widget.RecyclerView>
 

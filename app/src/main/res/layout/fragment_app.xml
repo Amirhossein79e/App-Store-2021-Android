@@ -519,10 +519,28 @@
                     </androidx.appcompat.widget.AppCompatTextView>
 
 
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="@dimen/dp0"
+                        android:layout_height="@dimen/dp40"
+                        app:layout_constraintTop_toBottomOf="@id/txt_comment_app"
+                        app:layout_constraintStart_toEndOf="@id/guide_start"
+                        app:layout_constraintEnd_toStartOf="@id/guide_end"
+                        android:layout_marginTop="@dimen/dp16"
+                        style="@style/btn_style"
+                        android:textSize="@dimen/text_size_normal"
+                        android:drawableEnd="@drawable/ic_comment"
+                        app:drawableTint="@color/md_white_1000"
+                        android:paddingStart="@dimen/dp8"
+                        android:paddingEnd="@dimen/dp8"
+                        android:text="@string/add_comment"
+                        android:id="@+id/btn_submit_comment">
+                    </androidx.appcompat.widget.AppCompatButton>
+
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="@dimen/dp0"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/txt_comment_app"
+                        app:layout_constraintTop_toBottomOf="@id/btn_submit_comment"
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -540,11 +558,10 @@
                     <LinearLayout
                         android:layout_width="@dimen/dp0"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/txt_comment_app"
+                        app:layout_constraintTop_toBottomOf="@id/btn_submit_comment"
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginTop="@dimen/dp8"
+                        android:layout_marginTop="@dimen/dp16"
                         android:layout_marginBottom="@dimen/dp8"
                         android:orientation="vertical"
                         android:id="@+id/linear_comment">
@@ -557,6 +574,8 @@
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintTop_toBottomOf="@id/linear_comment"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginBottom="@dimen/dp8"
                         android:paddingStart="@dimen/dp8"
                         android:paddingEnd="@dimen/dp8"
                         android:paddingTop="@dimen/dp4"
@@ -584,7 +603,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:rotation="180"
-            android:id="@+id/coordinator">
+            android:id="@+id/coordinator"
+            android:visibility="gone">
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

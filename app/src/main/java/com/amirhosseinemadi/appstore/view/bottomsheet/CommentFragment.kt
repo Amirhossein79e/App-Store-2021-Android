@@ -28,6 +28,7 @@ class CommentFragment(private val packageName:String) : BottomSheetDialogFragmen
     private lateinit var loading:Dialog
     private val list:MutableList<CommentModel>
     private var more:Boolean = true
+    private lateinit var deleteDialog:Dialog
 
     private var commentModel:CommentModel?
     private var callback:Callback?
@@ -51,7 +52,10 @@ class CommentFragment(private val packageName:String) : BottomSheetDialogFragmen
         fragmentCommentBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())
         initView()
-        commentInit(list.size,PrefManager.getAccess(),packageName)
+        if (callback == null)
+        {
+            commentInit(list.size, PrefManager.getAccess(), packageName)
+        }
 
         return fragmentCommentBinding.root
     }
@@ -80,10 +84,12 @@ class CommentFragment(private val packageName:String) : BottomSheetDialogFragmen
         {
             override fun notify(vararg obj: Any?)
             {
-                Utilities.dialogIcon(requireContext(),null,R.string.sure_delete,R.string.yes,R.string.no,true,true,
+                deleteDialog = Utilities.dialogIcon(requireContext(),null,R.string.sure_delete,R.string.yes,R.string.no,true,true,
                     {
+                        deleteDialog.dismiss()
                         deleteComment(PrefManager.getAccess()!!,packageName)
-                    },null).show()
+                    },null)
+                deleteDialog.show()
             }
         })
 
@@ -104,7 +110,7 @@ class CommentFragment(private val packageName:String) : BottomSheetDialogFragmen
             fragmentCommentBinding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
                 if (rating < 1f)
                 {
-                    ratingBar?.rating = 1f
+                    viewModel.rate.value = 1f
                 }
             }
 
@@ -147,7 +153,16 @@ class CommentFragment(private val packageName:String) : BottomSheetDialogFragmen
             {
                 if (it.responseCode == 1)
                 {
-                    commentInit(0,access,packageName)
+                    list.removeAt(0)
+                    fragmentCommentBinding.recycler.adapter?.notifyItemRemoved(0)
+                    if (list.size == 0)
+                    {
+                        dismiss()
+                        callback?.notify("delete")
+                    }else
+                    {
+                        commentInit(0,access,packageName)
+                    }
                 }else
                 {
                     Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!, BaseTransientBottomBar.LENGTH_SHORT)
@@ -161,9 +176,10 @@ class CommentFragment(private val packageName:String) : BottomSheetDialogFragmen
         viewModel.submitComment(access,comment,rate,packageName)
         viewModel.submitResponse.observe(viewLifecycleOwner,
             {
-                if (it.responseCode == 1)
+                if (it.responseCode == 1 || it.responseCode == 2)
                 {
                     dismiss()
+                    callback?.notify()
                 }else
                 {
                     Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!, BaseTransientBottomBar.LENGTH_SHORT)
