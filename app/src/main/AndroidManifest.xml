@@ -22,6 +22,8 @@
             </intent-filter>
         </service>
 
+        <service android:name=".util.DownloadManager"> </service>
+
         <receiver android:name=".common.UpdateChecker">
             <intent-filter>
                 <action android:name="com.amirhosseinemadi.appstore.UPDATE"> </action>

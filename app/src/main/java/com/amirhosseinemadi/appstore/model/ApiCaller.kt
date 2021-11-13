@@ -3,6 +3,7 @@ package com.amirhosseinemadi.appstore.model
 import android.provider.Telephony
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.entity.*
+import dagger.android.AndroidInjection.inject
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.SingleObserver
@@ -247,7 +248,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getComments(packageName:String, observer:SingleObserver<ResponseObject<String>>)
+    public fun getRating(packageName:String, observer:SingleObserver<ResponseObject<Float>>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("packageName", packageName)
@@ -287,7 +288,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun download(packageName:String, observer:SingleObserver<Response<ResponseBody>>)
+    public fun download(packageName:String, observer:Observer<String>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("packageName", packageName)

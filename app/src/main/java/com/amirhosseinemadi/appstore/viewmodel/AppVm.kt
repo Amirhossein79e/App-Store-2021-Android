@@ -22,6 +22,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
     val commentResponse:MutableLiveData<ResponseObject<List<CommentModel>>>
     val submitResponse:MutableLiveData<ResponseObject<String>>
     val deleteResponse:MutableLiveData<ResponseObject<String>>
+    val ratingResponse:MutableLiveData<ResponseObject<Float>>
 
     val rate:MutableLiveData<Float>
     val comment:MutableLiveData<String>
@@ -34,6 +35,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
         commentResponse = MutableLiveData()
         submitResponse = MutableLiveData()
         deleteResponse = MutableLiveData()
+        ratingResponse = MutableLiveData()
         rate = MutableLiveData<Float>().also{ it.value = 1f }
         comment = MutableLiveData<String>().also { it.value = "" }
     }
@@ -49,7 +51,13 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
 
             override fun onSuccess(t: ResponseObject<AppModel>?) {
                 appResponse.value = t
-                appCallback.onHide()
+                if (t?.data?.rate != null)
+                {
+                    val responseObjectRating:ResponseObject<Float> = ResponseObject()
+                    responseObjectRating.data = t.data!!.rate
+                    ratingResponse.value = responseObjectRating
+                }
+                //appCallback.onHide()
             }
 
             override fun onError(e: Throwable?) {
@@ -66,7 +74,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
         apiCaller.getComments(access,packageName,offset,object : SingleObserver<ResponseObject<List<CommentModel>>>
         {
             override fun onSubscribe(d: Disposable?) {
-                appCallback.onShow()
+                //appCallback.onShow()
             }
 
             override fun onSuccess(t: ResponseObject<List<CommentModel>>?) {
@@ -120,6 +128,35 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
 
             override fun onError(e: Throwable?) {
                 error.value = "submit"
+                appCallback.onHide()
+            }
+
+        })
+    }
+
+
+    fun getRating(packageName:String)
+    {
+        apiCaller.getRating(packageName, object : SingleObserver<ResponseObject<Float>>
+        {
+            override fun onSubscribe(d: Disposable?) {
+                appCallback.onShow()
+            }
+
+            override fun onSuccess(t: ResponseObject<Float>?) {
+                ratingResponse.value = t
+                if (t != null)
+                {
+                    if (t.data == null)
+                    {
+                        ratingResponse.value?.data = 0f;
+                    }
+                }
+                appCallback.onHide()
+            }
+
+            override fun onError(e: Throwable?) {
+                error.value = "rating"
                 appCallback.onHide()
             }
 

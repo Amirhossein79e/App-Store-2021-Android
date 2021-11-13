@@ -249,7 +249,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/dp12"
-                                android:textSize="@dimen/text_size_small_normal">
+                                android:textSize="@dimen/text_size_small_normal"
+                                android:text="@{view_model.ratingResponse.data.toString()}">
                             </androidx.appcompat.widget.AppCompatTextView>
 
 
@@ -342,6 +343,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/dp12"
                                 android:textSize="@dimen/text_size_small"
+                                android:paddingStart="@dimen/dp4"
+                                android:paddingEnd="@dimen/dp4"
                                 android:maxLines="1"
                                 android:ellipsize="end">
                             </androidx.appcompat.widget.AppCompatTextView>
@@ -525,13 +528,15 @@
                         app:layout_constraintTop_toBottomOf="@id/txt_comment_app"
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
-                        android:layout_marginTop="@dimen/dp16"
+                        android:layout_marginTop="@dimen/dp24"
                         style="@style/btn_style"
                         android:textSize="@dimen/text_size_normal"
                         android:drawableEnd="@drawable/ic_comment"
                         app:drawableTint="@color/md_white_1000"
                         android:paddingStart="@dimen/dp8"
                         android:paddingEnd="@dimen/dp8"
+                        android:layout_marginStart="@dimen/dp2"
+                        android:layout_marginEnd="@dimen/dp2"
                         android:text="@string/add_comment"
                         android:id="@+id/btn_submit_comment">
                     </androidx.appcompat.widget.AppCompatButton>
@@ -548,7 +553,6 @@
                         android:layout_marginBottom="@dimen/dp16"
                         android:gravity="center"
                         android:textSize="@dimen/text_size_normal"
-                        android:textColor="@color/colorOnPrimary"
                         android:text="@string/no_comments"
                         android:visibility="gone"
                         android:id="@+id/txt_no_comment_app">
@@ -579,7 +583,6 @@
                         android:paddingStart="@dimen/dp8"
                         android:paddingEnd="@dimen/dp8"
                         android:paddingTop="@dimen/dp4"
-                        android:paddingBottom="@dimen/dp4"
                         android:textSize="@dimen/text_size_normal"
                         android:gravity="center"
                         android:textColor="@color/colorOnPrimary"

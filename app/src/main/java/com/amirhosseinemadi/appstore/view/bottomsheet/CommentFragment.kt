@@ -21,7 +21,7 @@ import com.amirhosseinemadi.appstore.viewmodel.AppVm
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.BaseTransientBottomBar
 
-class CommentFragment(private val packageName:String) : BottomSheetDialogFragment(),AppCallback {
+class CommentFragment(private val packageName:String, private val mainCallback: Callback) : BottomSheetDialogFragment(),AppCallback {
 
     private val viewModel:AppVm
     private lateinit var fragmentCommentBinding:FragmentCommentBinding
@@ -41,7 +41,7 @@ class CommentFragment(private val packageName:String) : BottomSheetDialogFragmen
         callback = null
     }
 
-    constructor(commentModel:CommentModel?, packageName:String, callback:Callback) : this(packageName)
+    constructor(commentModel:CommentModel?, packageName:String, callback:Callback) : this(packageName,callback)
     {
          this.commentModel = commentModel
         this.callback = callback
@@ -155,13 +155,13 @@ class CommentFragment(private val packageName:String) : BottomSheetDialogFragmen
                 {
                     list.removeAt(0)
                     fragmentCommentBinding.recycler.adapter?.notifyItemRemoved(0)
+                    mainCallback.notify("delete")
                     if (list.size == 0)
                     {
                         dismiss()
-                        callback?.notify("delete")
                     }else
                     {
-                        commentInit(0,access,packageName)
+                        //commentInit(0,access,packageName)
                     }
                 }else
                 {

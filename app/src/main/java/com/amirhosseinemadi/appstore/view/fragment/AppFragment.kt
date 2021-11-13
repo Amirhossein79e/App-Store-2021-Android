@@ -1,8 +1,10 @@
 package com.amirhosseinemadi.appstore.view.fragment
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.telecom.Call
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
@@ -20,6 +22,7 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentAppBinding
 import com.amirhosseinemadi.appstore.model.ApiCaller
 import com.amirhosseinemadi.appstore.model.entity.CommentModel
+import com.amirhosseinemadi.appstore.util.DownloadManager
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.adapter.AppImageAdapter
@@ -81,6 +84,12 @@ class AppFragment() : Fragment(),AppCallback {
             metrics = requireContext().resources.displayMetrics
         }
 
+        appBinding.btnInstall.setOnClickListener {
+            val intent = Intent(requireContext(),DownloadManager::class.java)
+            intent.putExtra("packageName",packageName)
+            requireActivity().startService(intent)
+        }
+
         Picasso.get().load(ApiCaller.ICON_URL+packageName+".png").into(appBinding.img)
 
         appBinding.recycler.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
@@ -140,13 +149,7 @@ class AppFragment() : Fragment(),AppCallback {
             {
                 override fun notify(vararg obj: Any?)
                 {
-                    if(obj[0] != null && (obj[0] as String).equals("delete"))
-                    {
-                        appBinding.linearComment.removeViewAt(0)
-                    }else
-                    {
-                        commentInit(0,PrefManager.getAccess(),packageName)
-                    }
+                    commentInit(0,PrefManager.getAccess(),packageName)
                 }
             }).show(parentFragmentManager, null)
         }else
@@ -262,6 +265,7 @@ class AppFragment() : Fragment(),AppCallback {
             {
                 if (it.responseCode == 1)
                 {
+                    viewModel.getRating(packageName)
                     commentList.clear()
                     if(it.data != null)
                     {
@@ -271,11 +275,22 @@ class AppFragment() : Fragment(),AppCallback {
 
                     if (it.data != null && it.data!!.size > 0)
                     {
-                        appBinding.txtMoreComment.setOnClickListener() { CommentFragment(packageName).show(parentFragmentManager,null) }
-                        appBinding.txtMoreComment.visibility = View.VISIBLE
-
                         if (it.data!!.size >= 3)
                         {
+                            appBinding.txtMoreComment.setOnClickListener() { CommentFragment(packageName, object : Callback
+                            {
+                                override fun notify(vararg obj: Any?)
+                                {
+                                    if(obj.size > 0 && obj[0] != null && (obj[0] as String).equals("delete"))
+                                    {
+                                        appBinding.linearComment.removeViewAt(0)
+                                        viewModel.getRating(packageName)
+                                    }
+                                }
+                            }).show(parentFragmentManager,null) }
+
+                            appBinding.txtMoreComment.visibility = View.VISIBLE
+
                             for (i: Int in 0 until 3)
                             {
                                 inflateComments(it.data!!,i)
