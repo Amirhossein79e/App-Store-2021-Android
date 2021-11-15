@@ -2,6 +2,7 @@ package com.amirhosseinemadi.appstore.util
 
 import android.util.Log
 import okhttp3.*
+import java.nio.Buffer
 
 class CustomInterceptor : Interceptor {
 
@@ -29,29 +30,20 @@ class CustomInterceptor : Interceptor {
         Log.i("Request to Server : ","( $strSendEnc )")
 
         val response:Response = chain.proceed(modifiedRequest)
-        var modifiedResponse:Response? = null
         val responseBody:ResponseBody? = response.body()
 
         if (responseBody != null)
         {
-            val strRecEnc = response.body()?.string()
-            Log.i("Response from Server : ","( $strRecEnc )")
-
             if(postParam.value(0).equals("500"))
             {
-                val decrypted: ByteArray = SecurityManager.decryptRaw(
-                    strRecEnc!!,
-                    encryptedMap.get("key") as ByteArray,
-                    encryptedMap.get("iv") as ByteArray
-                )
-
                 Log.i("Response from Server : ","( File Bytes )")
 
-                modifiedResponse = response.newBuilder()
-                    .body(ResponseBody.create(responseBody.contentType(),decrypted))
-                    .build()
+                return response
             }else
             {
+                val strRecEnc = response.body()?.string()
+                Log.i("Response from Server : ","( $strRecEnc )")
+
                 val decrypted: String = SecurityManager.decrypt(
                     strRecEnc!!,
                     encryptedMap.get("key") as ByteArray,
@@ -60,12 +52,13 @@ class CustomInterceptor : Interceptor {
 
                 Log.i("Response from Server : ","( $decrypted )")
 
-                modifiedResponse = response.newBuilder()
+                val modifiedResponse = response.newBuilder()
+                    .headers(response.headers())
                     .body(ResponseBody.create(responseBody.contentType(),decrypted))
                     .build()
-            }
 
-            return modifiedResponse
+                return modifiedResponse
+            }
         }
 
         return response

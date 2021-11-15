@@ -1,7 +1,5 @@
 package com.amirhosseinemadi.appstore.model
 
-import android.provider.Telephony
-import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.entity.*
 import dagger.android.AndroidInjection.inject
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -288,7 +286,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun download(packageName:String, observer:Observer<String>)
+    public fun download(packageName:String, observer:Observer<Response<ResponseBody>>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("packageName", packageName)

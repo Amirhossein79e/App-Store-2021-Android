@@ -106,7 +106,7 @@ interface Service {
     @Streaming
     @POST("exe.php")
     @FormUrlEncoded
-    fun download(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Observable<String>
+    fun download(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Observable<Response<ResponseBody>>
 
 
 }

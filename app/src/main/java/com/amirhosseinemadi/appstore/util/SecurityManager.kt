@@ -107,6 +107,22 @@ class SecurityManager {
         }
 
 
+        fun decryptRawByte(inputData:ByteArray, aesKey:ByteArray, iv:ByteArray?) : ByteArray
+        {
+            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+
+            val key:Key = SecretKeySpec(aesKey,"AES")
+
+            val ivSpec:IvParameterSpec = IvParameterSpec(iv)
+
+            aesCipher.init(Cipher.DECRYPT_MODE,key,ivSpec)
+
+            val outputData:ByteArray = aesCipher.doFinal(inputData)
+
+            return outputData
+        }
+
+
         private fun storeDataKey(alias:String) : Any?
         {
             val keyStore:KeyStore = KeyStore.getInstance("AndroidKeyStore")
