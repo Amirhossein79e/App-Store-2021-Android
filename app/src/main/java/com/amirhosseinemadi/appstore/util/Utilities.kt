@@ -7,10 +7,13 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -84,6 +87,22 @@ class Utilities {
 
                 else -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = false
             }
+        }
+
+
+        fun dpToPx(activity:Activity, dp:Float) : Int
+        {
+            var metrics:DisplayMetrics = DisplayMetrics()
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            {
+                activity.display!!.getRealMetrics(metrics)
+            }else
+            {
+                metrics = activity.resources.displayMetrics
+            }
+
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,metrics).toInt()
         }
 
 

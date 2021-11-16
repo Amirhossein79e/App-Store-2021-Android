@@ -8,23 +8,31 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
-import android.os.MemoryFile
 import android.provider.MediaStore
 import android.widget.Toast
+import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.ApiCaller
+import com.amirhosseinemadi.appstore.model.entity.DownloadModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Response
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.*
+import java.lang.NullPointerException
+import kotlin.jvm.Throws
 
 class DownloadManager : Service() {
 
     private val apiCaller:ApiCaller
+
+    companion object
+    {
+        var downloadQueue:MutableList<DownloadModel>? = null
+    }
 
     init
     {
@@ -36,81 +44,46 @@ class DownloadManager : Service() {
         return null
     }
 
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
     {
-        if (intent != null && intent.extras != null && intent.extras!!.getString("packageName") != null)
+        downloadQueue = ArrayList()
+        val downloadModel:DownloadModel? = intent?.extras?.getParcelable("download")
+
+        if (downloadModel != null)
         {
-            apiCaller.download(intent.extras!!.getString("packageName")!!, object : Observer<Response<ResponseBody>>
+            if (!checkFileExist(downloadModel.packageName))
             {
-                override fun onSubscribe(d: Disposable?) {
-
-                }
-
-                override fun onNext(t: Response<ResponseBody>?)
+                download(downloadModel)
+            }else
+            {
+                Toast.makeText(this,"EXISTS",Toast.LENGTH_LONG).show()
+                downloadModel.progress?.value = 1001
+                if (downloadQueue != null && downloadQueue!!.size > 0)
                 {
-                    if (t?.body() != null)
+                    for (i:Int in 0 until downloadQueue!!.size)
                     {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                        if (downloadQueue!!.get(i).packageName.equals(downloadModel.packageName))
                         {
-                            if (!checkFileExist(intent.extras!!.getString("packageName")!!))
-                            {
-                                val uri:Uri? = createUri(intent.extras!!.getString("packageName")!!)
-                                val outputStream:OutputStream? = contentResolver.openOutputStream(uri!!)
-                                writeToFile(t.body()!!.byteStream(),outputStream!!)
-                            }else
-                            {
-                                Toast.makeText(this@DownloadManager,"EXIST",Toast.LENGTH_LONG).show()
-                            }
-                        }else
-                        {
-                            if (!checkFileExist(intent.extras!!.getString("packageName")!!))
-                            {
-                                val file:File = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),intent.extras!!.getString("packageName")!!+".apk")
-                                file.createNewFile()
-                                val outputStream:FileOutputStream = FileOutputStream(file)
-                                writeToFile(t.body()!!.byteStream(),outputStream)
-                            }
+                            downloadQueue!!.removeAt(i)
+                            break
                         }
                     }
+
+                    if (downloadQueue!!.size > 0)
+                    {
+                        download(downloadQueue!!.get(0))
+                    }else
+                    {
+                        stopSelf()
+                    }
+                }else
+                {
+                    stopSelf()
                 }
-
-                override fun onError(e: Throwable?) {
-
-                }
-
-                override fun onComplete() {
-
-                }
-
-            })
+            }
         }
         return super.onStartCommand(intent, flags, startId)
-    }
-
-
-    private fun writeToFile(inputStream:InputStream, outputStream:OutputStream)
-    {
-        var i:Int = 0
-        val buffer:ByteArray = ByteArray(2048)
-
-        while ((inputStream.read(buffer).also { i = it } != -1))
-        {
-            outputStream.write(buffer,0,i)
-        }
-
-        outputStream.flush()
-        outputStream.close()
-    }
-
-
-    private fun createUri(packageName:String) : Uri?
-    {
-        val fileCv:ContentValues = ContentValues()
-        fileCv.put(MediaStore.Files.FileColumns.DISPLAY_NAME,packageName)
-        fileCv.put(MediaStore.Files.FileColumns.MIME_TYPE,"application/vnd.android.package-archive")
-        fileCv.put(MediaStore.Files.FileColumns.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS)
-        val uri:Uri? = contentResolver.insert(MediaStore.Files.getContentUri("external"),fileCv)
-        return uri
     }
 
 
@@ -130,6 +103,156 @@ class DownloadManager : Service() {
             val file:File = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath+"/"+packageName+".apk")
             return file.exists()
         }
+    }
+
+
+    @Throws(NullPointerException::class,IOException::class)
+    private fun createOutputStream(packageName:String) : OutputStream?
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        {
+            val fileCv: ContentValues = ContentValues()
+            fileCv.put(MediaStore.Files.FileColumns.DISPLAY_NAME, packageName)
+            fileCv.put(MediaStore.Files.FileColumns.MIME_TYPE, "application/vnd.android.package-archive")
+            fileCv.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            val uri: Uri? = contentResolver.insert(MediaStore.Files.getContentUri("external"), fileCv)
+            return contentResolver.openOutputStream(uri!!)
+        }else
+        {
+            val file: File = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),packageName + ".apk")
+            file.createNewFile()
+            return FileOutputStream(file)
+        }
+    }
+
+
+    @Throws(IOException::class)
+    private fun writeToFile(response:Response<ResponseBody>, outputStream:OutputStream, downloadModel:DownloadModel) : Observable<Int>
+    {
+        val observable: Observable<Int> = Observable.generate {
+
+            try
+            {
+                val inputStream: InputStream = response.body()!!.byteStream()
+                val fileSize: Long = response.headers().get("my-content-length")!!.toLong()
+
+                var i: Int = 0
+                val buffer: ByteArray = ByteArray(2048)
+                var progress: Long = 0
+
+                while ((inputStream.read(buffer).also { i = it } != -1))
+                {
+                    outputStream.write(buffer, 0, i)
+                    progress += i
+                    downloadModel.progress!!.postValue((progress*100/fileSize).toInt())
+                }
+
+                outputStream.flush()
+                outputStream.close()
+                inputStream.close()
+
+                it.onComplete()
+
+            }catch (exception:Exception)
+            {
+                it.onError(exception)
+            }
+        }
+
+        return observable
+    }
+
+
+    private fun download(downloadModel:DownloadModel)
+    {
+        apiCaller.download(downloadModel.packageName, object : Observer<Response<ResponseBody>>
+        {
+            override fun onSubscribe(d: Disposable?) {
+
+            }
+
+            override fun onNext(t: Response<ResponseBody>?) {
+                if (t?.body() != null)
+                {
+                    val outputStream: OutputStream? = createOutputStream(downloadModel.packageName)
+                    writeToFile(t, outputStream!!,downloadModel).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(object : Observer<Int>
+                        {
+                            override fun onSubscribe(d: Disposable?) {
+
+                            }
+
+                            override fun onNext(t: Int?) {
+
+                            }
+
+                            override fun onError(e: Throwable?) {
+                                downloadModel.progress?.value = 1000
+                                Toast.makeText(this@DownloadManager, R.string.request_failed,Toast.LENGTH_LONG).show()
+                                Toast.makeText(this@DownloadManager, e?.message,Toast.LENGTH_LONG).show()
+                            }
+
+                            override fun onComplete() {
+                                downloadModel.progress?.value = 1001
+                            }
+
+                        })
+                }
+            }
+
+            override fun onError(e: Throwable?) {
+                Toast.makeText(this@DownloadManager, R.string.request_failed,Toast.LENGTH_LONG).show()
+                if (downloadQueue != null && downloadQueue!!.size > 0)
+                {
+                    for (i:Int in 0 until downloadQueue!!.size)
+                    {
+                        if (downloadQueue!!.get(i).packageName.equals(downloadModel.packageName))
+                        {
+                            downloadQueue!!.removeAt(i)
+                            break
+                        }
+                    }
+
+                    if (downloadQueue!!.size > 0)
+                    {
+                        download(downloadQueue!!.get(0))
+                    }else
+                    {
+                        stopSelf()
+                    }
+                }else
+                {
+                    stopSelf()
+                }
+            }
+
+            override fun onComplete() {
+                if (downloadQueue != null && downloadQueue!!.size > 0)
+                {
+                    for (i:Int in 0 until downloadQueue!!.size)
+                    {
+                        if (downloadQueue!!.get(i).packageName.equals(downloadModel.packageName))
+                        {
+                            downloadQueue!!.removeAt(i)
+                            break
+                        }
+                    }
+
+                    if (downloadQueue!!.size > 0)
+                    {
+                        download(downloadQueue!!.get(0))
+                    }else
+                    {
+                        stopSelf()
+                    }
+                }else
+                {
+                    stopSelf()
+                }
+            }
+
+        })
     }
 
 }

@@ -39,6 +39,12 @@
     <string name="by">by</string>
     <string name="not_found">Not found any app in this category . check other category</string>
     <string name="all_update">No update found . Your apps is up to date !</string>
+    <string name="install">Install</string>
+    <string name="update">Update</string>
+    <string name="open">Open</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="downloading">Downloading</string>
+    <string name="in_queue">In queue</string>
     <!-- Search Strings -->
     <string name="search">Search</string>
     <string name="not_found_search">Your search didn\'t have any result</string>

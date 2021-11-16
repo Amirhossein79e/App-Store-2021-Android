@@ -40,6 +40,12 @@
     <string name="by">توسط</string>
     <string name="not_found">هیچ اپلیکیشنی در این دسته پیدا نشد . دسته های دیگر را مشاهده کنید</string>
     <string name="all_update">بروزرسانی موجود نیست . اپلیکیشن های شما بروز است !</string>
+    <string name="install">نصب</string>
+    <string name="update">بروزرسانی</string>
+    <string name="open">اجرا</string>
+    <string name="uninstall">حذف</string>
+    <string name="downloading">در حال دریافت</string>
+    <string name="in_queue">در صف</string>
     <!-- Search Strings -->
     <string name="search">جستجو</string>
     <string name="not_found_search">جستجوی شما هیچ نتیجه ای نداشت</string>

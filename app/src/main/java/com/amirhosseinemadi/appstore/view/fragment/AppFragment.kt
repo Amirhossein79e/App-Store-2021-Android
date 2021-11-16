@@ -2,6 +2,7 @@ package com.amirhosseinemadi.appstore.view.fragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.telecom.Call
@@ -15,13 +16,17 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginEnd
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentAppBinding
 import com.amirhosseinemadi.appstore.model.ApiCaller
+import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.model.entity.CommentModel
+import com.amirhosseinemadi.appstore.model.entity.DownloadModel
 import com.amirhosseinemadi.appstore.util.DownloadManager
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
@@ -46,11 +51,13 @@ class AppFragment() : Fragment(),AppCallback {
     private lateinit var metrics:DisplayMetrics
     private lateinit var commentList:MutableList<CommentModel>
     private lateinit var deleteDialog:Dialog
+    private var appModel:AppModel?
 
     init
     {
         viewModel = AppVm(this)
         packageName = ""
+        appModel = null
     }
 
     constructor(packageName:String) : this()
@@ -84,14 +91,6 @@ class AppFragment() : Fragment(),AppCallback {
             metrics = requireContext().resources.displayMetrics
         }
 
-        appBinding.btnInstall.setOnClickListener {
-            val intent = Intent(requireContext(),DownloadManager::class.java)
-            intent.putExtra("packageName",packageName)
-            requireActivity().startService(intent)
-        }
-
-        Picasso.get().load(ApiCaller.ICON_URL+packageName+".png").into(appBinding.img)
-
         appBinding.recycler.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
 
         when(Random.nextInt(1,5))
@@ -105,13 +104,10 @@ class AppFragment() : Fragment(),AppCallback {
             4 -> { appBinding.imgTop.setImageResource(R.drawable.background_top_four) }
         }
 
+        Picasso.get().load(ApiCaller.ICON_URL+packageName+".png").into(appBinding.img)
 
         appBinding.btnSubmitComment.setOnClickListener(this::commentClick)
-
-
-        appBinding.imgBack.setOnClickListener {
-            backPressed()
-        }
+        appBinding.imgBack.setOnClickListener { backPressed() }
 
         Utilities.onBackPressed(appBinding.root, object : Callback
         {
@@ -120,6 +116,105 @@ class AppFragment() : Fragment(),AppCallback {
                 backPressed()
             }
         })
+    }
+
+
+    private fun initInstallBtn()
+    {
+        if (!Utilities.checkPackageInstalled(packageName))
+        {
+            appBinding.btnInstall.text = requireContext().getString(R.string.install)
+            (appBinding.btnInstall.layoutParams as LinearLayout.LayoutParams).marginEnd = Utilities.dpToPx(requireActivity(),0f)
+
+        }else if (Utilities.checkPackageInstalled(packageName) && requireContext().packageManager.getPackageInfo(packageName,0).versionCode < appModel?.verCode!!)
+        {
+            appBinding.btnInstall.text = requireContext().getString(R.string.update)
+            appBinding.btnUninstall.visibility = View.VISIBLE
+            (appBinding.btnInstall.layoutParams as LinearLayout.LayoutParams).marginEnd = Utilities.dpToPx(requireActivity(),4f)
+            (appBinding.btnUninstall.layoutParams as LinearLayout.LayoutParams).marginStart = Utilities.dpToPx(requireActivity(),4f)
+        }else
+        {
+            appBinding.btnInstall.text = requireContext().getString(R.string.open)
+            appBinding.btnUninstall.visibility = View.VISIBLE
+            (appBinding.btnInstall.layoutParams as LinearLayout.LayoutParams).marginEnd = Utilities.dpToPx(requireActivity(),4f)
+            (appBinding.btnUninstall.layoutParams as LinearLayout.LayoutParams).marginStart = Utilities.dpToPx(requireActivity(),4f)
+        }
+        appBinding.btnInstall.setOnClickListener(this::installClick)
+    }
+
+
+    private fun installClick(view:View)
+    {
+        if ((!Utilities.checkPackageInstalled(packageName)) ||
+            (Utilities.checkPackageInstalled(packageName) && requireContext().packageManager.getPackageInfo(packageName,0).versionCode < appModel?.verCode!!))
+        {
+            val download:DownloadModel = DownloadModel().also {
+                it.packageName = packageName
+
+                it.progress = MutableLiveData<Int>().also {
+                    it.value = -1
+                    it.observe(viewLifecycleOwner,
+                        {
+                            when (it)
+                            {
+                                -1 ->
+                                {
+                                    appBinding.progress.isIndeterminate = true
+                                    appBinding.txtDownloadStatus.text = getString(R.string.in_queue)
+                                }
+
+                                1000 ->
+                                {
+                                    appBinding.progress.visibility = View.GONE
+                                    appBinding.btnCancel.visibility = View.GONE
+                                    appBinding.txtDownloadStatus.visibility = View.GONE
+                                    appBinding.linearBtn.visibility = View.VISIBLE
+                                }
+
+                                1001 ->
+                                {
+                                    appBinding.progress.visibility = View.GONE
+                                    appBinding.btnCancel.visibility = View.GONE
+                                    appBinding.txtDownloadStatus.visibility = View.GONE
+                                    appBinding.linearBtn.visibility = View.VISIBLE
+                                }
+
+                                else ->
+                                {
+                                    appBinding.progress.isIndeterminate = false
+                                    appBinding.progress.progress = it
+                                    appBinding.txtDownloadStatus.text = getString(R.string.downloading) + " - $it%"
+                                }
+                            }
+                        })
+                }
+
+                it.isFinish = false
+            }
+
+            if (DownloadManager.downloadQueue != null)
+            {
+                DownloadManager.downloadQueue!!.add(download)
+
+                appBinding.linearBtn.visibility = View.GONE
+                appBinding.txtDownloadStatus.visibility = View.VISIBLE
+                appBinding.progress.visibility = View.VISIBLE
+                appBinding.btnCancel.visibility = View.VISIBLE
+            }else
+            {
+                val intent = Intent(requireContext(),DownloadManager::class.java)
+                intent.putExtra("download",download)
+                requireActivity().startService(intent)
+
+                appBinding.linearBtn.visibility = View.GONE
+                appBinding.txtDownloadStatus.visibility = View.VISIBLE
+                appBinding.progress.visibility = View.VISIBLE
+                appBinding.btnCancel.visibility = View.VISIBLE
+            }
+        }else
+        {
+            startActivity(requireContext().packageManager.getLaunchIntentForPackage(packageName))
+        }
     }
 
 
@@ -199,6 +294,9 @@ class AppFragment() : Fragment(),AppCallback {
                 { t ->
                     if (t?.responseCode == 1 && t.data != null)
                     {
+                        appModel = t.data
+                        initInstallBtn()
+
                         appBinding.recycler.adapter = AppImageAdapter(requireContext(),packageName,t.data!!.imageNum!!)
 
                         if (PrefManager.getLang().equals("en"))
@@ -245,7 +343,7 @@ class AppFragment() : Fragment(),AppCallback {
 
                             appBinding.linearChip.addView(chip)
 
-                            (chip.layoutParams as LinearLayout.LayoutParams).marginEnd = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,8f,metrics).toInt()
+                            (chip.layoutParams as LinearLayout.LayoutParams).marginEnd = Utilities.dpToPx(requireActivity(),8f)
                         }
 
                         commentInit(0,PrefManager.getAccess(),packageName)

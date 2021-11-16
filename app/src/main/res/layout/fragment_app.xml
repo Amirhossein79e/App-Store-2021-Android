@@ -399,7 +399,7 @@
                     </androidx.cardview.widget.CardView>
 
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@id/card_rate"
@@ -407,41 +407,94 @@
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         android:layout_marginTop="@dimen/dp16"
                         android:orientation="horizontal"
-                        android:id="@+id/linear_btn">
+                        android:id="@+id/linear_install">
 
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="@dimen/dp0"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginBottom="@dimen/dp8"
-                            style="@style/btn_style"
-                            android:textSize="@dimen/text_size_normal"
-                            android:text="Install"
-                            android:id="@+id/btn_install">
-                        </androidx.appcompat.widget.AppCompatButton>
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:orientation="horizontal"
+                            android:id="@+id/linear_btn">
 
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="@dimen/dp0"
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:layout_width="@dimen/dp0"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginBottom="@dimen/dp8"
+                                style="@style/btn_style"
+                                android:textSize="@dimen/text_size_normal"
+                                android:id="@+id/btn_install">
+                            </androidx.appcompat.widget.AppCompatButton>
+
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:layout_width="@dimen/dp0"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginBottom="@dimen/dp8"
+                                style="@style/btn_style"
+                                android:textSize="@dimen/text_size_normal"
+                                android:text="@string/uninstall"
+                                android:visibility="gone"
+                                android:id="@+id/btn_uninstall">
+                            </androidx.appcompat.widget.AppCompatButton>
+
+
+                        </LinearLayout>
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginBottom="@dimen/dp8"
-                            style="@style/btn_style"
-                            android:textSize="@dimen/text_size_normal"
-                            android:text="Uninstall"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:textSize="@dimen/text_size_small"
                             android:visibility="gone"
-                            android:id="@+id/btn_uninstall">
-                        </androidx.appcompat.widget.AppCompatButton>
+                            android:id="@+id/txt_download_status">
+                        </androidx.appcompat.widget.AppCompatTextView>
 
 
-                    </LinearLayout>
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:layout_width="@dimen/dp32"
+                            android:layout_height="@dimen/dp24"
+                            app:layout_constraintTop_toBottomOf="@id/txt_download_status"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginBottom="@dimen/dp8"
+                            style="@style/btn_style"
+                            android:src="@drawable/ic_cancel"
+                            android:tint="@color/md_white_1000"
+                            android:visibility="gone"
+                            android:id="@+id/btn_cancel">
+                        </androidx.appcompat.widget.AppCompatImageButton>
+
+
+                        <ProgressBar
+                            android:layout_width="@dimen/dp0"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="@id/btn_cancel"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/btn_cancel"
+                            app:layout_constraintBottom_toBottomOf="@id/btn_cancel"
+                            android:layout_marginEnd="@dimen/dp16"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:progressDrawable="@drawable/progress_drawable"
+                            android:indeterminateDrawable="@drawable/progress_drawable"
+                            android:indeterminateDuration="1500"
+                            android:visibility="gone"
+                            android:id="@+id/progress">
+                        </ProgressBar>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="@dimen/dp0"
                         android:layout_height="@dimen/dp0"
-                        app:layout_constraintTop_toBottomOf="@id/linear_btn"
+                        app:layout_constraintTop_toBottomOf="@id/linear_install"
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintDimensionRatio="3:1.5"
