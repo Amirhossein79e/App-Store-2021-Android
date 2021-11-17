@@ -15,7 +15,7 @@ import com.amirhosseinemadi.appstore.view.activity.SplashActivity
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class SettingsFragment(private val mode:String, private val callback:Callback) : BottomSheetDialogFragment() {
+class SettingsFragment(private val mode:String, private val callback:Callback?) : BottomSheetDialogFragment() {
 
     private lateinit var settingBinding:FragmentSettingsBinding
 

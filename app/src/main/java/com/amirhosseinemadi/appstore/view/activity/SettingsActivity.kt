@@ -15,7 +15,7 @@ import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.view.bottomsheet.SettingsFragment
 import com.amirhosseinemadi.appstore.view.callback.Callback
 
-class SettingsActivity : AppCompatActivity(),Callback {
+class SettingsActivity : AppCompatActivity() {
 
     private lateinit var settingsBinding:ActivitySettingsBinding
 
@@ -28,9 +28,9 @@ class SettingsActivity : AppCompatActivity(),Callback {
 
     private fun initView()
     {
-        settingsBinding.language.setOnClickListener { SettingsFragment("lang",this).show(supportFragmentManager, null) }
+        settingsBinding.language.setOnClickListener { SettingsFragment("lang",null).show(supportFragmentManager, null) }
 
-        settingsBinding.theme.setOnClickListener { SettingsFragment("dayNight",this).show(supportFragmentManager, null) }
+        settingsBinding.theme.setOnClickListener { SettingsFragment("dayNight",null).show(supportFragmentManager, null) }
 
         settingsBinding.switchS.isChecked = PrefManager.getUpdate()
 
@@ -71,11 +71,5 @@ class SettingsActivity : AppCompatActivity(),Callback {
     override fun onBackPressed() {
         finish()
     }
-
-
-    override fun notify(vararg obj: Any?) {
-        TODO("Not yet implemented")
-    }
-
 
 }

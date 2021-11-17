@@ -10,6 +10,8 @@ import android.os.Environment
 import android.os.IBinder
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.ApiCaller
@@ -32,11 +34,13 @@ class DownloadManager : Service() {
     companion object
     {
         var downloadQueue:MutableList<DownloadModel>? = null
+        var downloadProgress:MutableLiveData<DownloadModel>? = null
     }
 
     init
     {
         apiCaller = Application.component.apiCaller()
+        downloadProgress = MutableLiveData()
     }
 
     override fun onBind(intent: Intent?): IBinder?
@@ -52,37 +56,11 @@ class DownloadManager : Service() {
 
         if (downloadModel != null)
         {
-            if (!checkFileExist(downloadModel.packageName))
-            {
-                download(downloadModel)
-            }else
-            {
-                Toast.makeText(this,"EXISTS",Toast.LENGTH_LONG).show()
-                downloadModel.progress?.value = 1001
-                if (downloadQueue != null && downloadQueue!!.size > 0)
-                {
-                    for (i:Int in 0 until downloadQueue!!.size)
-                    {
-                        if (downloadQueue!!.get(i).packageName.equals(downloadModel.packageName))
-                        {
-                            downloadQueue!!.removeAt(i)
-                            break
-                        }
-                    }
-
-                    if (downloadQueue!!.size > 0)
-                    {
-                        download(downloadQueue!!.get(0))
-                    }else
-                    {
-                        stopSelf()
-                    }
-                }else
-                {
-                    stopSelf()
-                }
-            }
+            downloadQueue!!.add(downloadModel)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("QUEUE_RESULT"))
+            download(downloadQueue!!.get(0))
         }
+
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -126,10 +104,46 @@ class DownloadManager : Service() {
     }
 
 
+    private fun updateProgress(downloadModel:DownloadModel,progress:Int)
+    {
+        downloadModel.progress = progress
+        downloadProgress?.postValue(downloadModel)
+    }
+
+
+    private fun handleQueue(downloadModel:DownloadModel)
+    {
+        if (downloadQueue != null && downloadQueue!!.size > 0)
+        {
+            for (i:Int in 0 until downloadQueue!!.size)
+            {
+                if (downloadQueue!!.get(i).packageName.equals(downloadModel.packageName))
+                {
+                    downloadQueue!!.removeAt(i)
+                    break
+                }
+            }
+
+            if (downloadQueue!!.size > 0)
+            {
+                download(downloadQueue!!.get(0))
+            }else
+            {
+                stopSelf()
+            }
+        }else
+        {
+            stopSelf()
+        }
+    }
+
+
     @Throws(IOException::class)
     private fun writeToFile(response:Response<ResponseBody>, outputStream:OutputStream, downloadModel:DownloadModel) : Observable<Int>
     {
-        val observable: Observable<Int> = Observable.generate {
+        downloadProgress?.value = downloadModel
+
+        val observable:Observable<Int> = Observable.generate {
 
             try
             {
@@ -144,7 +158,7 @@ class DownloadManager : Service() {
                 {
                     outputStream.write(buffer, 0, i)
                     progress += i
-                    downloadModel.progress!!.postValue((progress*100/fileSize).toInt())
+                    updateProgress(downloadModel,(progress*100/fileSize).toInt())
                 }
 
                 outputStream.flush()
@@ -165,94 +179,66 @@ class DownloadManager : Service() {
 
     private fun download(downloadModel:DownloadModel)
     {
-        apiCaller.download(downloadModel.packageName, object : Observer<Response<ResponseBody>>
+        if (!checkFileExist(downloadModel.packageName!!))
         {
-            override fun onSubscribe(d: Disposable?) {
+            apiCaller.download(downloadModel.packageName!!, object : Observer<Response<ResponseBody>>
+            {
+                override fun onSubscribe(d: Disposable?) {
 
-            }
-
-            override fun onNext(t: Response<ResponseBody>?) {
-                if (t?.body() != null)
-                {
-                    val outputStream: OutputStream? = createOutputStream(downloadModel.packageName)
-                    writeToFile(t, outputStream!!,downloadModel).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(object : Observer<Int>
-                        {
-                            override fun onSubscribe(d: Disposable?) {
-
-                            }
-
-                            override fun onNext(t: Int?) {
-
-                            }
-
-                            override fun onError(e: Throwable?) {
-                                downloadModel.progress?.value = 1000
-                                Toast.makeText(this@DownloadManager, R.string.request_failed,Toast.LENGTH_LONG).show()
-                                Toast.makeText(this@DownloadManager, e?.message,Toast.LENGTH_LONG).show()
-                            }
-
-                            override fun onComplete() {
-                                downloadModel.progress?.value = 1001
-                            }
-
-                        })
                 }
-            }
 
-            override fun onError(e: Throwable?) {
-                Toast.makeText(this@DownloadManager, R.string.request_failed,Toast.LENGTH_LONG).show()
-                if (downloadQueue != null && downloadQueue!!.size > 0)
-                {
-                    for (i:Int in 0 until downloadQueue!!.size)
+                override fun onNext(t: Response<ResponseBody>?) {
+                    if (t?.body() != null)
                     {
-                        if (downloadQueue!!.get(i).packageName.equals(downloadModel.packageName))
-                        {
-                            downloadQueue!!.removeAt(i)
-                            break
-                        }
-                    }
+                        val outputStream: OutputStream? = createOutputStream(downloadModel.packageName!!)
+                        writeToFile(t, outputStream!!,downloadModel).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeWith(object : Observer<Int>
+                            {
+                                override fun onSubscribe(d: Disposable?) {
 
-                    if (downloadQueue!!.size > 0)
-                    {
-                        download(downloadQueue!!.get(0))
-                    }else
-                    {
-                        stopSelf()
+                                }
+
+                                override fun onNext(t: Int?) {
+
+                                }
+
+                                override fun onError(e: Throwable?) {
+                                    updateProgress(downloadModel,1000)
+                                    handleQueue(downloadModel)
+                                }
+
+                                override fun onComplete() {
+                                    updateProgress(downloadModel,1001)
+                                    handleQueue(downloadModel)
+                                }
+
+                            })
                     }
-                }else
-                {
-                    stopSelf()
                 }
-            }
 
-            override fun onComplete() {
-                if (downloadQueue != null && downloadQueue!!.size > 0)
-                {
-                    for (i:Int in 0 until downloadQueue!!.size)
-                    {
-                        if (downloadQueue!!.get(i).packageName.equals(downloadModel.packageName))
-                        {
-                            downloadQueue!!.removeAt(i)
-                            break
-                        }
-                    }
-
-                    if (downloadQueue!!.size > 0)
-                    {
-                        download(downloadQueue!!.get(0))
-                    }else
-                    {
-                        stopSelf()
-                    }
-                }else
-                {
-                    stopSelf()
+                override fun onError(e: Throwable?) {
+                    Toast.makeText(this@DownloadManager, R.string.request_failed,Toast.LENGTH_LONG).show()
+                    handleQueue(downloadModel)
                 }
-            }
 
-        })
+                override fun onComplete() {
+                    //handleQueue(downloadModel)
+                }
+
+            })
+        }else
+        {
+            Toast.makeText(this,"EXISTS",Toast.LENGTH_LONG).show()
+            updateProgress(downloadModel,1001)
+            handleQueue(downloadModel)
+        }
+    }
+
+    override fun onDestroy() {
+        downloadQueue = null
+        downloadProgress = null
+        super.onDestroy()
     }
 
 }

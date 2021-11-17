@@ -1,7 +1,10 @@
 package com.amirhosseinemadi.appstore.view.fragment
 
 import android.app.Dialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +16,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
@@ -20,6 +28,7 @@ import androidx.core.view.marginEnd
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.FragmentAppBinding
@@ -78,6 +87,12 @@ class AppFragment() : Fragment(),AppCallback {
         appInit()
 
         return appBinding.root
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(QueueBroadCast())
     }
 
 
@@ -143,52 +158,95 @@ class AppFragment() : Fragment(),AppCallback {
     }
 
 
+    private fun inflateComments(list:List<CommentModel>, i:Int)
+    {
+        val view:View = layoutInflater.inflate(R.layout.comment_item,appBinding.linearComment,false)
+        view.findViewById<AppCompatTextView>(R.id.txt_name).text = list.get(i).username
+        view.findViewById<AppCompatTextView>(R.id.txt_comment).text = list.get(i).detail
+        view.findViewById<AppCompatRatingBar>(R.id.rating_bar).rating = list.get(i).rate!!
+
+        if (list.get(i).isAccess == 1)
+        {
+            view.findViewById<AppCompatTextView>(R.id.txt_delete).let {
+                it.visibility = View.VISIBLE
+                it.setOnClickListener {
+                    deleteDialog = Utilities.dialogIcon(requireContext(),null,R.string.sure_delete,R.string.yes,R.string.no,true,true,
+                        {
+                            deleteComment(PrefManager.getAccess()!!,packageName)
+                            deleteDialog.dismiss()
+                        },null)
+                    deleteDialog.show()
+                }
+            }
+        }
+
+        appBinding.linearComment.addView(view)
+    }
+
+
+    private fun handleProgress()
+    {
+        if (DownloadManager.downloadProgress != null)
+        {
+            if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size > 0)
+            {
+                for (downloadModel:DownloadModel in DownloadManager.downloadQueue!!)
+                {
+                    if (downloadModel.packageName.equals(packageName))
+                    {
+                        DownloadManager.downloadProgress!!.observe(viewLifecycleOwner,
+                            {
+                                if (downloadModel.packageName.equals(packageName))
+                                {
+                                    when (downloadModel.progress)
+                                    {
+                                        -1 ->
+                                        {
+                                            appBinding.progress.isIndeterminate = true
+                                            appBinding.txtDownloadStatus.text = getString(R.string.in_queue)
+                                        }
+
+                                        1000 ->
+                                        {
+                                            appBinding.progress.visibility = View.GONE
+                                            appBinding.btnCancel.visibility = View.GONE
+                                            appBinding.txtDownloadStatus.visibility = View.GONE
+                                            appBinding.linearBtn.visibility = View.VISIBLE
+                                        }
+
+                                        1001 ->
+                                        {
+                                            appBinding.progress.visibility = View.GONE
+                                            appBinding.btnCancel.visibility = View.GONE
+                                            appBinding.txtDownloadStatus.visibility = View.GONE
+                                            appBinding.linearBtn.visibility = View.VISIBLE
+                                        }
+
+                                        else ->
+                                        {
+                                            appBinding.progress.isIndeterminate = false
+                                            appBinding.progress.progress = downloadModel.progress
+                                            appBinding.txtDownloadStatus.text = getString(R.string.downloading) + " - ${downloadModel.progress}"
+                                        }
+                                    }
+                                }
+                            })
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+
     private fun installClick(view:View)
     {
         if ((!Utilities.checkPackageInstalled(packageName)) ||
             (Utilities.checkPackageInstalled(packageName) && requireContext().packageManager.getPackageInfo(packageName,0).versionCode < appModel?.verCode!!))
         {
             val download:DownloadModel = DownloadModel().also {
+
                 it.packageName = packageName
-
-                it.progress = MutableLiveData<Int>().also {
-                    it.value = -1
-                    it.observe(viewLifecycleOwner,
-                        {
-                            when (it)
-                            {
-                                -1 ->
-                                {
-                                    appBinding.progress.isIndeterminate = true
-                                    appBinding.txtDownloadStatus.text = getString(R.string.in_queue)
-                                }
-
-                                1000 ->
-                                {
-                                    appBinding.progress.visibility = View.GONE
-                                    appBinding.btnCancel.visibility = View.GONE
-                                    appBinding.txtDownloadStatus.visibility = View.GONE
-                                    appBinding.linearBtn.visibility = View.VISIBLE
-                                }
-
-                                1001 ->
-                                {
-                                    appBinding.progress.visibility = View.GONE
-                                    appBinding.btnCancel.visibility = View.GONE
-                                    appBinding.txtDownloadStatus.visibility = View.GONE
-                                    appBinding.linearBtn.visibility = View.VISIBLE
-                                }
-
-                                else ->
-                                {
-                                    appBinding.progress.isIndeterminate = false
-                                    appBinding.progress.progress = it
-                                    appBinding.txtDownloadStatus.text = getString(R.string.downloading) + " - $it%"
-                                }
-                            }
-                        })
-                }
-
                 it.isFinish = false
             }
 
@@ -200,6 +258,7 @@ class AppFragment() : Fragment(),AppCallback {
                 appBinding.txtDownloadStatus.visibility = View.VISIBLE
                 appBinding.progress.visibility = View.VISIBLE
                 appBinding.btnCancel.visibility = View.VISIBLE
+                handleProgress()
             }else
             {
                 val intent = Intent(requireContext(),DownloadManager::class.java)
@@ -210,10 +269,38 @@ class AppFragment() : Fragment(),AppCallback {
                 appBinding.txtDownloadStatus.visibility = View.VISIBLE
                 appBinding.progress.visibility = View.VISIBLE
                 appBinding.btnCancel.visibility = View.VISIBLE
+
+                LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
             }
+
         }else
         {
             startActivity(requireContext().packageManager.getLaunchIntentForPackage(packageName))
+        }
+    }
+
+
+    private fun cancelClick(view: View)
+    {
+        if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size == 1)
+        {
+            requireActivity().stopService(Intent(requireContext(),DownloadManager::class.java))
+        }else if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size > 1)
+        {
+            if (DownloadManager.downloadQueue!!.get(0).packageName.equals(packageName))
+            {
+
+            }else
+            {
+                for (i:Int in 0 until DownloadManager.downloadQueue!!.size)
+                {
+                    if (DownloadManager.downloadQueue!!.get(i).packageName.equals(packageName))
+                    {
+                        DownloadManager.downloadQueue!!.removeAt(i)
+                        break
+                    }
+                }
+            }
         }
     }
 
@@ -296,6 +383,7 @@ class AppFragment() : Fragment(),AppCallback {
                     {
                         appModel = t.data
                         initInstallBtn()
+                        handleProgress()
 
                         appBinding.recycler.adapter = AppImageAdapter(requireContext(),packageName,t.data!!.imageNum!!)
 
@@ -428,32 +516,6 @@ class AppFragment() : Fragment(),AppCallback {
     }
 
 
-    private fun inflateComments(list:List<CommentModel>, i:Int)
-    {
-        val view:View = layoutInflater.inflate(R.layout.comment_item,appBinding.linearComment,false)
-        view.findViewById<AppCompatTextView>(R.id.txt_name).text = list.get(i).username
-        view.findViewById<AppCompatTextView>(R.id.txt_comment).text = list.get(i).detail
-        view.findViewById<AppCompatRatingBar>(R.id.rating_bar).rating = list.get(i).rate!!
-
-        if (list.get(i).isAccess == 1)
-        {
-            view.findViewById<AppCompatTextView>(R.id.txt_delete).let {
-                it.visibility = View.VISIBLE
-                it.setOnClickListener {
-                    deleteDialog = Utilities.dialogIcon(requireContext(),null,R.string.sure_delete,R.string.yes,R.string.no,true,true,
-                        {
-                            deleteComment(PrefManager.getAccess()!!,packageName)
-                            deleteDialog.dismiss()
-                        },null)
-                    deleteDialog.show()
-                }
-            }
-        }
-
-        appBinding.linearComment.addView(view)
-    }
-
-
     private fun backPressed()
     {
         if (parentFragmentManager.backStackEntryCount > 0)
@@ -479,5 +541,17 @@ class AppFragment() : Fragment(),AppCallback {
             loading.dismiss()
         }
     }
+
+
+    inner class QueueBroadCast : BroadcastReceiver() {
+
+        override fun onReceive(context: Context?, intent: Intent?)
+        {
+            handleProgress()
+            Toast.makeText(context,"Broad",Toast.LENGTH_LONG).show()
+            LocalBroadcastManager.getInstance(this@AppFragment.requireContext()).unregisterReceiver(this)
+        }
+    }
+
 
 }
