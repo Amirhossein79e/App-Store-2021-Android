@@ -1,8 +1,7 @@
 package com.amirhosseinemadi.appstore.util
 
 import android.app.Service
-import android.content.ContentValues
-import android.content.Intent
+import android.content.*
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
@@ -16,6 +15,7 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.ApiCaller
 import com.amirhosseinemadi.appstore.model.entity.DownloadModel
+import com.amirhosseinemadi.appstore.view.fragment.AppFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
@@ -24,8 +24,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.*
-import java.lang.NullPointerException
-import kotlin.jvm.Throws
 
 class DownloadManager : Service() {
 
@@ -54,7 +52,7 @@ class DownloadManager : Service() {
         downloadQueue = ArrayList()
         val downloadModel:DownloadModel? = intent?.extras?.getParcelable("download")
 
-        if (downloadModel != null)
+        if (downloadModel != null && !downloadModel.isCancel)
         {
             downloadQueue!!.add(downloadModel)
             LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("QUEUE_RESULT"))
@@ -108,6 +106,7 @@ class DownloadManager : Service() {
     {
         downloadModel.progress = progress
         downloadProgress?.postValue(downloadModel)
+        //Thread.sleep(300)
     }
 
 
@@ -156,9 +155,17 @@ class DownloadManager : Service() {
 
                 while ((inputStream.read(buffer).also { i = it } != -1))
                 {
+                    if (!downloadModel.isCancel)
+                    {
                     outputStream.write(buffer, 0, i)
                     progress += i
                     updateProgress(downloadModel,(progress*100/fileSize).toInt())
+                    }else
+                    {
+                        updateProgress(downloadModel,1001)
+                        deleteFile(downloadModel.packageName!!,null)
+                        break
+                    }
                 }
 
                 outputStream.flush()
@@ -179,6 +186,15 @@ class DownloadManager : Service() {
 
     private fun download(downloadModel:DownloadModel)
     {
+        class QueueBroadCast : BroadcastReceiver() {
+
+            override fun onReceive(context: Context?, intent: Intent?)
+            {
+                handleQueue(downloadModel)
+                LocalBroadcastManager.getInstance(this@DownloadManager).unregisterReceiver(this)
+            }
+        }
+
         if (!checkFileExist(downloadModel.packageName!!))
         {
             apiCaller.download(downloadModel.packageName!!, object : Observer<Response<ResponseBody>>
@@ -188,7 +204,7 @@ class DownloadManager : Service() {
                 }
 
                 override fun onNext(t: Response<ResponseBody>?) {
-                    if (t?.body() != null)
+                    if (t?.body() != null && !downloadModel.isCancel)
                     {
                         val outputStream: OutputStream? = createOutputStream(downloadModel.packageName!!)
                         writeToFile(t, outputStream!!,downloadModel).subscribeOn(Schedulers.io())
@@ -204,13 +220,27 @@ class DownloadManager : Service() {
                                 }
 
                                 override fun onError(e: Throwable?) {
-                                    updateProgress(downloadModel,1000)
-                                    handleQueue(downloadModel)
+                                    if (AppFragment.isRunning != null && AppFragment.isRunning!!)
+                                    {
+                                        LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
+                                    }else
+                                    {
+                                        handleQueue(downloadModel)
+                                    }
+                                    updateProgress(downloadModel,1002)
+                                    deleteFile(downloadModel.packageName!!,null)
                                 }
 
                                 override fun onComplete() {
-                                    updateProgress(downloadModel,1001)
-                                    handleQueue(downloadModel)
+                                    if (AppFragment.isRunning != null && AppFragment.isRunning!!)
+                                    {
+                                        LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
+                                    }else
+                                    {
+                                        handleQueue(downloadModel)
+                                    }
+                                    updateProgress(downloadModel,1000)
+                                    fileUri(downloadModel.packageName!!)
                                 }
 
                             })
@@ -218,8 +248,14 @@ class DownloadManager : Service() {
                 }
 
                 override fun onError(e: Throwable?) {
+                    if (AppFragment.isRunning != null && AppFragment.isRunning!!)
+                    {
+                        LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
+                    }else
+                    {
+                        handleQueue(downloadModel)
+                    }
                     Toast.makeText(this@DownloadManager, R.string.request_failed,Toast.LENGTH_LONG).show()
-                    handleQueue(downloadModel)
                 }
 
                 override fun onComplete() {
@@ -229,11 +265,64 @@ class DownloadManager : Service() {
             })
         }else
         {
-            Toast.makeText(this,"EXISTS",Toast.LENGTH_LONG).show()
-            updateProgress(downloadModel,1001)
-            handleQueue(downloadModel)
+            if (AppFragment.isRunning != null && AppFragment.isRunning!!)
+            {
+                LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
+            }else
+            {
+                handleQueue(downloadModel)
+            }
+            updateProgress(downloadModel,1000)
+            fileUri(downloadModel.packageName!!)
         }
     }
+
+
+    private fun fileUri(packageName:String) : Uri
+    {
+        var uri: Uri? = null
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        {
+            val selection: String = MediaStore.Files.FileColumns.RELATIVE_PATH + "=? and " + MediaStore.Files.FileColumns.DISPLAY_NAME + "=?"
+            val selectionArgs: Array<String> = arrayOf(Environment.DIRECTORY_DOWNLOADS + "/", packageName + ".apk")
+            val projectionArgs: Array<String> = arrayOf(MediaStore.Files.FileColumns._ID)
+            val cursor: Cursor? = contentResolver.query(MediaStore.Files.getContentUri("external"), projectionArgs, selection, selectionArgs, null)
+            cursor?.moveToFirst()
+            uri = Uri.withAppendedPath(MediaStore.Files.getContentUri("external"),cursor?.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)))
+            cursor?.close()
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
+            intent.setDataAndType(uri, "application/vnd.android.package-archive")
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }else
+        {
+            val file:File = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath+"/"+packageName+".apk")
+            uri = Uri.parse(file.absolutePath)
+        }
+        return uri!!
+    }
+
+
+    private fun deleteFile(packageName:String,int: Int?)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        {
+            val where:String = MediaStore.Files.FileColumns.RELATIVE_PATH+" =? and "+MediaStore.Files.FileColumns.DISPLAY_NAME+" =?"
+            val selectionArgs:Array<String> = arrayOf(Environment.DIRECTORY_DOWNLOADS+"/",packageName+".apk")
+            contentResolver.delete(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),where,selectionArgs)
+        }else
+        {
+            val file: File = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath+"/"+packageName+".apk")
+            if (file.exists())
+            {
+                file.delete()
+            }
+        }
+    }
+
 
     override fun onDestroy() {
         downloadQueue = null

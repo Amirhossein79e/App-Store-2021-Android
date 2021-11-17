@@ -2,32 +2,29 @@ package com.amirhosseinemadi.appstore.view.fragment
 
 import android.app.Dialog
 import android.content.BroadcastReceiver
+import android.content.ContentUris.withAppendedId
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.telecom.Call
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.DisplayMetrics
-import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.MediaController
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginEnd
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirhosseinemadi.appstore.R
@@ -49,6 +46,7 @@ import com.amirhosseinemadi.appstore.viewmodel.AppVm
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.squareup.picasso.Picasso
+import java.io.File
 import kotlin.random.Random
 
 class AppFragment() : Fragment(),AppCallback {
@@ -62,11 +60,17 @@ class AppFragment() : Fragment(),AppCallback {
     private lateinit var deleteDialog:Dialog
     private var appModel:AppModel?
 
+    companion object
+    {
+        var isRunning:Boolean? = null
+    }
+
     init
     {
         viewModel = AppVm(this)
         packageName = ""
         appModel = null
+        isRunning = true
     }
 
     constructor(packageName:String) : this()
@@ -75,6 +79,7 @@ class AppFragment() : Fragment(),AppCallback {
         metrics = DisplayMetrics()
         this.packageName = packageName
         commentList = ArrayList()
+        isRunning = true
     }
 
 
@@ -92,6 +97,8 @@ class AppFragment() : Fragment(),AppCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        isRunning = false
+        isRunning = null
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(QueueBroadCast())
     }
 
@@ -123,6 +130,7 @@ class AppFragment() : Fragment(),AppCallback {
 
         appBinding.btnSubmitComment.setOnClickListener(this::commentClick)
         appBinding.imgBack.setOnClickListener { backPressed() }
+        appBinding.btnCancel.setOnClickListener(this::cancelClick)
 
         Utilities.onBackPressed(appBinding.root, object : Callback
         {
@@ -222,11 +230,19 @@ class AppFragment() : Fragment(),AppCallback {
                                             appBinding.linearBtn.visibility = View.VISIBLE
                                         }
 
+                                        1002 ->
+                                        {
+                                            appBinding.progress.visibility = View.GONE
+                                            appBinding.btnCancel.visibility = View.GONE
+                                            appBinding.txtDownloadStatus.visibility = View.GONE
+                                            appBinding.linearBtn.visibility = View.VISIBLE
+                                        }
+
                                         else ->
                                         {
                                             appBinding.progress.isIndeterminate = false
                                             appBinding.progress.progress = downloadModel.progress
-                                            appBinding.txtDownloadStatus.text = getString(R.string.downloading) + " - ${downloadModel.progress}"
+                                            appBinding.txtDownloadStatus.text = getString(R.string.downloading) + " - ${downloadModel.progress}%"
                                         }
                                     }
                                 }
@@ -236,6 +252,7 @@ class AppFragment() : Fragment(),AppCallback {
                 }
             }
         }
+        LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(Intent("QUEUE_HANDLE"))
     }
 
 
@@ -247,7 +264,7 @@ class AppFragment() : Fragment(),AppCallback {
             val download:DownloadModel = DownloadModel().also {
 
                 it.packageName = packageName
-                it.isFinish = false
+                it.isCancel = false
             }
 
             if (DownloadManager.downloadQueue != null)
@@ -284,12 +301,14 @@ class AppFragment() : Fragment(),AppCallback {
     {
         if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size == 1)
         {
+            val downloadModel = DownloadManager.downloadQueue!!.get(0)
             requireActivity().stopService(Intent(requireContext(),DownloadManager::class.java))
+            deleteFile(downloadModel.packageName!!)
         }else if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size > 1)
         {
             if (DownloadManager.downloadQueue!!.get(0).packageName.equals(packageName))
             {
-
+                DownloadManager.downloadQueue!!.get(0).isCancel = true
             }else
             {
                 for (i:Int in 0 until DownloadManager.downloadQueue!!.size)
@@ -302,6 +321,10 @@ class AppFragment() : Fragment(),AppCallback {
                 }
             }
         }
+        appBinding.txtDownloadStatus.visibility = View.GONE
+        appBinding.progress.visibility = View.GONE
+        appBinding.btnCancel.visibility = View.GONE
+        appBinding.linearBtn.visibility = View.VISIBLE
     }
 
 
@@ -513,6 +536,44 @@ class AppFragment() : Fragment(),AppCallback {
                     Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),it.message!!, BaseTransientBottomBar.LENGTH_SHORT)
                 }
             })
+    }
+
+
+    private fun fileUri(packageName:String) : Uri
+    {
+        var uri: Uri? = null
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val selection: String = MediaStore.Files.FileColumns.RELATIVE_PATH + "=? and " + MediaStore.Files.FileColumns.DISPLAY_NAME + "=?"
+            val selectionArgs: Array<String> = arrayOf(Environment.DIRECTORY_DOWNLOADS + "/", packageName + ".apk")
+            val projectionArgs: Array<String> = arrayOf(MediaStore.Files.FileColumns._ID)
+            val cursor: Cursor? = requireContext().contentResolver.query(MediaStore.Files.getContentUri("external"), projectionArgs, selection, selectionArgs, null)
+            cursor?.moveToFirst()
+            uri = Uri.withAppendedPath(MediaStore.Files.getContentUri("external"),cursor?.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)))
+        }else
+        {
+            val file:File = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath+"/"+packageName+".apk")
+            uri = Uri.parse(file.absolutePath)
+        }
+        return uri!!
+    }
+
+
+    private fun deleteFile(packageName:String)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        {
+            val where:String = MediaStore.Files.FileColumns.RELATIVE_PATH+" =? and "+MediaStore.Files.FileColumns.DISPLAY_NAME+" =?"
+            val selectionArgs:Array<String> = arrayOf(Environment.DIRECTORY_DOWNLOADS+"/",packageName+".apk")
+            requireContext().contentResolver.delete(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),where,selectionArgs)
+        }else
+        {
+            val file: File = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath+"/"+packageName+".apk")
+            if (file.exists())
+            {
+                file.delete()
+            }
+        }
     }
 
 
