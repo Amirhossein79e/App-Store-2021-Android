@@ -13,6 +13,7 @@ import io.reactivex.rxjava3.disposables.Disposable
 class SearchVm(private val searchCallback:SearchCallback) : ViewModel() {
 
     private val apiCaller:ApiCaller
+
     val error:MutableLiveData<String>
     val titleResponse:MutableLiveData<ResponseObject<List<String>>>
     val appResponse:MutableLiveData<ResponseObject<List<AppModel>>>

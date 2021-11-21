@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding:ActivityMainBinding
     private lateinit var dialog:Dialog
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = MainVm()
@@ -52,8 +51,13 @@ class MainActivity : AppCompatActivity() {
         {
             when(intent.extras!!.getString("key"))
             {
+                "settings" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
+
                 "update" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
             }
+        }else
+        {
+            mainBinding.bottomNav.selectedItemId = R.id.item_home
         }
     }
 
@@ -66,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
-        mainBinding.bottomNav.selectedItemId = R.id.item_home
+
     }
 
 

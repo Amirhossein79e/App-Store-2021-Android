@@ -54,7 +54,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun initToken(uid:String, token:String, observer:SingleObserver<ResponseObject<String>>)
+    fun initToken(uid:String, token:String, observer:SingleObserver<ResponseObject<String>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("uid",uid)
@@ -67,7 +67,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun syncToken(uid:String, token:String, observer:SingleObserver<ResponseObject<String>>)
+    fun syncToken(uid:String, token:String, observer:SingleObserver<ResponseObject<String>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("uid",uid)
@@ -80,7 +80,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun signUpUser(email:String, password:String, username:String, token:String, observer:SingleObserver<ResponseObject<UserModel>>)
+    fun signUpUser(email:String, password:String, username:String, token:String, observer:SingleObserver<ResponseObject<UserModel>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("mail",email)
@@ -95,7 +95,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun signInUser(email:String, password:String, observer:SingleObserver<ResponseObject<UserModel>>)
+    fun signInUser(email:String, password:String, observer:SingleObserver<ResponseObject<UserModel>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("mail",email)
@@ -108,7 +108,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun syncUser(access:String, token:String, observer:SingleObserver<ResponseObject<String>>)
+    fun syncUser(access:String, token:String, observer:SingleObserver<ResponseObject<String>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("access",access)
@@ -121,7 +121,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun validateUser(access:String, observer:SingleObserver<ResponseObject<String>>)
+    fun validateUser(access:String, observer:SingleObserver<ResponseObject<String>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("access",access)
@@ -133,7 +133,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getHome(observer:SingleObserver<ResponseObject<HomeModel>>)
+    fun getHome(observer:SingleObserver<ResponseObject<HomeModel>>)
     {
         service.getHome(GET_HOME,"")
             .subscribeOn(Schedulers.io())
@@ -142,7 +142,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getCategories(observer:SingleObserver<ResponseObject<List<CategoryModel>>>)
+    fun getCategories(observer:SingleObserver<ResponseObject<List<CategoryModel>>>)
     {
         service.getCategories(GET_CATEGORIES,"")
             .subscribeOn(Schedulers.io())
@@ -151,7 +151,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getApps(offset:Int, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    fun getApps(offset:Int, observer:SingleObserver<ResponseObject<List<AppModel>>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("offset",offset)
@@ -163,7 +163,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getAppsByCategory(offset:Int, category:String, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    fun getAppsByCategory(offset:Int, category:String, observer:SingleObserver<ResponseObject<List<AppModel>>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("offset",offset)
@@ -176,7 +176,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getApp(packageName:String, observer:SingleObserver<ResponseObject<AppModel>>)
+    fun getApp(packageName:String, observer:SingleObserver<ResponseObject<AppModel>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("packageName",packageName)
@@ -188,7 +188,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getTitlesSearch(query:String, observer:SingleObserver<ResponseObject<List<String>>>)
+    fun getTitlesSearch(query:String, observer:SingleObserver<ResponseObject<List<String>>>)
     {
         val jsonObject:JSONObject = JSONObject()
         jsonObject.put("query",query)
@@ -200,7 +200,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getAppsSearch(offset: Int, query:String, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    fun getAppsSearch(offset: Int, query:String, observer:SingleObserver<ResponseObject<List<AppModel>>>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("offset",offset)
@@ -213,7 +213,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getUpdates(offset:Int, packages:List<JSONObject>, observer:SingleObserver<ResponseObject<List<AppModel>>>)
+    fun getUpdates(offset:Int, packages:List<JSONObject>, observer:SingleObserver<ResponseObject<List<AppModel>>>)
     {
         val jsonObject:JSONObject = JSONObject()
 
@@ -232,7 +232,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getComments(access:String?, packageName:String, offset:Int, observer:SingleObserver<ResponseObject<List<CommentModel>>>)
+    fun getComments(access:String?, packageName:String, offset:Int, observer:SingleObserver<ResponseObject<List<CommentModel>>>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("access", access)
@@ -246,7 +246,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun getRating(packageName:String, observer:SingleObserver<ResponseObject<Float>>)
+    fun getRating(packageName:String, observer:SingleObserver<ResponseObject<Float>>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("packageName", packageName)
@@ -258,7 +258,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun submitComment(access: String, detail:String, rate:Float, packageName:String, observer:SingleObserver<ResponseObject<String>>)
+    fun submitComment(access: String, detail:String, rate:Float, packageName:String, observer:SingleObserver<ResponseObject<String>>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("access", access)
@@ -273,7 +273,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun deleteComment(access: String, packageName:String, observer:SingleObserver<ResponseObject<String>>)
+    fun deleteComment(access: String, packageName:String, observer:SingleObserver<ResponseObject<String>>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("access", access)
@@ -286,7 +286,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    public fun download(packageName:String, observer:Observer<Response<ResponseBody>>)
+    fun download(packageName:String, observer:Observer<Response<ResponseBody>>)
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("packageName", packageName)

@@ -4,11 +4,12 @@
     android:layout_height="match_parent"
     app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="@dimen/dp16"
-    app:cardElevation="@dimen/dp12"
+    app:cardElevation="@dimen/dp0"
     android:layout_marginStart="@dimen/dp4"
     android:layout_marginEnd="@dimen/dp4"
     android:layout_marginTop="@dimen/dp12"
     android:layout_marginBottom="@dimen/dp12"
+    android:clipToPadding="false"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 

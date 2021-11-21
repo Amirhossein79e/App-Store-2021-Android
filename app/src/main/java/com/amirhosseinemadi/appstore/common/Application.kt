@@ -25,7 +25,7 @@ class Application : Application() {
 
     companion object
     {
-        public lateinit var component: Component
+        lateinit var component: Component
     }
 
     override fun onCreate() {

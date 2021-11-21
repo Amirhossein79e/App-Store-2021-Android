@@ -42,23 +42,6 @@ class PrefManager() {
         }
 
 
-        fun setTime(time:Long)
-        {
-            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
-            val editor:SharedPreferences.Editor = preferences.edit()
-            editor.putLong("time",time)
-            editor.commit()
-        }
-
-
-        fun getTime() : Long
-        {
-            val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
-            val time:Long = preferences.getLong("time",0)
-            return time
-        }
-
-
         fun setTheme(mode:String)
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
@@ -97,7 +80,7 @@ class PrefManager() {
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = preferences.edit()
-            editor.putString("token", SecurityManager.storeDataEncrypt(token,"token"))
+            editor.putString("token", SecurityManager.keyStoreEncrypt(token,"token"))
             editor.commit()
         }
 
@@ -108,7 +91,7 @@ class PrefManager() {
             var token: String? = preferences.getString("token", null)
             if (token != null)
             {
-                token = SecurityManager.storeDataDecrypt(token,"token")
+                token = SecurityManager.keyStoreDecrypt(token,"token")
             }
             return token
         }
@@ -120,7 +103,7 @@ class PrefManager() {
             val editor: SharedPreferences.Editor = preferences.edit()
             if (access != null)
             {
-                editor.putString("access", SecurityManager.storeDataEncrypt(access, "access"))
+                editor.putString("access", SecurityManager.keyStoreEncrypt(access, "access"))
             }else
             {
                 editor.putString("access",access)
@@ -135,7 +118,7 @@ class PrefManager() {
             var access: String? = preferences.getString("access", null)
             if (access != null)
             {
-                access = SecurityManager.storeDataDecrypt(access,"access")
+                access = SecurityManager.keyStoreDecrypt(access,"access")
             }
             return access
         }
@@ -147,7 +130,7 @@ class PrefManager() {
             val editor: SharedPreferences.Editor = preferences.edit()
             if (user != null)
             {
-                editor.putString("user", SecurityManager.storeDataEncrypt(user, "user"))
+                editor.putString("user", SecurityManager.keyStoreEncrypt(user, "user"))
             }else
             {
                 editor.putString("user",user)
@@ -162,7 +145,7 @@ class PrefManager() {
             var user: String? = preferences.getString("user", null)
             if (user != null)
             {
-                user = SecurityManager.storeDataDecrypt(user,"user")
+                user = SecurityManager.keyStoreDecrypt(user,"user")
             }
             return user
         }

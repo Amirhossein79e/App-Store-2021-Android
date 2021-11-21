@@ -15,6 +15,7 @@ import io.reactivex.rxjava3.disposables.Disposable
 class HomeVm(private val homeCallback: HomeCallback) : ViewModel() {
 
     private val apiCaller:ApiCaller
+
     val error:MutableLiveData<String>
     val homeResponse:MutableLiveData<ResponseObject<HomeModel>>
     val appResponse:MutableLiveData<ResponseObject<List<AppModel>>>

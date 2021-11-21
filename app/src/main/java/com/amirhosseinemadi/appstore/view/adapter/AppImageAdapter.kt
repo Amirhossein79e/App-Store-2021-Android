@@ -22,9 +22,9 @@ class AppImageAdapter(private val context:Context, private val packageName:Strin
     init
     {
         list = ArrayList()
-        for (i:Int in 1 until imageNum+1)
+        for (i:Int in 0 until imageNum)
         {
-            list.add(i.toString())
+            list.add((i+1).toString())
         }
     }
 

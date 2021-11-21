@@ -46,9 +46,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         settingsBinding.imgBack.setOnClickListener{
-            val intent:Intent = Intent(this,MainActivity::class.java)
-            intent.putExtra("key","settings")
-            startActivity(intent)
+            startActivity(Intent(this,MainActivity::class.java).also { it.putExtra("key","settings") })
             finish()
         }
 
@@ -69,6 +67,7 @@ class SettingsActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
+        startActivity(Intent(this,MainActivity::class.java).also { it.putExtra("key","settings") })
         finish()
     }
 

@@ -22,8 +22,8 @@ import org.json.JSONObject
 class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
 
     private val apiCaller: ApiCaller
-    val error: MutableLiveData<String>
 
+    val error: MutableLiveData<String>
     val signUpResponse: MutableLiveData<ResponseObject<UserModel>>
     val signInResponse: MutableLiveData<ResponseObject<UserModel>>
     val validateResponse: MutableLiveData<ResponseObject<String>>
@@ -34,8 +34,7 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     var usernameStr: String = ""
     var passwordReStr: String = ""
     val visib: MutableLiveData<Int> = MutableLiveData<Int>().also { it.value = View.GONE }
-    val btnText: MutableLiveData<String> =
-        MutableLiveData<String>().also { it.value = accountCallback.getStr(R.string.sign_in) }
+    val btnText: MutableLiveData<String> = MutableLiveData<String>().also { it.value = accountCallback.getStr(R.string.sign_in) }
     private var signIn: Boolean
 
     init {
@@ -88,7 +87,8 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
 
 
     fun signClick(view: View) {
-        if (signIn) {
+        if (signIn)
+        {
             signIn = false
             val str: SpannableString = SpannableString(accountCallback.getStr(R.string.sign_in_alt))
             str.setSpan(UnderlineSpan(), 0, str.length, 0)
@@ -97,7 +97,8 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
             visib.value = View.VISIBLE
             emailStr = ""
             passwordStr = ""
-        } else {
+        } else
+        {
             signIn = true
             val str: SpannableString = SpannableString(accountCallback.getStr(R.string.sign_up_alt))
             str.setSpan(UnderlineSpan(), 0, str.length, 0)
@@ -191,7 +192,6 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
                 override fun onError(e: Throwable?) {
                     error.value = "update"
                     accountCallback.onHide()
-                    println("!!!!!!!!!!!!!!!!!!!!!!!!!!!" + e?.message)
                 }
 
             })

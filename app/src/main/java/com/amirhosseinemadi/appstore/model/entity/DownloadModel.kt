@@ -6,17 +6,23 @@ import android.os.Parcelable
 class DownloadModel() : Parcelable{
 
     var packageName:String? = ""
+
+    var appName:String? = ""
+
     var progress:Int = -1
+
     var isCancel = false
 
     constructor(parcel: Parcel) : this() {
         packageName = parcel.readString()
+        appName = parcel.readString()
         progress = parcel.readInt()
         isCancel = parcel.readByte() != 0.toByte()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(packageName)
+        parcel.writeString(appName)
         parcel.writeInt(progress)
         parcel.writeByte(if (isCancel) 1 else 0)
     }

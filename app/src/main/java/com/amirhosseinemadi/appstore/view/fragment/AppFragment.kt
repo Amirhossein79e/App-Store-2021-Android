@@ -265,6 +265,7 @@ class AppFragment() : Fragment(),AppCallback {
 
                 it.packageName = packageName
                 it.isCancel = false
+                it.appName = appModel?.nameEn
             }
 
             if (DownloadManager.downloadQueue != null)

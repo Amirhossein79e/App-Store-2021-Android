@@ -17,6 +17,7 @@ import io.reactivex.rxjava3.disposables.Disposable
 class AppVm(private val appCallback: AppCallback) : ViewModel() {
 
     private val apiCaller:ApiCaller
+
     val error:MutableLiveData<String>
     val appResponse:MutableLiveData<ResponseObject<AppModel>>
     val commentResponse:MutableLiveData<ResponseObject<List<CommentModel>>>

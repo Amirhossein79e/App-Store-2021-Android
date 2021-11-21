@@ -8,12 +8,12 @@ class CategoryModel {
     var id:Int? = null
 
     @SerializedName("category_fa")
-    var categoryFa:String? = ""
+    var categoryFa:String = ""
 
     @SerializedName("category_en")
-    var categoryEn:String? = ""
+    var categoryEn:String = ""
 
     @SerializedName("icon")
-    var icon:String? = ""
+    var icon:String = ""
 
 }

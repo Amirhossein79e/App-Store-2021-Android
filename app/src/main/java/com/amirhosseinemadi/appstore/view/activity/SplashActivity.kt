@@ -202,7 +202,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context?) {
         val configuration:Configuration = newBase!!.resources.configuration
-        configuration.setLocale(Locale(PrefManager.getLang(),"IR"))
+        configuration.setLocale(Locale(PrefManager.getLang()))
         super.attachBaseContext(newBase.createConfigurationContext(configuration))
     }
 

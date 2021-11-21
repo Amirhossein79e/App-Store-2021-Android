@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.model.entity.HomeCategoryModel
 import com.amirhosseinemadi.appstore.util.PrefManager
+import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.callback.Callback
 
 class MainRecyclerAdapter(private val context:Context, private val list: List<HomeCategoryModel>, private val callback:Callback) : RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder>() {
@@ -75,6 +76,10 @@ class MainRecyclerAdapter(private val context:Context, private val list: List<Ho
             cardParams.endToStart = R.id.guide_right
         }
 
+        if (position == list.size-1)
+        {
+            cardParams.bottomMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,32f,metrics).toInt()
+        }
 
         val homeCategoryModel:HomeCategoryModel = list.get(position)
         if (lang.equals("fa"))

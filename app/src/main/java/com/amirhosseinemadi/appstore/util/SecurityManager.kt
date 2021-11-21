@@ -107,23 +107,7 @@ class SecurityManager {
         }
 
 
-        fun decryptRawByte(inputData:ByteArray, aesKey:ByteArray, iv:ByteArray?) : ByteArray
-        {
-            val aesCipher:Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-
-            val key:Key = SecretKeySpec(aesKey,"AES")
-
-            val ivSpec:IvParameterSpec = IvParameterSpec(iv)
-
-            aesCipher.init(Cipher.DECRYPT_MODE,key,ivSpec)
-
-            val outputData:ByteArray = aesCipher.doFinal(inputData)
-
-            return outputData
-        }
-
-
-        private fun storeDataKey(alias:String) : Any?
+        private fun keyStoreKey(alias:String) : Any?
         {
             val keyStore:KeyStore = KeyStore.getInstance("AndroidKeyStore")
             keyStore.load(null)
@@ -184,7 +168,7 @@ class SecurityManager {
         }
 
 
-        fun storeDataEncrypt(inputData: String,alias: String) : String
+        fun keyStoreEncrypt(inputData: String, alias: String) : String
         {
             var finalString:String = ""
 
@@ -192,7 +176,7 @@ class SecurityManager {
             {
                 val cipher:Cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
 
-                val key:SecretKey = storeDataKey(alias) as SecretKey
+                val key:SecretKey = keyStoreKey(alias) as SecretKey
 
                 cipher.init(Cipher.ENCRYPT_MODE,key)
 
@@ -204,7 +188,7 @@ class SecurityManager {
             {
                 val cipher:Cipher = Cipher.getInstance("RSA")
 
-                val key:KeyPair = storeDataKey(alias) as KeyPair
+                val key:KeyPair = keyStoreKey(alias) as KeyPair
 
                 cipher.init(Cipher.ENCRYPT_MODE,key.public)
 
@@ -217,7 +201,7 @@ class SecurityManager {
         }
 
 
-        fun storeDataDecrypt(inputData: String,alias: String) : String
+        fun keyStoreDecrypt(inputData: String, alias: String) : String
         {
             var finalString:String = ""
 
@@ -225,7 +209,7 @@ class SecurityManager {
             {
                 val cipher:Cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
 
-                val key:SecretKey = storeDataKey(alias) as SecretKey
+                val key:SecretKey = keyStoreKey(alias) as SecretKey
 
                 val iv:ByteArray? = Base64.decode(inputData.substring(0,24),Base64.NO_WRAP)
                 val ivSpec:IvParameterSpec = IvParameterSpec(iv)
@@ -240,7 +224,7 @@ class SecurityManager {
             {
                 val cipher:Cipher = Cipher.getInstance("RSA")
 
-                val key:KeyPair = storeDataKey(alias) as KeyPair
+                val key:KeyPair = keyStoreKey(alias) as KeyPair
 
                 cipher.init(Cipher.ENCRYPT_MODE,key.public)
 
@@ -253,7 +237,7 @@ class SecurityManager {
         }
 
 
-        fun getDigest(inputData:String) : String
+        fun hashData(inputData:String) : String
         {
             val digest:MessageDigest = MessageDigest.getInstance("SHA1")
 

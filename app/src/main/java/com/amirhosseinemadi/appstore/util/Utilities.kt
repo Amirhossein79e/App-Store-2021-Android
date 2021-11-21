@@ -22,6 +22,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
@@ -139,7 +140,7 @@ class Utilities {
             val dialog:Dialog = Dialog(context)
             dialog.setCancelable(false)
             dialog.setContentView(view)
-            dialog.window?.setBackgroundDrawable(context.getDrawable(R.drawable.dialog_background))
+            dialog.window?.setBackgroundDrawable(AppCompatResources.getDrawable(context,R.drawable.dialog_background))
 
             if (imgRes != null)
             {
@@ -188,11 +189,14 @@ class Utilities {
 
         fun showSnack(viewGroup:ViewGroup, text:String, @BaseTransientBottomBar.Duration duration:Int)
         {
-            CustomSnack.make(viewGroup,duration).setText(text).show()
+            val customSnack:CustomSnack = CustomSnack.make(viewGroup,duration)
+            customSnack.setText(text)
+            customSnack.view.setBackgroundColor(ContextCompat.getColor(viewGroup.context,R.color.transparent))
+            customSnack.show()
         }
 
 
-        public fun checkPackageInstalled(packageName:String) : Boolean
+        fun checkPackageInstalled(packageName:String) : Boolean
         {
             try
             {
