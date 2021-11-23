@@ -4,6 +4,7 @@ import com.amirhosseinemadi.appstore.model.entity.*
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -106,7 +107,7 @@ interface Service {
     @Streaming
     @POST("exe.php")
     @FormUrlEncoded
-    fun download(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Observable<Response<ResponseBody>>
+    fun download(@Field("requestCode") requestCode:Int,@Field("data") data:String) : Call<ResponseBody>
 
 
 }

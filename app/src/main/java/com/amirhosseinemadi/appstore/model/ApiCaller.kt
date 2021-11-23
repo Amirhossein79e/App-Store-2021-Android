@@ -9,9 +9,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.lang.Exception
 import javax.inject.Inject
+import kotlin.jvm.Throws
 
 class ApiCaller @Inject constructor(retrofit: Retrofit) {
 
@@ -286,15 +290,14 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     }
 
 
-    fun download(packageName:String, observer:Observer<Response<ResponseBody>>)
+    @Throws(Exception::class)
+    fun download(packageName:String) : Response<ResponseBody>
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("packageName", packageName)
+        val resp:Response<ResponseBody> = service.download(DOWNLOAD, jsonObject.toString()).execute()
 
-        service.download(DOWNLOAD, jsonObject.toString())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(observer)
+        return resp
     }
 
 

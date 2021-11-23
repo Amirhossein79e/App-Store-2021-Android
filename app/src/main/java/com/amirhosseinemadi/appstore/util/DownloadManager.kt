@@ -25,17 +25,19 @@ import com.amirhosseinemadi.appstore.view.fragment.AppFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.*
+import java.util.concurrent.Executors
 
 class DownloadManager : Service() {
 
     private val apiCaller:ApiCaller
+    private var currentThread:Thread?
     private lateinit var notificationManager:NotificationManagerCompat
-    private lateinit var notificationCompat:NotificationCompat.Builder
 
     companion object
     {
@@ -46,7 +48,7 @@ class DownloadManager : Service() {
     init
     {
         apiCaller = Application.component.apiCaller()
-        downloadProgress = MutableLiveData()
+        currentThread = null
     }
 
     override fun onBind(intent: Intent?): IBinder?
@@ -55,27 +57,55 @@ class DownloadManager : Service() {
     }
 
 
+    override fun onCreate() {
+        super.onCreate()
+        downloadQueue = ArrayList()
+        downloadProgress = MutableLiveData()
+        notificationManager = NotificationManagerCompat.from(this)
+    }
+
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
     {
-        downloadQueue = ArrayList()
-        val downloadModel:DownloadModel? = intent?.extras?.getParcelable("download")
-
-        if (downloadModel != null && !downloadModel.isCancel)
+        if (intent?.extras?.getString("task").equals("start"))
         {
-            notificationManager = NotificationManagerCompat.from(this)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            val downloadModel:DownloadModel? = intent?.extras?.getParcelable("download")
+            if (downloadModel != null && !downloadModel.isCancel)
             {
-                val channel:NotificationChannel = NotificationChannel("1000","Foreground Service",NotificationManager.IMPORTANCE_DEFAULT)
-                notificationManager.createNotificationChannel(channel)
+                if (downloadQueue!!.size == 0)
+                {
+                    downloadQueue!!.add(downloadModel)
+                    Executors.defaultThreadFactory().newThread { download(downloadQueue!!.get(0)) }.start()
+                }else
+                {
+                    downloadQueue!!.add(downloadModel)
+                }
+                LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("QUEUE_RESULT"))
             }
-            startForeground(1000,createNotification(downloadModel,0,true))
 
-            downloadQueue!!.add(downloadModel)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("QUEUE_RESULT"))
-            download(downloadQueue!!.get(0))
+        }else if (intent?.extras?.getString("task").equals("stop"))
+        {
+            val downloadModel:DownloadModel? = intent?.extras?.getParcelable("download")
+            if (downloadModel != null && downloadModel.isCancel)
+            {
+                for (i:Int in 0 until downloadQueue!!.size)
+                {
+                    val download:DownloadModel = downloadQueue!!.get(i)
+                    if (downloadModel.packageName.equals(download.packageName))
+                    {
+                        if (i == 0)
+                        {
+                            downloadQueue!!.get(0).isCancel = true
+                        }else
+                        {
+                            downloadQueue!!.removeAt(i)
+                        }
+                    }
+                }
+            }
         }
 
-        return super.onStartCommand(intent, flags, startId)
+        return START_NOT_STICKY
     }
 
 
@@ -85,6 +115,14 @@ class DownloadManager : Service() {
         notificationCompat.setSmallIcon(R.drawable.ic_update)
         notificationCompat.setContentTitle("Downloading ${downloadModel.appName}")
         notificationCompat.setContentText(downloadModel.appName)
+        notificationCompat.setOngoing(true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            notificationCompat.setPriority(NotificationManager.IMPORTANCE_LOW)
+        }else
+        {
+            notificationCompat.setPriority(Notification.PRIORITY_LOW)
+        }
         notificationCompat.setProgress(100,progress,isIndeterminate)
         return notificationCompat.build()
     }
@@ -100,10 +138,12 @@ class DownloadManager : Service() {
             val cursor: Cursor? = contentResolver.query(MediaStore.Files.getContentUri("external"), projectionArgs, selection, selectionArgs, null)
             val result:Boolean = cursor!!.count > 0
             cursor.close()
+
             return result
         }else
         {
             val file:File = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath+"/"+packageName+".apk")
+
             return file.exists()
         }
     }
@@ -114,7 +154,7 @@ class DownloadManager : Service() {
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
         {
-            val fileCv: ContentValues = ContentValues()
+            val fileCv:ContentValues = ContentValues()
             fileCv.put(MediaStore.Files.FileColumns.DISPLAY_NAME, packageName)
             fileCv.put(MediaStore.Files.FileColumns.MIME_TYPE, "application/vnd.android.package-archive")
             fileCv.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
@@ -133,7 +173,6 @@ class DownloadManager : Service() {
     {
         downloadModel.progress = progress
         downloadProgress?.postValue(downloadModel)
-        //Thread.sleep(300)
     }
 
 
@@ -156,70 +195,82 @@ class DownloadManager : Service() {
             }else
             {
                 notificationManager.cancel(1000)
-                stopForeground(true)
+                if (currentThread != null && !currentThread!!.isInterrupted)
+                {
+                    currentThread!!.interrupt()
+                }
                 stopSelf()
             }
         }else
         {
             notificationManager.cancel(1000)
-            stopForeground(true)
+            if (currentThread != null && !currentThread!!.isInterrupted)
+            {
+                currentThread!!.interrupt()
+            }
             stopSelf()
         }
     }
 
 
     @Throws(IOException::class)
-    private fun writeToFile(response:Response<ResponseBody>, outputStream:OutputStream, downloadModel:DownloadModel) : Observable<Int>
+    private fun writeToFile(response:Response<ResponseBody>, outputStream:OutputStream, downloadModel:DownloadModel, queueBroadCast:BroadcastReceiver)
     {
-        downloadProgress?.value = downloadModel
+        downloadProgress?.postValue(downloadModel)
 
-        val observable:Observable<Int> = Observable.generate {
+        try
+        {
+            val inputStream: InputStream = response.body()!!.byteStream()
+            val fileSize: Long = response.headers().get("my-content-length")!!.toLong()
 
-            try
+            var i: Int = 0
+            val buffer: ByteArray = ByteArray(4096)
+            var progress: Long = 0
+
+            while ((inputStream.read(buffer).also { i = it } != -1))
             {
-                val inputStream: InputStream = response.body()!!.byteStream()
-                val fileSize: Long = response.headers().get("my-content-length")!!.toLong()
-
-                var i: Int = 0
-                val buffer: ByteArray = ByteArray(2048)
-                var progress: Long = 0
-
-                while ((inputStream.read(buffer).also { i = it } != -1))
+                if (!downloadModel.isCancel)
                 {
-                    if (!downloadModel.isCancel)
-                    {
-                        outputStream.write(buffer, 0, i)
-                        progress += i
-                        updateProgress(downloadModel,(progress*100/fileSize).toInt())
-                        val notification:Notification = createNotification(downloadModel,(progress*100/fileSize).toInt(),false)
-                        notificationManager.notify(1000,notification)
-                    }else
-                    {
-                        notificationManager.cancel(1000)
-                        updateProgress(downloadModel,1001)
-                        deleteFile(downloadModel.packageName!!,null)
-                        it.onError(IOException())
-                        break
-                    }
-                }
-
-                outputStream.flush()
-                outputStream.close()
-                inputStream.close()
-
-                if (fileSize == progress)
+                    outputStream.write(buffer, 0, i)
+                    progress += i
+                    updateProgress(downloadModel,(progress*100/fileSize).toInt())
+                    val notification:Notification = createNotification(downloadModel,(progress*100/fileSize).toInt(),false)
+                    notificationManager.notify(1000,notification)
+                }else
                 {
-                    it.onNext(1)
+                    notificationManager.cancel(1000)
+                    updateProgress(downloadModel,1001)
+                    deleteFile(downloadModel.packageName!!,null)
+                    break
                 }
-                it.onComplete()
-
-            }catch (exception:Exception)
-            {
-                it.onError(exception)
             }
-        }
 
-        return observable
+            outputStream.flush()
+            outputStream.close()
+            inputStream.close()
+
+            if (fileSize == progress)
+            {
+                updateProgress(downloadModel, 1000)
+                fileUri(downloadModel.packageName!!)
+                handleQueue(downloadModel)
+            }else
+            {
+                deleteFile(downloadModel.packageName!!,null)
+            }
+
+        }catch (exception:Exception)
+        {
+            if (AppFragment.isRunning != null && AppFragment.isRunning!!)
+            {
+                LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(queueBroadCast, IntentFilter("QUEUE_HANDLE"))
+            } else
+            {
+                handleQueue(downloadModel)
+            }
+            updateProgress(downloadModel, 1002)
+            deleteFile(downloadModel.packageName!!, null)
+        }
     }
 
 
@@ -227,83 +278,43 @@ class DownloadManager : Service() {
     {
         class QueueBroadCast : BroadcastReceiver() {
 
-            override fun onReceive(context: Context?, intent: Intent?)
-            {
+            override fun onReceive(context: Context?, intent: Intent?) {
                 handleQueue(downloadModel)
                 LocalBroadcastManager.getInstance(this@DownloadManager).unregisterReceiver(this)
             }
+
         }
 
         if (!checkFileExist(downloadModel.packageName!!))
         {
-            apiCaller.download(downloadModel.packageName!!, object : Observer<Response<ResponseBody>>
+            try
             {
-                override fun onSubscribe(d: Disposable?) {
+                val response: Response<ResponseBody> = apiCaller.download(downloadModel.packageName!!)
 
+                if (response.body() != null && !downloadModel.isCancel)
+                {
+                    val outputStream: OutputStream? = createOutputStream(downloadModel.packageName!!)
+                    writeToFile(response, outputStream!!, downloadModel, QueueBroadCast())
                 }
+            }catch (exception:java.lang.Exception)
+            {
+                updateProgress(downloadModel, 1002)
+                deleteFile(downloadModel.packageName!!, null)
 
-                override fun onNext(t: Response<ResponseBody>?) {
-                    if (t?.body() != null && !downloadModel.isCancel)
-                    {
-                        val outputStream: OutputStream? = createOutputStream(downloadModel.packageName!!)
-                        writeToFile(t, outputStream!!,downloadModel).subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeWith(object : Observer<Int>
-                            {
-                                override fun onSubscribe(d: Disposable?) {
-
-                                }
-
-                                override fun onNext(t: Int?) {
-                                    if (AppFragment.isRunning != null && AppFragment.isRunning!!)
-                                    {
-                                        LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
-                                    }else
-                                    {
-                                        handleQueue(downloadModel)
-                                    }
-                                    updateProgress(downloadModel,1000)
-                                    fileUri(downloadModel.packageName!!)
-                                }
-
-                                override fun onError(e: Throwable?) {
-                                    if (AppFragment.isRunning != null && AppFragment.isRunning!!)
-                                    {
-                                        LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
-                                    }else
-                                    {
-                                        handleQueue(downloadModel)
-                                    }
-                                    updateProgress(downloadModel,1002)
-                                    deleteFile(downloadModel.packageName!!,null)
-                                }
-
-                                override fun onComplete() {
-
-                                }
-
-                            })
-                    }
+                if (AppFragment.isRunning != null && AppFragment.isRunning!!)
+                {
+                    LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
+                } else
+                {
+                    handleQueue(downloadModel)
                 }
+            }
 
-                override fun onError(e: Throwable?) {
-                    if (AppFragment.isRunning != null && AppFragment.isRunning!!)
-                    {
-                        LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
-                    }else
-                    {
-                        handleQueue(downloadModel)
-                    }
-                    Toast.makeText(this@DownloadManager, R.string.request_failed,Toast.LENGTH_LONG).show()
-                }
-
-                override fun onComplete() {
-                    //handleQueue(downloadModel)
-                }
-
-            })
         }else
         {
+            updateProgress(downloadModel,1000)
+            fileUri(downloadModel.packageName!!)
+
             if (AppFragment.isRunning != null && AppFragment.isRunning!!)
             {
                 LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
@@ -311,8 +322,6 @@ class DownloadManager : Service() {
             {
                 handleQueue(downloadModel)
             }
-            updateProgress(downloadModel,1000)
-            fileUri(downloadModel.packageName!!)
         }
     }
 
@@ -379,11 +388,10 @@ class DownloadManager : Service() {
 
 
     override fun onDestroy() {
+        super.onDestroy()
         downloadQueue = null
         downloadProgress = null
         notificationManager.cancel(1000)
-        stopForeground(true)
-        super.onDestroy()
     }
 
 }

@@ -128,6 +128,15 @@ class AppFragment() : Fragment(),AppCallback {
 
         Picasso.get().load(ApiCaller.ICON_URL+packageName+".png").into(appBinding.img)
 
+        handleProgress()
+        if(DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size > 0)
+        {
+            appBinding.linearBtn.visibility = View.GONE
+            appBinding.txtDownloadStatus.visibility = View.VISIBLE
+            appBinding.progress.visibility = View.VISIBLE
+            appBinding.btnCancel.visibility = View.VISIBLE
+        }
+
         appBinding.btnSubmitComment.setOnClickListener(this::commentClick)
         appBinding.imgBack.setOnClickListener { backPressed() }
         appBinding.btnCancel.setOnClickListener(this::cancelClick)
@@ -194,63 +203,67 @@ class AppFragment() : Fragment(),AppCallback {
 
     private fun handleProgress()
     {
-        if (DownloadManager.downloadProgress != null)
+        if (DownloadManager.downloadProgress != null && !DownloadManager.downloadProgress!!.hasActiveObservers())
         {
-            if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size > 0)
-            {
-                for (downloadModel:DownloadModel in DownloadManager.downloadQueue!!)
+            DownloadManager.downloadProgress!!.observe(viewLifecycleOwner,
                 {
-                    if (downloadModel.packageName.equals(packageName))
+                    if (it.packageName.equals(packageName))
                     {
-                        DownloadManager.downloadProgress!!.observe(viewLifecycleOwner,
+                        when (it.progress)
+                        {
+                            -1 ->
                             {
-                                if (downloadModel.packageName.equals(packageName))
+                                appBinding.progress.isIndeterminate = true
+                                appBinding.txtDownloadStatus.text = getString(R.string.in_queue)
+                            }
+
+                            1000 ->
+                            {
+                                appBinding.progress.visibility = View.GONE
+                                appBinding.btnCancel.visibility = View.GONE
+                                appBinding.txtDownloadStatus.visibility = View.GONE
+                                appBinding.linearBtn.visibility = View.VISIBLE
+                            }
+
+                            1001 ->
+                            {
+                                appBinding.progress.visibility = View.GONE
+                                appBinding.btnCancel.visibility = View.GONE
+                                appBinding.txtDownloadStatus.visibility = View.GONE
+                                appBinding.linearBtn.visibility = View.VISIBLE
+                            }
+
+                            1002 ->
+                            {
+                                appBinding.progress.visibility = View.GONE
+                                appBinding.btnCancel.visibility = View.GONE
+                                appBinding.txtDownloadStatus.visibility = View.GONE
+                                appBinding.linearBtn.visibility = View.VISIBLE
+                            }
+
+                            else ->
+                            {
+                                appBinding.progress.isIndeterminate = false
+                                appBinding.progress.progress = it.progress
+                                appBinding.txtDownloadStatus.text = getString(R.string.downloading) + " - ${it.progress}%"
+                            }
+                        }
+                    } else
+                    {
+                        for (downloadModel:DownloadModel in DownloadManager.downloadQueue!!)
+                        {
+                            if (downloadModel.packageName.equals(packageName))
+                            {
+                                if (downloadModel.progress == -1)
                                 {
-                                    when (downloadModel.progress)
-                                    {
-                                        -1 ->
-                                        {
-                                            appBinding.progress.isIndeterminate = true
-                                            appBinding.txtDownloadStatus.text = getString(R.string.in_queue)
-                                        }
-
-                                        1000 ->
-                                        {
-                                            appBinding.progress.visibility = View.GONE
-                                            appBinding.btnCancel.visibility = View.GONE
-                                            appBinding.txtDownloadStatus.visibility = View.GONE
-                                            appBinding.linearBtn.visibility = View.VISIBLE
-                                        }
-
-                                        1001 ->
-                                        {
-                                            appBinding.progress.visibility = View.GONE
-                                            appBinding.btnCancel.visibility = View.GONE
-                                            appBinding.txtDownloadStatus.visibility = View.GONE
-                                            appBinding.linearBtn.visibility = View.VISIBLE
-                                        }
-
-                                        1002 ->
-                                        {
-                                            appBinding.progress.visibility = View.GONE
-                                            appBinding.btnCancel.visibility = View.GONE
-                                            appBinding.txtDownloadStatus.visibility = View.GONE
-                                            appBinding.linearBtn.visibility = View.VISIBLE
-                                        }
-
-                                        else ->
-                                        {
-                                            appBinding.progress.isIndeterminate = false
-                                            appBinding.progress.progress = downloadModel.progress
-                                            appBinding.txtDownloadStatus.text = getString(R.string.downloading) + " - ${downloadModel.progress}%"
-                                        }
-                                    }
+                                    appBinding.progress.isIndeterminate = true
+                                    appBinding.txtDownloadStatus.text = getString(R.string.in_queue)
                                 }
-                            })
-                        break
+                                break
+                            }
+                        }
                     }
-                }
-            }
+                })
         }
         LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(Intent("QUEUE_HANDLE"))
     }
@@ -261,36 +274,24 @@ class AppFragment() : Fragment(),AppCallback {
         if ((!Utilities.checkPackageInstalled(packageName)) ||
             (Utilities.checkPackageInstalled(packageName) && requireContext().packageManager.getPackageInfo(packageName,0).versionCode < appModel?.verCode!!))
         {
-            val download:DownloadModel = DownloadModel().also {
-
-                it.packageName = packageName
-                it.isCancel = false
+            val downloadModel:DownloadModel = DownloadModel().also {
+                it.packageName = appModel?.packageName
                 it.appName = appModel?.nameEn
+                it.isCancel = false
+                it.progress = -1
             }
 
-            if (DownloadManager.downloadQueue != null)
-            {
-                DownloadManager.downloadQueue!!.add(download)
+            val intent = Intent(requireContext(),DownloadManager::class.java)
+            intent.putExtra("task","start")
+            intent.putExtra("download",downloadModel)
+            requireActivity().startService(intent)
 
-                appBinding.linearBtn.visibility = View.GONE
-                appBinding.txtDownloadStatus.visibility = View.VISIBLE
-                appBinding.progress.visibility = View.VISIBLE
-                appBinding.btnCancel.visibility = View.VISIBLE
-                handleProgress()
-            }else
-            {
-                val intent = Intent(requireContext(),DownloadManager::class.java)
-                intent.putExtra("download",download)
-                requireActivity().startService(intent)
+            appBinding.linearBtn.visibility = View.GONE
+            appBinding.txtDownloadStatus.visibility = View.VISIBLE
+            appBinding.progress.visibility = View.VISIBLE
+            appBinding.btnCancel.visibility = View.VISIBLE
 
-                appBinding.linearBtn.visibility = View.GONE
-                appBinding.txtDownloadStatus.visibility = View.VISIBLE
-                appBinding.progress.visibility = View.VISIBLE
-                appBinding.btnCancel.visibility = View.VISIBLE
-
-                LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
-            }
-
+            LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
         }else
         {
             startActivity(requireContext().packageManager.getLaunchIntentForPackage(packageName))
@@ -300,11 +301,29 @@ class AppFragment() : Fragment(),AppCallback {
 
     private fun cancelClick(view: View)
     {
+        val downloadModel:DownloadModel = DownloadModel().also {
+            it.packageName = appModel?.packageName
+            it.appName = appModel?.nameEn
+            it.isCancel = true
+        }
+
+        val intent = Intent(requireContext(),DownloadManager::class.java)
+        intent.putExtra("task","stop")
+        intent.putExtra("download",downloadModel)
+        requireActivity().startService(intent)
+    }
+
+
+    private fun cancelClick()
+    {
         if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size == 1)
         {
             val downloadModel = DownloadManager.downloadQueue!!.get(0)
-            requireActivity().stopService(Intent(requireContext(),DownloadManager::class.java))
+            DownloadManager.downloadQueue!!.get(0).isCancel = true
+
+
             deleteFile(downloadModel.packageName!!)
+
         }else if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size > 1)
         {
             if (DownloadManager.downloadQueue!!.get(0).packageName.equals(packageName))
@@ -610,7 +629,6 @@ class AppFragment() : Fragment(),AppCallback {
         override fun onReceive(context: Context?, intent: Intent?)
         {
             handleProgress()
-            Toast.makeText(context,"Broad",Toast.LENGTH_LONG).show()
             LocalBroadcastManager.getInstance(this@AppFragment.requireContext()).unregisterReceiver(this)
         }
     }

@@ -27,16 +27,17 @@
             </intent-filter>
         </service>
 
-        <service android:name=".util.DownloadManager"> </service>
+        <service
+            android:name=".util.DownloadManager"
+            >
+        </service>
 
         <receiver android:name=".common.UpdateChecker">
             <intent-filter>
                 <action android:name="com.amirhosseinemadi.appstore.UPDATE"> </action>
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".view.fragment.AppFragment$Companion$QueueBroadCast"> </receiver>
-
+        
         <activity android:name=".view.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

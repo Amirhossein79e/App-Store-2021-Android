@@ -1,6 +1,7 @@
 package com.amirhosseinemadi.appstore.view.activity
 
 import android.app.Dialog
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -8,9 +9,11 @@ import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.view.MenuItem
 import android.widget.FrameLayout
@@ -28,6 +31,13 @@ import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.fragment.*
 import com.amirhosseinemadi.appstore.viewmodel.MainVm
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
