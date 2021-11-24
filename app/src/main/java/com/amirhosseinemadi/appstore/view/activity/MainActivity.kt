@@ -13,7 +13,9 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
+import android.provider.MediaStore
 import android.provider.Settings
 import android.view.MenuItem
 import android.widget.FrameLayout
@@ -69,7 +71,9 @@ class MainActivity : AppCompatActivity() {
         {
             mainBinding.bottomNav.selectedItemId = R.id.item_home
         }
+
     }
+
 
 
     private fun initView()

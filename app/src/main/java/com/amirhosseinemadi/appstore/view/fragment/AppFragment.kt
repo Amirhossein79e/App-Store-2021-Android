@@ -2,10 +2,10 @@ package com.amirhosseinemadi.appstore.view.fragment
 
 import android.app.Dialog
 import android.content.BroadcastReceiver
-import android.content.ContentUris.withAppendedId
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
@@ -20,6 +20,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.MediaController
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
@@ -47,6 +50,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.squareup.picasso.Picasso
 import java.io.File
+import java.security.Permission
+import java.util.jar.Manifest
 import kotlin.random.Random
 
 class AppFragment() : Fragment(),AppCallback {
@@ -58,6 +63,7 @@ class AppFragment() : Fragment(),AppCallback {
     private lateinit var metrics:DisplayMetrics
     private lateinit var commentList:MutableList<CommentModel>
     private lateinit var deleteDialog:Dialog
+    private lateinit var requestPermission:ActivityResultLauncher<String>
     private var appModel:AppModel?
 
     companion object
@@ -80,6 +86,38 @@ class AppFragment() : Fragment(),AppCallback {
         this.packageName = packageName
         commentList = ArrayList()
         isRunning = true
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()
+        ) {
+            if (it)
+            {
+                val downloadModel:DownloadModel = DownloadModel().also {
+                    it.packageName = appModel?.packageName
+                    it.appName = appModel?.nameEn
+                    it.isCancel = false
+                    it.progress = -1
+                }
+
+                val intent = Intent(requireContext(),DownloadManager::class.java)
+                intent.putExtra("task","start")
+                intent.putExtra("download",downloadModel)
+                requireActivity().startService(intent)
+
+                appBinding.linearBtn.visibility = View.GONE
+                appBinding.txtDownloadStatus.visibility = View.VISIBLE
+                appBinding.progress.visibility = View.VISIBLE
+                appBinding.btnCancel.visibility = View.VISIBLE
+
+                LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
+            }else
+            {
+                Utilities.showSnack(appBinding.coordinator,"For download we need access to storage permission",BaseTransientBottomBar.LENGTH_SHORT)
+            }
+        }
     }
 
 
@@ -131,10 +169,17 @@ class AppFragment() : Fragment(),AppCallback {
         handleProgress()
         if(DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size > 0)
         {
-            appBinding.linearBtn.visibility = View.GONE
-            appBinding.txtDownloadStatus.visibility = View.VISIBLE
-            appBinding.progress.visibility = View.VISIBLE
-            appBinding.btnCancel.visibility = View.VISIBLE
+            for (downloadModel:DownloadModel in DownloadManager.downloadQueue!!)
+            {
+                if (downloadModel.packageName.equals(packageName))
+                {
+                    appBinding.linearBtn.visibility = View.GONE
+                    appBinding.txtDownloadStatus.visibility = View.VISIBLE
+                    appBinding.progress.visibility = View.VISIBLE
+                    appBinding.btnCancel.visibility = View.VISIBLE
+                    break
+                }
+            }
         }
 
         appBinding.btnSubmitComment.setOnClickListener(this::commentClick)
@@ -274,24 +319,55 @@ class AppFragment() : Fragment(),AppCallback {
         if ((!Utilities.checkPackageInstalled(packageName)) ||
             (Utilities.checkPackageInstalled(packageName) && requireContext().packageManager.getPackageInfo(packageName,0).versionCode < appModel?.verCode!!))
         {
-            val downloadModel:DownloadModel = DownloadModel().also {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+            {
+                if (requireContext().checkSelfPermission(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                {
+                    val downloadModel:DownloadModel = DownloadModel().also {
+                        it.packageName = appModel?.packageName
+                        it.appName = appModel?.nameEn
+                        it.isCancel = false
+                        it.progress = -1
+                    }
+
+                    val intent = Intent(requireContext(),DownloadManager::class.java)
+                    intent.putExtra("task","start")
+                    intent.putExtra("download",downloadModel)
+                    requireActivity().startService(intent)
+
+                    appBinding.linearBtn.visibility = View.GONE
+                    appBinding.txtDownloadStatus.visibility = View.VISIBLE
+                    appBinding.progress.visibility = View.VISIBLE
+                    appBinding.btnCancel.visibility = View.VISIBLE
+
+                    LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
+                }else
+                {
+                    requestPermission.launch(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+                }
+
+            }else
+            {
+                val downloadModel:DownloadModel = DownloadModel().also {
                 it.packageName = appModel?.packageName
                 it.appName = appModel?.nameEn
                 it.isCancel = false
                 it.progress = -1
+                }
+
+                val intent = Intent(requireContext(),DownloadManager::class.java)
+                intent.putExtra("task","start")
+                intent.putExtra("download",downloadModel)
+                requireActivity().startService(intent)
+
+                appBinding.linearBtn.visibility = View.GONE
+                appBinding.txtDownloadStatus.visibility = View.VISIBLE
+                appBinding.progress.visibility = View.VISIBLE
+                appBinding.btnCancel.visibility = View.VISIBLE
+
+                LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
             }
 
-            val intent = Intent(requireContext(),DownloadManager::class.java)
-            intent.putExtra("task","start")
-            intent.putExtra("download",downloadModel)
-            requireActivity().startService(intent)
-
-            appBinding.linearBtn.visibility = View.GONE
-            appBinding.txtDownloadStatus.visibility = View.VISIBLE
-            appBinding.progress.visibility = View.VISIBLE
-            appBinding.btnCancel.visibility = View.VISIBLE
-
-            LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
         }else
         {
             startActivity(requireContext().packageManager.getLaunchIntentForPackage(packageName))
@@ -311,40 +387,6 @@ class AppFragment() : Fragment(),AppCallback {
         intent.putExtra("task","stop")
         intent.putExtra("download",downloadModel)
         requireActivity().startService(intent)
-    }
-
-
-    private fun cancelClick()
-    {
-        if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size == 1)
-        {
-            val downloadModel = DownloadManager.downloadQueue!!.get(0)
-            DownloadManager.downloadQueue!!.get(0).isCancel = true
-
-
-            deleteFile(downloadModel.packageName!!)
-
-        }else if (DownloadManager.downloadQueue != null && DownloadManager.downloadQueue!!.size > 1)
-        {
-            if (DownloadManager.downloadQueue!!.get(0).packageName.equals(packageName))
-            {
-                DownloadManager.downloadQueue!!.get(0).isCancel = true
-            }else
-            {
-                for (i:Int in 0 until DownloadManager.downloadQueue!!.size)
-                {
-                    if (DownloadManager.downloadQueue!!.get(i).packageName.equals(packageName))
-                    {
-                        DownloadManager.downloadQueue!!.removeAt(i)
-                        break
-                    }
-                }
-            }
-        }
-        appBinding.txtDownloadStatus.visibility = View.GONE
-        appBinding.progress.visibility = View.GONE
-        appBinding.btnCancel.visibility = View.GONE
-        appBinding.linearBtn.visibility = View.VISIBLE
     }
 
 

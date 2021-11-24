@@ -9,11 +9,7 @@ import android.os.Build
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.view.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -27,11 +23,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.customview.CustomSnack
-import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.view.callback.Callback
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import org.json.JSONObject
-import java.time.Duration
 import java.util.regex.Pattern
 
 class Utilities {
@@ -82,25 +76,25 @@ class Utilities {
 
         fun underApiStatusBarHandle(activity: AppCompatActivity)
         {
-            when(activity.delegate.localNightMode)
+            when(PrefManager.getTheme())
             {
-                AppCompatDelegate.MODE_NIGHT_NO -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = true
+                "light" -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = true
 
-                else -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = false
+                "dark" -> WindowInsetsControllerCompat(activity.window,activity.window.decorView).isAppearanceLightStatusBars = false
             }
         }
 
 
-        fun dpToPx(activity:Activity, dp:Float) : Int
+        fun dpToPx(context:Context, dp:Float) : Int
         {
             var metrics:DisplayMetrics = DisplayMetrics()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
             {
-                activity.display!!.getRealMetrics(metrics)
+                context.display?.getRealMetrics(metrics)
             }else
             {
-                metrics = activity.resources.displayMetrics
+                metrics = context.resources.displayMetrics
             }
 
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,metrics).toInt()
@@ -127,9 +121,11 @@ class Utilities {
         {
             val view:View = LayoutInflater.from(context).inflate(R.layout.dialog_loading,null)
             val dialog:Dialog = Dialog(context)
+            dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            dialog.window?.setBackgroundDrawable(AppCompatResources.getDrawable(context,R.drawable.dialog_background))
             dialog.setCancelable(false)
             dialog.setContentView(view)
-            dialog.window?.setBackgroundDrawable(AppCompatResources.getDrawable(context,R.drawable.dialog_background))
+
             return dialog
         }
 

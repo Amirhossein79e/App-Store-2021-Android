@@ -1,9 +1,6 @@
 package com.amirhosseinemadi.appstore.util
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.*
 import android.database.Cursor
 import android.net.Uri
@@ -11,7 +8,6 @@ import android.os.Build
 import android.os.Environment
 import android.os.IBinder
 import android.provider.MediaStore
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.MutableLiveData
@@ -19,19 +15,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.ApiCaller
-import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.model.entity.DownloadModel
 import com.amirhosseinemadi.appstore.view.fragment.AppFragment
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Observer
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.*
+import java.util.*
 import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
 
 class DownloadManager : Service() {
 
@@ -62,6 +53,10 @@ class DownloadManager : Service() {
         downloadQueue = ArrayList()
         downloadProgress = MutableLiveData()
         notificationManager = NotificationManagerCompat.from(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            notificationManager.createNotificationChannel(NotificationChannel(("1000"),"download",NotificationManager.IMPORTANCE_DEFAULT))
+        }
     }
 
 
@@ -75,6 +70,7 @@ class DownloadManager : Service() {
                 if (downloadQueue!!.size == 0)
                 {
                     downloadQueue!!.add(downloadModel)
+                    startForeground(1000,progressNotification(downloadModel,0,true))
                     Executors.defaultThreadFactory().newThread { download(downloadQueue!!.get(0)) }.start()
                 }else
                 {
@@ -109,13 +105,14 @@ class DownloadManager : Service() {
     }
 
 
-    private fun createNotification(downloadModel:DownloadModel,progress:Int,isIndeterminate:Boolean) : Notification
+    private fun progressNotification(downloadModel:DownloadModel, progress:Int, isIndeterminate:Boolean) : Notification
     {
         val notificationCompat:NotificationCompat.Builder = NotificationCompat.Builder(this,"1000")
-        notificationCompat.setSmallIcon(R.drawable.ic_update)
-        notificationCompat.setContentTitle("Downloading ${downloadModel.appName}")
-        notificationCompat.setContentText(downloadModel.appName)
-        notificationCompat.setOngoing(true)
+            .setSmallIcon(R.drawable.ic_update)
+            .setOnlyAlertOnce(true)
+            .setContentTitle("Downloading ${downloadModel.appName}")
+            .setContentText(progress.toString()+"%")
+            .setProgress(100,progress,isIndeterminate)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
             notificationCompat.setPriority(NotificationManager.IMPORTANCE_LOW)
@@ -123,8 +120,35 @@ class DownloadManager : Service() {
         {
             notificationCompat.setPriority(Notification.PRIORITY_LOW)
         }
-        notificationCompat.setProgress(100,progress,isIndeterminate)
+
         return notificationCompat.build()
+    }
+
+
+    private fun finishNotification(downloadModel:DownloadModel) : Notification
+    {
+        val notificationCompat:NotificationCompat.Builder = NotificationCompat.Builder(this,"1000")
+            .setSmallIcon(R.drawable.ic_update)
+            .setContentTitle("Download finished")
+            .setContentText("${downloadModel.appName} downloaded successfully")
+            .setContentIntent(PendingIntent.getActivity(this,0,createIntent(downloadModel.packageName!!),0))
+            .setAutoCancel(true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            notificationCompat.setPriority(NotificationManager.IMPORTANCE_DEFAULT)
+        }else
+        {
+            notificationCompat.setPriority(Notification.PRIORITY_DEFAULT)
+        }
+
+        return notificationCompat.build()
+    }
+
+
+    private fun updateProgress(downloadModel:DownloadModel,progress:Int)
+    {
+        downloadModel.progress = progress
+        downloadProgress?.postValue(downloadModel)
     }
 
 
@@ -169,10 +193,56 @@ class DownloadManager : Service() {
     }
 
 
-    private fun updateProgress(downloadModel:DownloadModel,progress:Int)
+    private fun deleteFile(packageName:String,int: Int?)
     {
-        downloadModel.progress = progress
-        downloadProgress?.postValue(downloadModel)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        {
+            val where: String = MediaStore.Files.FileColumns.RELATIVE_PATH + "=? and " + MediaStore.Files.FileColumns.DISPLAY_NAME + " =?"
+            val selectionArgs: Array<String> = arrayOf(Environment.DIRECTORY_DOWNLOADS + "/", packageName + ".apk")
+            contentResolver.delete(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL), where, selectionArgs)
+        } else
+        {
+            val file: File = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/" + packageName + ".apk")
+            if (file.exists())
+            {
+                file.delete()
+            }
+        }
+    }
+
+
+    private fun createIntent(packageName:String) : Intent
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        {
+            val selection: String = MediaStore.Files.FileColumns.RELATIVE_PATH + "=? and " + MediaStore.Files.FileColumns.DISPLAY_NAME + "=?"
+            val selectionArgs: Array<String> = arrayOf(Environment.DIRECTORY_DOWNLOADS + "/", packageName + ".apk")
+            val projectionArgs: Array<String> = arrayOf(MediaStore.Files.FileColumns._ID)
+            val cursor: Cursor? = contentResolver.query(MediaStore.Files.getContentUri("external"), projectionArgs, selection, selectionArgs, null)
+
+            cursor?.moveToFirst()
+
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
+            intent.setDataAndType(Uri.withAppendedPath(MediaStore.Files.getContentUri("external"), cursor?.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID))), "application/vnd.android.package-archive")
+            cursor?.close()
+
+            return intent
+
+        } else
+        {
+            val file: File = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/" + packageName + ".apk")
+
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
+            intent.setDataAndType(Uri.parse(Uri.fromFile(file).toString()),"application/vnd.android.package-archive")
+
+            return intent
+        }
     }
 
 
@@ -194,20 +264,20 @@ class DownloadManager : Service() {
                 download(downloadQueue!!.get(0))
             }else
             {
-                notificationManager.cancel(1000)
                 if (currentThread != null && !currentThread!!.isInterrupted)
                 {
                     currentThread!!.interrupt()
                 }
+                stopForeground(true)
                 stopSelf()
             }
         }else
         {
-            notificationManager.cancel(1000)
             if (currentThread != null && !currentThread!!.isInterrupted)
             {
                 currentThread!!.interrupt()
             }
+            stopForeground(true)
             stopSelf()
         }
     }
@@ -234,13 +304,11 @@ class DownloadManager : Service() {
                     outputStream.write(buffer, 0, i)
                     progress += i
                     updateProgress(downloadModel,(progress*100/fileSize).toInt())
-                    val notification:Notification = createNotification(downloadModel,(progress*100/fileSize).toInt(),false)
+                    val notification:Notification = progressNotification(downloadModel,(progress*100/fileSize).toInt(),false)
                     notificationManager.notify(1000,notification)
                 }else
                 {
-                    notificationManager.cancel(1000)
                     updateProgress(downloadModel,1001)
-                    deleteFile(downloadModel.packageName!!,null)
                     break
                 }
             }
@@ -252,12 +320,16 @@ class DownloadManager : Service() {
             if (fileSize == progress)
             {
                 updateProgress(downloadModel, 1000)
-                fileUri(downloadModel.packageName!!)
-                handleQueue(downloadModel)
+                val notification:Notification = finishNotification(downloadModel)
+                notificationManager.notify(Random().nextInt(),notification)
+                startActivity(createIntent(downloadModel.packageName!!))
             }else
             {
+                updateProgress(downloadModel, 1002)
                 deleteFile(downloadModel.packageName!!,null)
             }
+
+            handleQueue(downloadModel)
 
         }catch (exception:Exception)
         {
@@ -313,7 +385,7 @@ class DownloadManager : Service() {
         }else
         {
             updateProgress(downloadModel,1000)
-            fileUri(downloadModel.packageName!!)
+            startActivity(createIntent(downloadModel.packageName!!))
 
             if (AppFragment.isRunning != null && AppFragment.isRunning!!)
             {
@@ -326,72 +398,10 @@ class DownloadManager : Service() {
     }
 
 
-    private fun fileUri(packageName:String) : Uri?
-    {
-        try {
-            var uri: Uri? = null
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val selection: String =
-                    MediaStore.Files.FileColumns.RELATIVE_PATH + "=? and " + MediaStore.Files.FileColumns.DISPLAY_NAME + "=?"
-                val selectionArgs: Array<String> =
-                    arrayOf(Environment.DIRECTORY_DOWNLOADS + "/", packageName + ".apk")
-                val projectionArgs: Array<String> = arrayOf(MediaStore.Files.FileColumns._ID)
-                val cursor: Cursor? = contentResolver.query(
-                    MediaStore.Files.getContentUri("external"),
-                    projectionArgs,
-                    selection,
-                    selectionArgs,
-                    null
-                )
-                cursor?.moveToFirst()
-                uri = Uri.withAppendedPath(
-                    MediaStore.Files.getContentUri("external"),
-                    cursor?.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID))
-                )
-                cursor?.close()
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                intent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
-                intent.setDataAndType(uri, "application/vnd.android.package-archive")
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-            } else {
-                val file: File =
-                    File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/" + packageName + ".apk")
-                uri = Uri.parse(file.absolutePath)
-            }
-            return uri!!
-        }catch (exception:Exception)
-        {
-            return null
-        }
-    }
-
-
-    private fun deleteFile(packageName:String,int: Int?)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-        {
-            val where:String = MediaStore.Files.FileColumns.RELATIVE_PATH+" =? and "+MediaStore.Files.FileColumns.DISPLAY_NAME+" =?"
-            val selectionArgs:Array<String> = arrayOf(Environment.DIRECTORY_DOWNLOADS+"/",packageName+".apk")
-            contentResolver.delete(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),where,selectionArgs)
-        }else
-        {
-            val file: File = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath+"/"+packageName+".apk")
-            if (file.exists())
-            {
-                file.delete()
-            }
-        }
-    }
-
-
     override fun onDestroy() {
         super.onDestroy()
         downloadQueue = null
         downloadProgress = null
-        notificationManager.cancel(1000)
     }
 
 }

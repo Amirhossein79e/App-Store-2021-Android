@@ -1,6 +1,7 @@
 package com.amirhosseinemadi.appstore.view.bottomsheet
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -87,6 +88,7 @@ class SettingsFragment(private val mode:String, private val callback:Callback?) 
                     PrefManager.setLang("en")
                     dismiss()
                     startActivity(Intent(requireContext(),SplashActivity::class.java))
+                    requireActivity().finishAffinity()
                 }
             }
 
@@ -97,6 +99,7 @@ class SettingsFragment(private val mode:String, private val callback:Callback?) 
                     PrefManager.setLang("fa")
                     dismiss()
                     startActivity(Intent(requireContext(),SplashActivity::class.java))
+                    requireActivity().finishAffinity()
                 }
             }
         }
@@ -115,6 +118,11 @@ class SettingsFragment(private val mode:String, private val callback:Callback?) 
                 if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES)
                 {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+                    {
+                        startActivity(Intent(requireContext(),SplashActivity::class.java))
+                        requireActivity().finishAffinity()
+                    }
                 }
             }
 
@@ -125,6 +133,11 @@ class SettingsFragment(private val mode:String, private val callback:Callback?) 
                 if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO)
                 {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+                    {
+                        startActivity(Intent(requireContext(),SplashActivity::class.java))
+                        requireActivity().finishAffinity()
+                    }
                 }
             }
         }
