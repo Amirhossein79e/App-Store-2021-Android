@@ -295,6 +295,7 @@ class ApiCaller @Inject constructor(retrofit: Retrofit) {
     {
         val jsonObject: JSONObject = JSONObject()
         jsonObject.put("packageName", packageName)
+
         val resp:Response<ResponseBody> = service.download(DOWNLOAD, jsonObject.toString()).execute()
 
         return resp

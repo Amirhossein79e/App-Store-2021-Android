@@ -1,10 +1,8 @@
 package com.amirhosseinemadi.appstore.view.fragment
 
 import android.app.Dialog
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.app.PendingIntent
+import android.content.*
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -22,6 +20,7 @@ import android.widget.MediaController
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
@@ -121,6 +120,12 @@ class AppFragment() : Fragment(),AppCallback {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         appBinding = DataBindingUtil.inflate<FragmentAppBinding>(inflater,R.layout.fragment_app,container,false).also { it.viewModel = viewModel }
         appBinding.lifecycleOwner = this
@@ -205,18 +210,21 @@ class AppFragment() : Fragment(),AppCallback {
 
         }else if (Utilities.checkPackageInstalled(packageName) && requireContext().packageManager.getPackageInfo(packageName,0).versionCode < appModel?.verCode!!)
         {
+            val marginInPx = Utilities.dpToPx(requireContext(),4f)
             appBinding.btnInstall.text = requireContext().getString(R.string.update)
             appBinding.btnUninstall.visibility = View.VISIBLE
-            (appBinding.btnInstall.layoutParams as LinearLayout.LayoutParams).marginEnd = Utilities.dpToPx(requireActivity(),4f)
-            (appBinding.btnUninstall.layoutParams as LinearLayout.LayoutParams).marginStart = Utilities.dpToPx(requireActivity(),4f)
+            (appBinding.btnUninstall.layoutParams as LinearLayout.LayoutParams).setMargins(marginInPx,0,0,marginInPx)
+            (appBinding.btnInstall.layoutParams as LinearLayout.LayoutParams).setMargins(0,0,marginInPx,marginInPx)
         }else
         {
+            val marginInPx = Utilities.dpToPx(requireContext(),4f)
             appBinding.btnInstall.text = requireContext().getString(R.string.open)
             appBinding.btnUninstall.visibility = View.VISIBLE
-            (appBinding.btnInstall.layoutParams as LinearLayout.LayoutParams).marginEnd = Utilities.dpToPx(requireActivity(),4f)
-            (appBinding.btnUninstall.layoutParams as LinearLayout.LayoutParams).marginStart = Utilities.dpToPx(requireActivity(),4f)
+            (appBinding.btnUninstall.layoutParams as LinearLayout.LayoutParams).setMargins(marginInPx,0,0,marginInPx)
+            (appBinding.btnInstall.layoutParams as LinearLayout.LayoutParams).setMargins(0,0,marginInPx,marginInPx)
         }
         appBinding.btnInstall.setOnClickListener(this::installClick)
+        //appBinding.btnUninstall.setOnClickListener()
     }
 
 
@@ -371,6 +379,15 @@ class AppFragment() : Fragment(),AppCallback {
         }else
         {
             startActivity(requireContext().packageManager.getLaunchIntentForPackage(packageName))
+        }
+    }
+
+
+    private fun unInstallClick(view:View)
+    {
+        if (Utilities.checkPackageInstalled(packageName))
+        {
+
         }
     }
 

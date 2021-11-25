@@ -66,5 +66,7 @@
     <string name="submit">Submit Comment</string>
     <string name="rate_comment_hint">Your comment (if you leave this empty your rate will be submit)</string>
     <string name="add_comment">Add Comment</string>
+    <string name="download_finished">Download finished</string>
+    <string name="downloaded"> downloaded successfully</string>
 
 </resources>

@@ -47,9 +47,9 @@ class IntroFragment() : Fragment() {
 
     private fun setAttrs()
     {
-        introBinding.img.setImageDrawable(ContextCompat.getDrawable(requireContext(),imgRes!!))
-        introBinding.txtTitle.text = resources.getString(txtTitleRes!!)
-        introBinding.txtSub.text = resources.getString(txtSubRes!!)
+        introBinding.img.setImageDrawable(ContextCompat.getDrawable(requireContext(),imgRes))
+        introBinding.txtTitle.text = resources.getString(txtTitleRes)
+        introBinding.txtSub.text = resources.getString(txtSubRes)
     }
 
 }

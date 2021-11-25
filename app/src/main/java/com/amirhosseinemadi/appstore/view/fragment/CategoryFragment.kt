@@ -27,13 +27,17 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 
 class CategoryFragment() : Fragment(),CategoryCallback {
 
-    private lateinit var viewModel:CategoryVm
+    private val viewModel:CategoryVm
     private lateinit var categoryBinding:FragmentCategoryBinding
     private lateinit var dialog:Dialog
     private var category:String? = null
     private var more:Boolean = true
     private var appList:MutableList<AppModel>? = null
 
+    init
+    {
+        viewModel = CategoryVm(this)
+    }
 
     constructor(category:String) : this()
     {
@@ -43,7 +47,6 @@ class CategoryFragment() : Fragment(),CategoryCallback {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        viewModel = CategoryVm(this)
         categoryBinding = DataBindingUtil.inflate<FragmentCategoryBinding>(inflater,R.layout.fragment_category,container,false).also{ it.viewModel = viewModel }
         categoryBinding.lifecycleOwner = this
         dialog = Utilities.loadingDialog(requireContext())

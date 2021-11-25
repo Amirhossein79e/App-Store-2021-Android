@@ -67,5 +67,7 @@
     <string name="submit">ثبت دیدگاه</string>
     <string name="rate_comment_hint">دیدگاه شما (اگر این قسمت را خالی رها کنید امتیاز شما ثبت می شود)</string>
     <string name="add_comment">افزودن دیدگاه</string>
+    <string name="download_finished">دانلود به اتمام رسید</string>
+    <string name="downloaded">با موفقیت دانلود شد</string>
 
 </resources>

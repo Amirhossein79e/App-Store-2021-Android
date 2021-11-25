@@ -19,12 +19,16 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 
 class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),AccountCallback {
 
-    private lateinit var viewModel:AccountVm
+    private val viewModel:AccountVm
     private lateinit var loginBinding:FragmentLoginBinding
     private lateinit var loading:Dialog
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    init
+    {
         viewModel = AccountVm(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         loginBinding = DataBindingUtil.inflate<FragmentLoginBinding>(inflater,R.layout.fragment_login,container,false).also{ it.viewModel = viewModel}
         loginBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())

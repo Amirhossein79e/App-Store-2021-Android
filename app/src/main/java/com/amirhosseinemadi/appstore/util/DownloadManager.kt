@@ -129,8 +129,8 @@ class DownloadManager : Service() {
     {
         val notificationCompat:NotificationCompat.Builder = NotificationCompat.Builder(this,"1000")
             .setSmallIcon(R.drawable.ic_update)
-            .setContentTitle("Download finished")
-            .setContentText("${downloadModel.appName} downloaded successfully")
+            .setContentTitle(getString(R.string.download_finished))
+            .setContentText(downloadModel.appName + getString(R.string.downloaded))
             .setContentIntent(PendingIntent.getActivity(this,0,createIntent(downloadModel.packageName!!),0))
             .setAutoCancel(true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)

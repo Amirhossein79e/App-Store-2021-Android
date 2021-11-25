@@ -20,6 +20,7 @@ class CustomSnack(viewGroup:ViewGroup, view: View, contentViewCallback:com.googl
 
             val contentViewCallback:MyContentViewCallback = MyContentViewCallback(view)
             val customSnack:CustomSnack = CustomSnack(viewGroup,view,contentViewCallback)
+
             customSnack.duration = duration
             customSnack.getView().setPadding(0,0,0,0)
 
