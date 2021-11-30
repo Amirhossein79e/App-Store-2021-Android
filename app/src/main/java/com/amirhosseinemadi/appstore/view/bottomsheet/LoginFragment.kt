@@ -17,18 +17,15 @@ import com.amirhosseinemadi.appstore.viewmodel.AccountVm
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.BaseTransientBottomBar
 
-class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),AccountCallback {
+class LoginFragment(private val callback: Callback) : BottomSheetDialogFragment(),AccountCallback {
 
-    private val viewModel:AccountVm
+    private lateinit var viewModel:AccountVm
     private lateinit var loginBinding:FragmentLoginBinding
     private lateinit var loading:Dialog
 
-    init
-    {
-        viewModel = AccountVm(this)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewModel = AccountVm(this)
         loginBinding = DataBindingUtil.inflate<FragmentLoginBinding>(inflater,R.layout.fragment_login,container,false).also{ it.viewModel = viewModel}
         loginBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())
@@ -139,7 +136,7 @@ class LoginFragment(val callback: Callback) : BottomSheetDialogFragment(),Accoun
     }
 
     override fun getStr(res: Int) : String {
-        return requireActivity().getString(res)
+        return requireContext().getString(res)
     }
 
 

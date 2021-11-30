@@ -128,7 +128,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
             }
 
             override fun onError(e: Throwable?) {
-                error.value = "submit"
+                error.value = "delete"
                 appCallback.onHide()
             }
 

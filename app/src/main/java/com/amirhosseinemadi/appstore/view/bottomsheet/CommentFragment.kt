@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
@@ -17,6 +18,7 @@ import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.adapter.CommentAdapter
 import com.amirhosseinemadi.appstore.view.callback.AppCallback
 import com.amirhosseinemadi.appstore.view.callback.Callback
+import com.amirhosseinemadi.appstore.view.fragment.ErrorFragment
 import com.amirhosseinemadi.appstore.viewmodel.AppVm
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -52,6 +54,7 @@ class CommentFragment(private val packageName:String, private val mainCallback: 
         fragmentCommentBinding.lifecycleOwner = this
         loading = Utilities.loadingDialog(requireContext())
         initView()
+        handleError()
         if (callback == null)
         {
             commentInit(list.size, PrefManager.getAccess(), packageName)
@@ -116,6 +119,15 @@ class CommentFragment(private val packageName:String, private val mainCallback: 
 
             fragmentCommentBinding.btn.setOnClickListener { submitComment(PrefManager.getAccess()!!,viewModel.comment.value!!,viewModel.rate.value!!,packageName) }
         }
+    }
+
+
+    private fun handleError()
+    {
+        viewModel.error.observe(viewLifecycleOwner,
+            {
+                Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),getString(R.string.request_failed), BaseTransientBottomBar.LENGTH_SHORT)
+            })
     }
 
 

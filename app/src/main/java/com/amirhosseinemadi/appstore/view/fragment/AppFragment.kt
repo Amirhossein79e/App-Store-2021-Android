@@ -122,7 +122,7 @@ class AppFragment() : Fragment(),AppCallback {
 
     override fun onResume() {
         super.onResume()
-
+        initInstallBtn()
     }
 
 
@@ -224,7 +224,7 @@ class AppFragment() : Fragment(),AppCallback {
             (appBinding.btnInstall.layoutParams as LinearLayout.LayoutParams).setMargins(0,0,marginInPx,marginInPx)
         }
         appBinding.btnInstall.setOnClickListener(this::installClick)
-        //appBinding.btnUninstall.setOnClickListener()
+        appBinding.btnUninstall.setOnClickListener(this::unInstallClick)
     }
 
 
@@ -387,7 +387,9 @@ class AppFragment() : Fragment(),AppCallback {
     {
         if (Utilities.checkPackageInstalled(packageName))
         {
-
+            val intent:Intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
     }
 
@@ -467,6 +469,10 @@ class AppFragment() : Fragment(),AppCallback {
                         when(it)
                         {
                             "app" -> {viewModel.app(packageName)}
+
+                            "rating" -> {viewModel.getRating(packageName)}
+
+                            "comment" -> {viewModel.comment(0,PrefManager.getAccess(),packageName)}
                         }
                     }
 
