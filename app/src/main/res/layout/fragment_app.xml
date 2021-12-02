@@ -465,7 +465,7 @@
                             android:layout_marginBottom="@dimen/dp8"
                             style="@style/btn_style"
                             android:src="@drawable/ic_cancel"
-                            android:tint="@color/md_white_1000"
+                            android:background="@color/transparent"
                             android:visibility="gone"
                             android:id="@+id/btn_cancel">
                         </androidx.appcompat.widget.AppCompatImageButton>
@@ -576,8 +576,8 @@
 
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:layout_width="@dimen/dp0"
-                        android:layout_height="@dimen/dp40"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp32"
                         app:layout_constraintTop_toBottomOf="@id/txt_comment_app"
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
@@ -586,10 +586,9 @@
                         android:textSize="@dimen/text_size_normal"
                         android:drawableEnd="@drawable/ic_comment"
                         app:drawableTint="@color/md_white_1000"
+                        android:drawablePadding="@dimen/dp8"
                         android:paddingStart="@dimen/dp8"
                         android:paddingEnd="@dimen/dp8"
-                        android:layout_marginStart="@dimen/dp2"
-                        android:layout_marginEnd="@dimen/dp2"
                         android:text="@string/add_comment"
                         android:id="@+id/btn_submit_comment">
                     </androidx.appcompat.widget.AppCompatButton>

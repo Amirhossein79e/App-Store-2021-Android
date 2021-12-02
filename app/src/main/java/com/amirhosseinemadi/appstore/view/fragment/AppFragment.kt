@@ -49,6 +49,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.squareup.picasso.Picasso
 import java.io.File
+import java.lang.IllegalArgumentException
 import java.security.Permission
 import java.util.jar.Manifest
 import kotlin.random.Random
@@ -90,6 +91,7 @@ class AppFragment() : Fragment(),AppCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()
         ) {
             if (it)
@@ -120,12 +122,6 @@ class AppFragment() : Fragment(),AppCallback {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-        initInstallBtn()
-    }
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         appBinding = DataBindingUtil.inflate<FragmentAppBinding>(inflater,R.layout.fragment_app,container,false).also { it.viewModel = viewModel }
         appBinding.lifecycleOwner = this
@@ -138,16 +134,44 @@ class AppFragment() : Fragment(),AppCallback {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+    }
+
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         isRunning = false
         isRunning = null
+
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(QueueBroadCast())
+
+        try
+        {
+            requireActivity().unregisterReceiver(PackageBroadCast())
+
+        }catch (exception:IllegalArgumentException)
+        {
+
+        }
+
     }
 
 
     private fun initView()
     {
+        val intentFilter:IntentFilter = IntentFilter()
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
+        intentFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED)
+        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED)
+        intentFilter.addDataScheme("package")
+        requireActivity().registerReceiver(PackageBroadCast(),intentFilter)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
         {
             requireActivity().display!!.getRealMetrics(metrics)
@@ -207,6 +231,7 @@ class AppFragment() : Fragment(),AppCallback {
         {
             appBinding.btnInstall.text = requireContext().getString(R.string.install)
             (appBinding.btnInstall.layoutParams as LinearLayout.LayoutParams).marginEnd = Utilities.dpToPx(requireActivity(),0f)
+            appBinding.btnUninstall.visibility = View.GONE
 
         }else if (Utilities.checkPackageInstalled(packageName) && requireContext().packageManager.getPackageInfo(packageName,0).versionCode < appModel?.verCode!!)
         {
@@ -387,7 +412,7 @@ class AppFragment() : Fragment(),AppCallback {
     {
         if (Utilities.checkPackageInstalled(packageName))
         {
-            val intent:Intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE)
+            val intent:Intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE,Uri.parse("package:$packageName"))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
@@ -695,6 +720,18 @@ class AppFragment() : Fragment(),AppCallback {
         {
             handleProgress()
             LocalBroadcastManager.getInstance(this@AppFragment.requireContext()).unregisterReceiver(this)
+        }
+    }
+
+
+    inner class PackageBroadCast : BroadcastReceiver()
+    {
+        override fun onReceive(context: Context?, intent: Intent?)
+        {
+            if (intent?.dataString?.replace("package:","").equals(packageName))
+            {
+                initInstallBtn()
+            }
         }
     }
 

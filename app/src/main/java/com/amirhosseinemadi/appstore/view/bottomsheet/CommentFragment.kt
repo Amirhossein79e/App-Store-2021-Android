@@ -117,8 +117,14 @@ class CommentFragment(private val packageName:String, private val mainCallback: 
                 }
             }
 
-            fragmentCommentBinding.btn.setOnClickListener { submitComment(PrefManager.getAccess()!!,viewModel.comment.value!!,viewModel.rate.value!!,packageName) }
+            fragmentCommentBinding.btn.setOnClickListener(this::submitClick)
         }
+    }
+
+
+    private fun submitClick(view: View)
+    {
+        submitComment(PrefManager.getAccess()!!,viewModel.comment.value!!,viewModel.rate.value!!,packageName)
     }
 
 

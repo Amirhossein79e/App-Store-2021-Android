@@ -211,12 +211,12 @@ class SecurityManager {
 
                 val key:SecretKey = keyStoreKey(alias) as SecretKey
 
-                val iv:ByteArray? = Base64.decode(inputData.substring(0,24),Base64.NO_WRAP)
+                val iv:ByteArray? = Base64.decode(inputData.substring(0,24),Base64.DEFAULT)
                 val ivSpec:IvParameterSpec = IvParameterSpec(iv)
 
                 cipher.init(Cipher.DECRYPT_MODE,key,ivSpec)
 
-                val decrypted:String = String(cipher.doFinal(Base64.decode(inputData.substring(24),Base64.NO_WRAP)))
+                val decrypted:String = String(cipher.doFinal(Base64.decode(inputData.substring(24),Base64.DEFAULT)))
 
                 finalString = decrypted
 
@@ -228,7 +228,8 @@ class SecurityManager {
 
                 cipher.init(Cipher.ENCRYPT_MODE,key.public)
 
-                val decrypted:String = String(cipher.doFinal(Base64.decode(inputData,Base64.NO_WRAP)))
+                val decrypted:String = String(cipher.doFinal(Base64.decode(inputData,Base64.DEFAULT)),StandardCharsets.UTF_8)
+                println(String(cipher.doFinal(inputData.toByteArray()))+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
                 finalString = decrypted
             }

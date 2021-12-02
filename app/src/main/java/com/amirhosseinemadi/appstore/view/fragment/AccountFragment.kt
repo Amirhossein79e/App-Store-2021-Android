@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amirhosseinemadi.appstore.R
@@ -16,7 +15,6 @@ import com.amirhosseinemadi.appstore.databinding.FragmentAccountBinding
 import com.amirhosseinemadi.appstore.model.entity.AppModel
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
-import com.amirhosseinemadi.appstore.view.activity.MainActivity
 import com.amirhosseinemadi.appstore.view.activity.SettingsActivity
 import com.amirhosseinemadi.appstore.view.adapter.AppRecyclerAdapter
 import com.amirhosseinemadi.appstore.view.bottomsheet.LoginFragment
@@ -54,40 +52,16 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
 
     private fun initView()
     {
-        accountBinding.btnSettings.setOnClickListener {
-            startActivity(Intent(requireContext(), SettingsActivity::class.java))
-        }
+        accountBinding.btnSettings.setOnClickListener(this::settingClick)
+        accountBinding.btnLog.setOnClickListener(this::logClick)
 
         if (PrefManager.checkSignIn())
         {
             accountBinding.txtUser.text = PrefManager.getUser()
             accountBinding.txtWord.text = PrefManager.getUser()!!.substring(0,1).uppercase()
             accountBinding.btnLog.text = requireContext().getText(R.string.sign_out)
-
-            accountBinding.btnLog.setOnClickListener {
-                accountBinding.txtWord.text = requireContext().getText(R.string.user).substring(0,1).uppercase()
-                accountBinding.txtUser.text = requireContext().getText(R.string.user)
-                accountBinding.btnLog.text = requireContext().getText(R.string.sign_in)
-
-                PrefManager.setUser(null)
-                PrefManager.setAccess(null)
-
-                accountBinding.btnLog.setOnClickListener {
-                    LoginFragment(this).show(requireActivity().supportFragmentManager,"")
-                }
-
-                Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),requireContext().getString(R.string.sign_out_successful),BaseTransientBottomBar.LENGTH_SHORT)
-            }
         }else
         {
-            accountBinding.btnLog.setOnClickListener {
-                accountBinding.txtWord.text = requireContext().getText(R.string.user).substring(0,1).uppercase()
-                accountBinding.txtUser.text = requireContext().getText(R.string.user)
-                accountBinding.btnLog.text = requireContext().getText(R.string.sign_in)
-
-                LoginFragment(this).show(requireActivity().supportFragmentManager,"")
-            }
-
             accountBinding.txtWord.text = requireContext().getText(R.string.user).substring(0,1).uppercase()
             checkUpdate()
         }
@@ -155,6 +129,43 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
     }
 
 
+    private fun settingClick(view: View)
+    {
+        startActivity(Intent(requireContext(), SettingsActivity::class.java))
+    }
+
+
+    private fun logClick(view:View)
+    {
+        if (PrefManager.checkSignIn())
+        {
+            accountBinding.txtWord.text = requireContext().getText(R.string.user).substring(0,1).uppercase()
+            accountBinding.txtUser.text = requireContext().getText(R.string.user)
+            accountBinding.btnLog.text = requireContext().getText(R.string.sign_in)
+
+            PrefManager.setUser(null)
+            PrefManager.setAccess(null)
+
+            accountBinding.btnLog.setOnClickListener(this::loginClick)
+
+            Utilities.showSnack(requireActivity().findViewById(R.id.coordinator),requireContext().getString(R.string.sign_out_successful),BaseTransientBottomBar.LENGTH_SHORT)
+        }else
+        {
+            accountBinding.txtWord.text = requireContext().getText(R.string.user).substring(0,1).uppercase()
+            accountBinding.txtUser.text = requireContext().getText(R.string.user)
+            accountBinding.btnLog.text = requireContext().getText(R.string.sign_in)
+            LoginFragment(this).show(requireActivity().supportFragmentManager,"")
+        }
+
+    }
+
+
+    private fun loginClick(view: View)
+    {
+        LoginFragment(this).show(requireActivity().supportFragmentManager,"")
+    }
+
+
     private fun checkAccountInit()
     {
         if (PrefManager.checkSignIn())
@@ -174,9 +185,7 @@ class AccountFragment : Fragment(),AccountCallback,Callback {
                                 accountBinding.txtWord.text = requireContext().getText(R.string.user).substring(0,1).uppercase()
                                 accountBinding.txtUser.text = requireContext().getText(R.string.user)
                                 accountBinding.btnLog.text = requireContext().getText(R.string.sign_in)
-                                accountBinding.btnLog.setOnClickListener {
-                                    LoginFragment(this).show(requireActivity().supportFragmentManager,"")
-                                }
+                                accountBinding.btnLog.setOnClickListener(this::loginClick)
                             }
                         }
                         checkUpdate()

@@ -333,13 +333,7 @@ class DownloadManager : Service() {
 
         }catch (exception:Exception)
         {
-            if (AppFragment.isRunning != null && AppFragment.isRunning!!)
-            {
-                LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(queueBroadCast, IntentFilter("QUEUE_HANDLE"))
-            } else
-            {
-                handleQueue(downloadModel)
-            }
+            handleQueue(downloadModel)
             updateProgress(downloadModel, 1002)
             deleteFile(downloadModel.packageName!!, null)
         }
@@ -372,28 +366,14 @@ class DownloadManager : Service() {
             {
                 updateProgress(downloadModel, 1002)
                 deleteFile(downloadModel.packageName!!, null)
-
-                if (AppFragment.isRunning != null && AppFragment.isRunning!!)
-                {
-                    LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
-                } else
-                {
-                    handleQueue(downloadModel)
-                }
+                handleQueue(downloadModel)
             }
 
         }else
         {
             updateProgress(downloadModel,1000)
             startActivity(createIntent(downloadModel.packageName!!))
-
-            if (AppFragment.isRunning != null && AppFragment.isRunning!!)
-            {
-                LocalBroadcastManager.getInstance(this@DownloadManager).registerReceiver(QueueBroadCast(), IntentFilter("QUEUE_HANDLE"))
-            }else
-            {
-                handleQueue(downloadModel)
-            }
+            handleQueue(downloadModel)
         }
     }
 

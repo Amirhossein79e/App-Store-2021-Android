@@ -57,9 +57,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="@dimen/dp4"
-        android:src="@drawable/ic_settings"
+        app:srcCompat="@drawable/ic_settings"
         android:background="@drawable/btn_selector"
         android:backgroundTint="@color/transparent"
+        app:tint="@color/colorOnPrimary"
         android:id="@+id/btn_settings">
     </androidx.appcompat.widget.AppCompatImageView>
 
