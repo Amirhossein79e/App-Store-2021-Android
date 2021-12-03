@@ -34,6 +34,7 @@
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="dp18">18dp</dimen>
     <dimen name="dp20">20dp</dimen>
+    <dimen name="dp10">10dp</dimen>
 
 
 </resources>

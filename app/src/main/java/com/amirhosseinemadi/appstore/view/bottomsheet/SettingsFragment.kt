@@ -120,8 +120,8 @@ class SettingsFragment(private val mode:String, private val callback:Callback?) 
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
                     {
-                        startActivity(Intent(requireContext(),SplashActivity::class.java))
                         requireActivity().finishAffinity()
+                        startActivity(Intent(requireContext(),SplashActivity::class.java))
                     }
                 }
             }
@@ -135,8 +135,8 @@ class SettingsFragment(private val mode:String, private val callback:Callback?) 
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
                     {
-                        startActivity(Intent(requireContext(),SplashActivity::class.java))
                         requireActivity().finishAffinity()
+                        startActivity(Intent(requireContext(),SplashActivity::class.java))
                     }
                 }
             }

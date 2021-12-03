@@ -67,7 +67,6 @@
         android:gravity="center"
         android:textSize="@dimen/text_size_normal"
         android:text="@string/request_failed"
-        android:textStyle="bold"
         android:id="@+id/txt">
     </androidx.appcompat.widget.AppCompatTextView>
 

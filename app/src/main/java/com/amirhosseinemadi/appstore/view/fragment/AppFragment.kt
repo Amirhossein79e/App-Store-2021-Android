@@ -54,14 +54,13 @@ import java.security.Permission
 import java.util.jar.Manifest
 import kotlin.random.Random
 
-class AppFragment() : Fragment(),AppCallback {
+class AppFragment(private val packageName:String) : Fragment(),AppCallback {
 
     private var viewModel:AppVm
-    private var packageName:String
     private lateinit var appBinding:FragmentAppBinding
     private lateinit var loading:Dialog
-    private lateinit var metrics:DisplayMetrics
-    private lateinit var commentList:MutableList<CommentModel>
+    private var metrics:DisplayMetrics
+    private val commentList:MutableList<CommentModel>
     private lateinit var deleteDialog:Dialog
     private lateinit var requestPermission:ActivityResultLauncher<String>
     private var appModel:AppModel?
@@ -69,23 +68,22 @@ class AppFragment() : Fragment(),AppCallback {
     companion object
     {
         var isRunning:Boolean? = null
+        private var callback:Callback? = null
+
+        fun notifyPackage()
+        {
+            callback?.notify()
+        }
     }
 
     init
     {
         viewModel = AppVm(this)
-        packageName = ""
         appModel = null
         isRunning = true
-    }
 
-    constructor(packageName:String) : this()
-    {
-        viewModel = AppVm(this)
         metrics = DisplayMetrics()
-        this.packageName = packageName
         commentList = ArrayList()
-        isRunning = true
     }
 
 
@@ -134,43 +132,26 @@ class AppFragment() : Fragment(),AppCallback {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
+
         isRunning = false
         isRunning = null
+        callback = null
 
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(QueueBroadCast())
-
-        try
-        {
-            requireActivity().unregisterReceiver(PackageBroadCast())
-
-        }catch (exception:IllegalArgumentException)
-        {
-
-        }
-
     }
 
 
     private fun initView()
     {
-        val intentFilter:IntentFilter = IntentFilter()
-        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
-        intentFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED)
-        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED)
-        intentFilter.addDataScheme("package")
-        requireActivity().registerReceiver(PackageBroadCast(),intentFilter)
+        callback = object : Callback
+        {
+            override fun notify(vararg obj: Any?)
+            {
+                initInstallBtn()
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
         {
@@ -212,16 +193,46 @@ class AppFragment() : Fragment(),AppCallback {
         }
 
         appBinding.btnSubmitComment.setOnClickListener(this::commentClick)
-        appBinding.imgBack.setOnClickListener { backPressed() }
+        appBinding.imgBack.setOnClickListener(this::backPressed)
         appBinding.btnCancel.setOnClickListener(this::cancelClick)
 
         Utilities.onBackPressed(appBinding.root, object : Callback
         {
             override fun notify(vararg obj: Any?)
             {
-                backPressed()
+                backPressed(null)
             }
         })
+    }
+
+
+    private fun handleError()
+    {
+        viewModel.error.observe(viewLifecycleOwner,
+            {
+                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,ErrorFragment(object :
+                    Callback
+                {
+                    override fun notify(vararg obj: Any?)
+                    {
+                        val fragment:Fragment? = requireActivity().supportFragmentManager.findFragmentByTag("error")
+
+                        if (fragment != null)
+                        {
+                            requireActivity().supportFragmentManager.beginTransaction().remove(fragment).commit()
+                        }
+                        when(it)
+                        {
+                            "app" -> {viewModel.app(packageName)}
+
+                            "rating" -> {viewModel.getRating(packageName)}
+
+                            "comment" -> {viewModel.comment(0,PrefManager.getAccess(),packageName)}
+                        }
+                    }
+
+                }),"error").commit()
+            })
     }
 
 
@@ -250,6 +261,114 @@ class AppFragment() : Fragment(),AppCallback {
         }
         appBinding.btnInstall.setOnClickListener(this::installClick)
         appBinding.btnUninstall.setOnClickListener(this::unInstallClick)
+    }
+
+
+    private fun installClick(view:View)
+    {
+        if ((!Utilities.checkPackageInstalled(packageName)) ||
+            (Utilities.checkPackageInstalled(packageName) && requireContext().packageManager.getPackageInfo(packageName,0).versionCode < appModel?.verCode!!))
+        {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+            {
+                if (requireContext().checkSelfPermission(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                {
+                    val downloadModel:DownloadModel = DownloadModel().also {
+                        it.packageName = appModel?.packageName
+                        it.appName = appModel?.nameEn
+                        it.isCancel = false
+                        it.progress = -1
+                    }
+
+                    val intent = Intent(requireContext(),DownloadManager::class.java)
+                    intent.putExtra("task","start")
+                    intent.putExtra("download",downloadModel)
+                    requireActivity().startService(intent)
+
+                    appBinding.linearBtn.visibility = View.GONE
+                    appBinding.txtDownloadStatus.visibility = View.VISIBLE
+                    appBinding.progress.visibility = View.VISIBLE
+                    appBinding.btnCancel.visibility = View.VISIBLE
+
+                    LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
+                }else
+                {
+                    requestPermission.launch(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+                }
+
+            }else
+            {
+                val downloadModel:DownloadModel = DownloadModel().also {
+                    it.packageName = appModel?.packageName
+                    it.appName = appModel?.nameEn
+                    it.isCancel = false
+                    it.progress = -1
+                }
+
+                val intent = Intent(requireContext(),DownloadManager::class.java)
+                intent.putExtra("task","start")
+                intent.putExtra("download",downloadModel)
+                requireActivity().startService(intent)
+
+                appBinding.linearBtn.visibility = View.GONE
+                appBinding.txtDownloadStatus.visibility = View.VISIBLE
+                appBinding.progress.visibility = View.VISIBLE
+                appBinding.btnCancel.visibility = View.VISIBLE
+
+                LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
+            }
+
+        }else
+        {
+            startActivity(requireContext().packageManager.getLaunchIntentForPackage(packageName))
+        }
+    }
+
+
+    private fun unInstallClick(view:View)
+    {
+        if (Utilities.checkPackageInstalled(packageName))
+        {
+            val intent:Intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE,Uri.parse("package:$packageName"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+    }
+
+
+    private fun cancelClick(view: View)
+    {
+        appBinding.progress.isIndeterminate = true
+        appBinding.txtDownloadStatus.text = getString(R.string.in_queue)
+
+        val downloadModel:DownloadModel = DownloadModel().also {
+            it.packageName = appModel?.packageName
+            it.appName = appModel?.nameEn
+            it.isCancel = true
+        }
+
+        val intent = Intent(requireContext(),DownloadManager::class.java)
+        intent.putExtra("task","stop")
+        intent.putExtra("download",downloadModel)
+        requireActivity().startService(intent)
+    }
+
+
+    private fun commentClick(view:View)
+    {
+        if (PrefManager.checkSignIn())
+        {
+            openCommentSubmit()
+        }else
+        {
+            LoginFragment(object : Callback
+            {
+                override fun notify(vararg obj: Any?)
+                {
+                    openCommentSubmit()
+                }
+            }).show(parentFragmentManager,null)
+        }
     }
 
 
@@ -347,111 +466,6 @@ class AppFragment() : Fragment(),AppCallback {
     }
 
 
-    private fun installClick(view:View)
-    {
-        if ((!Utilities.checkPackageInstalled(packageName)) ||
-            (Utilities.checkPackageInstalled(packageName) && requireContext().packageManager.getPackageInfo(packageName,0).versionCode < appModel?.verCode!!))
-        {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-            {
-                if (requireContext().checkSelfPermission(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-                {
-                    val downloadModel:DownloadModel = DownloadModel().also {
-                        it.packageName = appModel?.packageName
-                        it.appName = appModel?.nameEn
-                        it.isCancel = false
-                        it.progress = -1
-                    }
-
-                    val intent = Intent(requireContext(),DownloadManager::class.java)
-                    intent.putExtra("task","start")
-                    intent.putExtra("download",downloadModel)
-                    requireActivity().startService(intent)
-
-                    appBinding.linearBtn.visibility = View.GONE
-                    appBinding.txtDownloadStatus.visibility = View.VISIBLE
-                    appBinding.progress.visibility = View.VISIBLE
-                    appBinding.btnCancel.visibility = View.VISIBLE
-
-                    LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
-                }else
-                {
-                    requestPermission.launch(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-                }
-
-            }else
-            {
-                val downloadModel:DownloadModel = DownloadModel().also {
-                it.packageName = appModel?.packageName
-                it.appName = appModel?.nameEn
-                it.isCancel = false
-                it.progress = -1
-                }
-
-                val intent = Intent(requireContext(),DownloadManager::class.java)
-                intent.putExtra("task","start")
-                intent.putExtra("download",downloadModel)
-                requireActivity().startService(intent)
-
-                appBinding.linearBtn.visibility = View.GONE
-                appBinding.txtDownloadStatus.visibility = View.VISIBLE
-                appBinding.progress.visibility = View.VISIBLE
-                appBinding.btnCancel.visibility = View.VISIBLE
-
-                LocalBroadcastManager.getInstance(requireContext()).registerReceiver(QueueBroadCast(),IntentFilter("QUEUE_RESULT"))
-            }
-
-        }else
-        {
-            startActivity(requireContext().packageManager.getLaunchIntentForPackage(packageName))
-        }
-    }
-
-
-    private fun unInstallClick(view:View)
-    {
-        if (Utilities.checkPackageInstalled(packageName))
-        {
-            val intent:Intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE,Uri.parse("package:$packageName"))
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }
-    }
-
-
-    private fun cancelClick(view: View)
-    {
-        val downloadModel:DownloadModel = DownloadModel().also {
-            it.packageName = appModel?.packageName
-            it.appName = appModel?.nameEn
-            it.isCancel = true
-        }
-
-        val intent = Intent(requireContext(),DownloadManager::class.java)
-        intent.putExtra("task","stop")
-        intent.putExtra("download",downloadModel)
-        requireActivity().startService(intent)
-    }
-
-
-    private fun commentClick(view:View)
-    {
-        if (PrefManager.checkSignIn())
-        {
-            openCommentSubmit()
-        }else
-        {
-            LoginFragment(object : Callback
-            {
-                override fun notify(vararg obj: Any?)
-                {
-                    openCommentSubmit()
-                }
-            }).show(parentFragmentManager,null)
-        }
-    }
-
-
     private fun openCommentSubmit()
     {
         if (commentList.size > 0 && commentList.get(0).isAccess == 1)
@@ -473,36 +487,6 @@ class AppFragment() : Fragment(),AppCallback {
                 }
             }).show(parentFragmentManager,null)
         }
-    }
-
-
-    private fun handleError()
-    {
-        viewModel.error.observe(viewLifecycleOwner,
-            {
-                requireActivity().supportFragmentManager.beginTransaction().add(R.id.frame,ErrorFragment(object :
-                    Callback
-                {
-                    override fun notify(vararg obj: Any?)
-                    {
-                        val fragment:Fragment? = requireActivity().supportFragmentManager.findFragmentByTag("error")
-
-                        if (fragment != null)
-                        {
-                            requireActivity().supportFragmentManager.beginTransaction().remove(fragment).commit()
-                        }
-                        when(it)
-                        {
-                            "app" -> {viewModel.app(packageName)}
-
-                            "rating" -> {viewModel.getRating(packageName)}
-
-                            "comment" -> {viewModel.comment(0,PrefManager.getAccess(),packageName)}
-                        }
-                    }
-
-                }),"error").commit()
-            })
     }
 
 
@@ -649,45 +633,7 @@ class AppFragment() : Fragment(),AppCallback {
     }
 
 
-    private fun fileUri(packageName:String) : Uri
-    {
-        var uri: Uri? = null
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val selection: String = MediaStore.Files.FileColumns.RELATIVE_PATH + "=? and " + MediaStore.Files.FileColumns.DISPLAY_NAME + "=?"
-            val selectionArgs: Array<String> = arrayOf(Environment.DIRECTORY_DOWNLOADS + "/", packageName + ".apk")
-            val projectionArgs: Array<String> = arrayOf(MediaStore.Files.FileColumns._ID)
-            val cursor: Cursor? = requireContext().contentResolver.query(MediaStore.Files.getContentUri("external"), projectionArgs, selection, selectionArgs, null)
-            cursor?.moveToFirst()
-            uri = Uri.withAppendedPath(MediaStore.Files.getContentUri("external"),cursor?.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)))
-        }else
-        {
-            val file:File = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath+"/"+packageName+".apk")
-            uri = Uri.parse(file.absolutePath)
-        }
-        return uri!!
-    }
-
-
-    private fun deleteFile(packageName:String)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-        {
-            val where:String = MediaStore.Files.FileColumns.RELATIVE_PATH+" =? and "+MediaStore.Files.FileColumns.DISPLAY_NAME+" =?"
-            val selectionArgs:Array<String> = arrayOf(Environment.DIRECTORY_DOWNLOADS+"/",packageName+".apk")
-            requireContext().contentResolver.delete(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),where,selectionArgs)
-        }else
-        {
-            val file: File = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath+"/"+packageName+".apk")
-            if (file.exists())
-            {
-                file.delete()
-            }
-        }
-    }
-
-
-    private fun backPressed()
+    private fun backPressed(view:View?)
     {
         if (parentFragmentManager.backStackEntryCount > 0)
         {
@@ -722,18 +668,5 @@ class AppFragment() : Fragment(),AppCallback {
             LocalBroadcastManager.getInstance(this@AppFragment.requireContext()).unregisterReceiver(this)
         }
     }
-
-
-    inner class PackageBroadCast : BroadcastReceiver()
-    {
-        override fun onReceive(context: Context?, intent: Intent?)
-        {
-            if (intent?.dataString?.replace("package:","").equals(packageName))
-            {
-                initInstallBtn()
-            }
-        }
-    }
-
 
 }

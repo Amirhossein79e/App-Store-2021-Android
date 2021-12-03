@@ -120,13 +120,15 @@ class SearchFragment() : Fragment(),SearchCallback {
         {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
+                titleList.clear()
+                searchBinding.recyclerTitle.adapter?.notifyDataSetChanged()
+
                 if (searchBinding.sch.hasFocus())
                 {
                     searchBinding.sch.clearFocus()
                 }
                 isNew = true
-                titleList.clear()
-                searchBinding.recyclerTitle.adapter?.notifyDataSetChanged()
+
                 viewModel.app(0,query!!)
                 return false
             }
@@ -184,13 +186,13 @@ class SearchFragment() : Fragment(),SearchCallback {
             }
         })
 
-        searchBinding.imgBack.setOnClickListener { backPressed() }
+        searchBinding.imgBack.setOnClickListener(this::backPressed)
 
         Utilities.onBackPressed(searchBinding.root, object : Callback
         {
             override fun notify(vararg obj: Any?)
             {
-                backPressed()
+                backPressed(null)
             }
         })
     }
@@ -297,7 +299,7 @@ class SearchFragment() : Fragment(),SearchCallback {
     }
 
 
-    private fun backPressed()
+    private fun backPressed(view:View?)
     {
         if (parentFragmentManager.backStackEntryCount > 0)
         {

@@ -60,7 +60,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
         {
             appByCategory(appList!!.size,category!!)
             categoryBinding.imgBack.visibility = View.VISIBLE
-            categoryBinding.imgBack.setOnClickListener { backPressed() }
+            categoryBinding.imgBack.setOnClickListener(this::backPressed)
             (categoryBinding.recycler.layoutParams as ConstraintLayout.LayoutParams).topToBottom = R.id.img_back
         }
 
@@ -102,7 +102,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
         {
             override fun notify(vararg obj: Any?)
             {
-                backPressed()
+                backPressed(null)
             }
         })
     }
@@ -188,7 +188,7 @@ class CategoryFragment() : Fragment(),CategoryCallback {
     }
 
 
-    private fun backPressed() {
+    private fun backPressed(view:View?) {
         if (parentFragmentManager.backStackEntryCount > 0)
         {
             val backStack: FragmentManager.BackStackEntry = parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount - 1)

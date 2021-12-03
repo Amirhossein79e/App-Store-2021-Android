@@ -76,11 +76,6 @@ class MainRecyclerAdapter(private val context:Context, private val list: List<Ho
             cardParams.endToStart = R.id.guide_right
         }
 
-        if (position == list.size-1)
-        {
-            cardParams.bottomMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,32f,metrics).toInt()
-        }
-
         val homeCategoryModel:HomeCategoryModel = list.get(position)
         if (lang.equals("fa"))
         {

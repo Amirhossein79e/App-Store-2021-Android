@@ -544,7 +544,6 @@
                         android:textSize="@dimen/text_size_normal"
                         android:gravity="center"
                         android:textColor="@color/colorOnPrimary"
-                        android:textStyle="bold"
                         android:text="@string/more"
                         android:id="@+id/txt_more">
                     </androidx.appcompat.widget.AppCompatTextView>
@@ -638,7 +637,6 @@
                         android:textSize="@dimen/text_size_normal"
                         android:gravity="center"
                         android:textColor="@color/colorOnPrimary"
-                        android:textStyle="bold"
                         android:text="@string/more"
                         android:visibility="gone"
                         android:id="@+id/txt_more_comment">

@@ -53,10 +53,18 @@ class DownloadManager : Service() {
         downloadQueue = ArrayList()
         downloadProgress = MutableLiveData()
         notificationManager = NotificationManagerCompat.from(this)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             notificationManager.createNotificationChannel(NotificationChannel(("1000"),"download",NotificationManager.IMPORTANCE_DEFAULT))
         }
+
+        val intentFilter:IntentFilter = IntentFilter()
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
+        intentFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED)
+        intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED)
+        intentFilter.addDataScheme("package")
+        Application.component.context().registerReceiver(PackageBroadCast(),intentFilter)
     }
 
 
@@ -130,7 +138,7 @@ class DownloadManager : Service() {
         val notificationCompat:NotificationCompat.Builder = NotificationCompat.Builder(this,"1000")
             .setSmallIcon(R.drawable.ic_update)
             .setContentTitle(getString(R.string.download_finished))
-            .setContentText(downloadModel.appName + getString(R.string.downloaded))
+            .setContentText(downloadModel.appName + " " + getString(R.string.downloaded))
             .setContentIntent(PendingIntent.getActivity(this,0,createIntent(downloadModel.packageName!!),0))
             .setAutoCancel(true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -382,6 +390,20 @@ class DownloadManager : Service() {
         super.onDestroy()
         downloadQueue = null
         downloadProgress = null
+    }
+
+
+    inner class PackageBroadCast : BroadcastReceiver()
+    {
+        override fun onReceive(context: Context?, intent: Intent?)
+        {
+            AppFragment.notifyPackage()
+
+            if (intent?.action.equals(Intent.ACTION_PACKAGE_ADDED))
+            {
+                deleteFile(intent?.dataString?.replace("package:","")!!,null)
+            }
+        }
     }
 
 }

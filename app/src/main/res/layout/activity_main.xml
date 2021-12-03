@@ -65,7 +65,7 @@
             app:itemIconTint="@color/bottom_nav_item_color"
             app:itemTextColor="@color/bottom_nav_item_color"
             app:itemIconSize="28dp"
-            app:elevation="@dimen/dp32"
+            app:elevation="@dimen/dp56"
             app:menu="@menu/bottom_nav_menu"
             android:id="@+id/bottom_nav"
             android:clipChildren="false">

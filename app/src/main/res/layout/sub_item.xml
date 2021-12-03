@@ -21,11 +21,22 @@
         android:id="@+id/linear">
 
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/dp12"
+            app:cardElevation="@dimen/dp0"
+            app:cardBackgroundColor="@color/transparent">
+
+
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="@dimen/dp56"
             android:layout_height="@dimen/dp56"
             android:id="@+id/img">
         </androidx.appcompat.widget.AppCompatImageView>
+
+
+        </androidx.cardview.widget.CardView>
 
 
         <androidx.appcompat.widget.AppCompatTextView

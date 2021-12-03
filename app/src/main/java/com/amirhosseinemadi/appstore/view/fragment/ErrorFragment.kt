@@ -25,9 +25,7 @@ class ErrorFragment(private val callback:Callback) : Fragment() {
 
     private fun initView()
     {
-        view1.findViewById<AppCompatButton>(R.id.btn).setOnClickListener {
-            callback.notify()
-        }
+        view1.findViewById<AppCompatButton>(R.id.btn).setOnClickListener(this::retryClick)
 
         Utilities.onBackPressed(view1,object : Callback
         {
@@ -36,6 +34,12 @@ class ErrorFragment(private val callback:Callback) : Fragment() {
                 requireActivity().finish()
             }
         })
+    }
+
+
+    private fun retryClick(view:View)
+    {
+        callback.notify()
     }
 
 }

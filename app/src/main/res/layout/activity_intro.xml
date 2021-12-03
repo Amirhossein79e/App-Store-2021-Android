@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05"
+        app:layout_constraintGuide_percent="0.03"
         android:id="@+id/guide_start">
     </androidx.constraintlayout.widget.Guideline>
 
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95"
+        app:layout_constraintGuide_percent="0.97"
         android:id="@+id/guide_end">
     </androidx.constraintlayout.widget.Guideline>
 
@@ -71,6 +71,7 @@
         app:layout_constraintBottom_toBottomOf="@id/linear_indicator"
         app:layout_constraintTop_toTopOf="@id/linear_indicator"
         app:layout_constraintEnd_toStartOf="@id/guide_end"
+        android:layout_marginEnd="@dimen/dp10"
         style="@style/btn_style"
         android:text="@string/next"
         android:id="@+id/btn_next">

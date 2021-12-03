@@ -151,7 +151,6 @@
         android:layout_marginBottom="@dimen/dp16"
         android:textSize="@dimen/text_size_small"
         android:textColor="@color/colorOnPrimary"
-        android:textStyle="bold"
         android:text="@string/sign_up_alt"
         android:onClick="@{view_model::signClick}"
         android:id="@+id/txt_alt_log">
