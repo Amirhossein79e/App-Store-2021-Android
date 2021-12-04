@@ -47,13 +47,13 @@ class MessagingService : FirebaseMessagingService() {
         if (PrefManager.getLang().equals("fa"))
         {
             notification.setContentTitle(data.get("title_fa"))
-                .setSmallIcon(R.drawable.ic_update)
+                .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setSubText("message")
                 .setContentText(data.get("message_fa"))
         }else
         {
             notification.setContentTitle(data.get("title_en"))
-                .setSmallIcon(R.drawable.ic_update)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setSubText("message")
                 .setContentText(data.get("message_en"))
         }

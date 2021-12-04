@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainBinding = DataBindingUtil.setContentView<ActivityMainBinding>(this,R.layout.activity_main)
+        mainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         initView()
         registerNetworkListener()
     }
@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+
         if (intent.extras != null && intent.extras!!.getString("key") != null)
         {
             when(intent.extras!!.getString("key"))
@@ -44,6 +45,8 @@ class MainActivity : AppCompatActivity() {
                 "settings" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
 
                 "update" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
+
+                "download" -> { supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(intent.extras?.getString("packageName")!!),"appFragment").commit() }
             }
         }else
         {

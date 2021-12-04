@@ -55,7 +55,7 @@ class AppVm(private val appCallback: AppCallback) : ViewModel() {
                 if (t?.data?.rate != null)
                 {
                     val responseObjectRating:ResponseObject<Float> = ResponseObject()
-                    responseObjectRating.data = t.data!!.rate
+                    responseObjectRating.data = String.format("%.1f",t.data!!.rate).toFloat()
                     ratingResponse.value = responseObjectRating
                 }
                 //appCallback.onHide()

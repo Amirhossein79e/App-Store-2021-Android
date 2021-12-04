@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05"
+            app:layout_constraintGuide_percent="0.02"
             android:id="@+id/guide_start">
         </androidx.constraintlayout.widget.Guideline>
 
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95"
+            app:layout_constraintGuide_percent="0.98"
             android:id="@+id/guide_end">
         </androidx.constraintlayout.widget.Guideline>
 
@@ -63,7 +63,7 @@
             android:textSize="@dimen/text_size_large_normal"
             app:layout_constraintTop_toBottomOf="@id/guide_top"
             app:layout_constraintStart_toEndOf="@id/guide_start"
-            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginStart="@dimen/dp10"
             style="@style/txt_style"
             android:text="@string/user_comments"
             android:id="@+id/txt_detail">
@@ -79,6 +79,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="@dimen/dp16"
             android:layout_marginTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp16"
+            android:clipToPadding="false"
+            android:clipChildren="false"
             android:id="@+id/recycler">
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -95,7 +98,7 @@
             android:stepSize="1"
             style="@style/Widget.AppCompat.RatingBar.Indicator"
             android:progressTint="@color/md_yellow_A400"
-            android:progressBackgroundTint="@color/colorOnPrimary"
+            android:progressBackgroundTint="@color/md_yellow_A400"
             android:rating="@={view_model.rate}"
             android:isIndicator="false"
             android:visibility="gone"
@@ -111,6 +114,8 @@
             app:layout_constraintStart_toEndOf="@id/guide_start"
             app:layout_constraintEnd_toStartOf="@id/guide_end"
             android:layout_marginTop="@dimen/dp24"
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginEnd="@dimen/dp10"
             android:gravity="top|start"
             style="@style/edt_style"
             android:hint="@string/rate_comment_hint"
@@ -128,6 +133,8 @@
             app:layout_constraintEnd_toStartOf="@id/guide_end"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="@dimen/dp32"
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginEnd="@dimen/dp10"
             android:layout_marginBottom="@dimen/dp16"
             style="@style/btn_style"
             android:textSize="@dimen/text_size_normal"

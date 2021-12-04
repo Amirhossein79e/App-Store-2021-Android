@@ -64,7 +64,7 @@ class UpdateChecker : BroadcastReceiver() {
         intent.putExtra("key","update")
 
         val notificationCompat:NotificationCompat.Builder = NotificationCompat.Builder(context,"2")
-            .setSmallIcon(R.drawable.ic_update)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(PendingIntent.getActivity(context,0, intent,0))
 
         if (PrefManager.getLang().equals("en"))

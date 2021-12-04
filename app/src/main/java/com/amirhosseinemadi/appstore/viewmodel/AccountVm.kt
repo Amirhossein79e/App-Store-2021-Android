@@ -29,10 +29,10 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
     val validateResponse: MutableLiveData<ResponseObject<String>>
     val updateResponse: MutableLiveData<ResponseObject<List<AppModel>>>
 
-    var emailStr: String = ""
-    var passwordStr: String = ""
-    var usernameStr: String = ""
-    var passwordReStr: String = ""
+    var emailStr:MutableLiveData<String> = MutableLiveData<String>().also{ it.value = ""}
+    var passwordStr:MutableLiveData<String> = MutableLiveData<String>().also{ it.value = ""}
+    var usernameStr:MutableLiveData<String> = MutableLiveData<String>().also{ it.value = ""}
+    var passwordReStr:MutableLiveData<String> = MutableLiveData<String>().also{ it.value = ""}
     val visib: MutableLiveData<Int> = MutableLiveData<Int>().also { it.value = View.GONE }
     val btnText: MutableLiveData<String> = MutableLiveData<String>().also { it.value = accountCallback.getStr(R.string.sign_in) }
     private var signIn: Boolean
@@ -50,9 +50,9 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
 
     fun btnClick(view: View) {
         if (signIn) {
-            if (Utilities.validateEmail(emailStr)) {
-                if (Utilities.validatePassword(passwordStr)) {
-                    accountCallback.signIn(emailStr, passwordStr)
+            if (Utilities.validateEmail(emailStr.value!!)) {
+                if (Utilities.validatePassword(passwordStr.value!!)) {
+                    accountCallback.signIn(emailStr.value!!, passwordStr.value!!)
                 } else {
                     accountCallback.onMessage(R.string.password_error)
                 }
@@ -60,14 +60,14 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
                 accountCallback.onMessage(R.string.email_error);
             }
         } else {
-            if (Utilities.validateEmail(emailStr)) {
-                if (usernameStr.length > 2) {
-                    if (Utilities.validatePassword(passwordStr)) {
+            if (Utilities.validateEmail(emailStr.value!!)) {
+                if (usernameStr.value!!.length > 2) {
+                    if (Utilities.validatePassword(passwordStr.value!!)) {
                         if (passwordStr.equals(passwordReStr)) {
                             accountCallback.signUp(
-                                emailStr,
-                                passwordStr,
-                                usernameStr,
+                                emailStr.value!!,
+                                passwordStr.value!!,
+                                usernameStr.value!!,
                                 PrefManager.getToken()!!
                             )
                         } else {
@@ -95,8 +95,8 @@ class AccountVm(private val accountCallback:AccountCallback) : ViewModel() {
             (view as AppCompatTextView).text = str
             btnText.value = accountCallback.getStr(R.string.sign_up)
             visib.value = View.VISIBLE
-            emailStr = ""
-            passwordStr = ""
+            emailStr.value = ""
+            passwordStr.value = ""
         } else
         {
             signIn = true

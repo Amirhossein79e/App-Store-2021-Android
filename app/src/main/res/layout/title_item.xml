@@ -15,6 +15,7 @@
         android:layout_marginTop="@dimen/dp12"
         android:layout_marginStart="@dimen/dp8"
         android:layout_marginBottom="@dimen/dp12"
+        android:padding="@dimen/dp2"
         app:srcCompat="@drawable/ic_search"
         android:id="@+id/img">
     </androidx.appcompat.widget.AppCompatImageView>

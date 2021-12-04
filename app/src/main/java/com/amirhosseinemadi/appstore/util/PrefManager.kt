@@ -54,7 +54,7 @@ class PrefManager() {
         fun getTheme() : String?
         {
             val preferences: SharedPreferences = Application.component.context().getSharedPreferences("main", Context.MODE_PRIVATE)
-            val mode:String? = preferences.getString("theme","dark")
+            val mode:String? = preferences.getString("theme","light")
             return mode
         }
 

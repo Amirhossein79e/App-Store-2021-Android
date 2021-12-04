@@ -113,31 +113,25 @@ class SettingsFragment(private val mode:String, private val callback:Callback?) 
         {
             R.id.txt_dark ->
             {
-                dismiss()
-                PrefManager.setTheme("dark")
                 if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES)
                 {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-                    {
-                        requireActivity().finishAffinity()
-                        startActivity(Intent(requireContext(),SplashActivity::class.java))
-                    }
+                    PrefManager.setTheme("dark")
+                    dismiss()
+                    startActivity(Intent(requireContext(),SplashActivity::class.java))
+                    requireActivity().finishAffinity()
                 }
             }
 
             R.id.txt_light ->
             {
-                dismiss()
-                PrefManager.setTheme("light")
                 if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO)
                 {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-                    {
-                        requireActivity().finishAffinity()
-                        startActivity(Intent(requireContext(),SplashActivity::class.java))
-                    }
+                    PrefManager.setTheme("light")
+                    dismiss()
+                    startActivity(Intent(requireContext(),SplashActivity::class.java))
+                    requireActivity().finishAffinity()
                 }
             }
         }

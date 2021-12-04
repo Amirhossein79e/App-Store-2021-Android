@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.03"
+        app:layout_constraintGuide_percent="0.02"
         android:id="@+id/guide_start">
     </androidx.constraintlayout.widget.Guideline>
 
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.97"
+        app:layout_constraintGuide_percent="0.98"
         android:id="@+id/guide_end">
     </androidx.constraintlayout.widget.Guideline>
 
@@ -77,7 +77,7 @@
         android:layout_marginEnd="@dimen/dp10"
         app:cardCornerRadius="@dimen/dp16"
         app:cardBackgroundColor="@color/colorSecondary"
-        app:cardElevation="@dimen/dp16"
+        app:cardElevation="@dimen/dp12"
         android:id="@+id/card">
 
 
@@ -100,6 +100,7 @@
                 android:textSize="@dimen/text_size_large"
                 android:textColor="@color/md_white_1000"
                 android:textAllCaps="true"
+                android:elevation="@dimen/dp12"
                 android:id="@+id/txt_word">
             </androidx.appcompat.widget.AppCompatTextView>
 

@@ -16,6 +16,7 @@ import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.common.Application
 import com.amirhosseinemadi.appstore.model.ApiCaller
 import com.amirhosseinemadi.appstore.model.entity.DownloadModel
+import com.amirhosseinemadi.appstore.view.activity.MainActivity
 import com.amirhosseinemadi.appstore.view.fragment.AppFragment
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -115,12 +116,18 @@ class DownloadManager : Service() {
 
     private fun progressNotification(downloadModel:DownloadModel, progress:Int, isIndeterminate:Boolean) : Notification
     {
+        val intent:Intent = Intent(this,MainActivity::class.java)
+        intent.putExtra("key","download")
+        intent.putExtra("packageName",downloadModel.packageName)
+
         val notificationCompat:NotificationCompat.Builder = NotificationCompat.Builder(this,"1000")
-            .setSmallIcon(R.drawable.ic_update)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOnlyAlertOnce(true)
             .setContentTitle("Downloading ${downloadModel.appName}")
             .setContentText(progress.toString()+"%")
             .setProgress(100,progress,isIndeterminate)
+            .setContentIntent(PendingIntent.getActivity(this,0,intent,0))
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
             notificationCompat.setPriority(NotificationManager.IMPORTANCE_LOW)
@@ -136,7 +143,7 @@ class DownloadManager : Service() {
     private fun finishNotification(downloadModel:DownloadModel) : Notification
     {
         val notificationCompat:NotificationCompat.Builder = NotificationCompat.Builder(this,"1000")
-            .setSmallIcon(R.drawable.ic_update)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(getString(R.string.download_finished))
             .setContentText(downloadModel.appName + " " + getString(R.string.downloaded))
             .setContentIntent(PendingIntent.getActivity(this,0,createIntent(downloadModel.packageName!!),0))
@@ -292,7 +299,7 @@ class DownloadManager : Service() {
 
 
     @Throws(IOException::class)
-    private fun writeToFile(response:Response<ResponseBody>, outputStream:OutputStream, downloadModel:DownloadModel, queueBroadCast:BroadcastReceiver)
+    private fun writeToFile(response:Response<ResponseBody>, outputStream:OutputStream, downloadModel:DownloadModel)
     {
         downloadProgress?.postValue(downloadModel)
 
@@ -368,7 +375,7 @@ class DownloadManager : Service() {
                 if (response.body() != null && !downloadModel.isCancel)
                 {
                     val outputStream: OutputStream? = createOutputStream(downloadModel.packageName!!)
-                    writeToFile(response, outputStream!!, downloadModel, QueueBroadCast())
+                    writeToFile(response, outputStream!!, downloadModel)
                 }
             }catch (exception:java.lang.Exception)
             {

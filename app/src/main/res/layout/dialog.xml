@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="@dimen/dp4"
-    android:paddingBottom="@dimen/dp4">
+    android:paddingTop="@dimen/dp8"
+    android:paddingBottom="@dimen/dp8">
 
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -43,9 +43,8 @@
         app:layout_constraintTop_toBottomOf="@id/txt"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/dp24"
-        android:layout_marginStart="@dimen/dp4"
-        android:layout_marginEnd="@dimen/dp4"
-        android:layout_marginBottom="@dimen/dp4"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginEnd="@dimen/dp8"
         android:orientation="horizontal">
 
 
@@ -57,8 +56,8 @@
             android:layout_marginStart="@dimen/dp4"
             android:layout_marginTop="@dimen/dp4"
             android:layout_marginBottom="@dimen/dp4"
-            android:paddingStart="@dimen/dp4"
-            android:paddingEnd="@dimen/dp4"
+            android:paddingStart="@dimen/dp6"
+            android:paddingEnd="@dimen/dp6"
             style="@style/btn_style"
             android:visibility="gone"
             android:text="@string/no"
@@ -74,8 +73,8 @@
             android:layout_marginStart="@dimen/dp4"
             android:layout_marginTop="@dimen/dp4"
             android:layout_marginBottom="@dimen/dp4"
-            android:paddingStart="@dimen/dp4"
-            android:paddingEnd="@dimen/dp4"
+            android:paddingStart="@dimen/dp6"
+            android:paddingEnd="@dimen/dp6"
             style="@style/btn_style"
             android:visibility="gone"
             android:text="@string/yes"

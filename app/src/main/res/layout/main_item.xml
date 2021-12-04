@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.03"
+        app:layout_constraintGuide_percent="0.02"
         android:id="@+id/guide_left">
     </androidx.constraintlayout.widget.Guideline>
 
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.93"
+        app:layout_constraintGuide_percent="0.94"
         android:id="@+id/guide_right_txt">
     </androidx.constraintlayout.widget.Guideline>
 
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.97"
+        app:layout_constraintGuide_percent="0.98"
         android:id="@+id/guide_right">
     </androidx.constraintlayout.widget.Guideline>
 

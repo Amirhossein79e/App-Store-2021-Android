@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -110,12 +111,13 @@ class CommentFragment(private val packageName:String, private val mainCallback: 
                 viewModel.rate.value = commentModel!!.rate
             }
 
-            fragmentCommentBinding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-                if (rating < 1f)
+            viewModel.rate.observe(viewLifecycleOwner,
                 {
-                    viewModel.rate.value = 1f
-                }
-            }
+                    if (it < 1)
+                    {
+                        viewModel.rate.value = 1f
+                    }
+                })
 
             fragmentCommentBinding.btn.setOnClickListener(this::submitClick)
         }

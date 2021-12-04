@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05"
+            app:layout_constraintGuide_percent="0.02"
             android:id="@+id/guide_start">
         </androidx.constraintlayout.widget.Guideline>
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95"
+            app:layout_constraintGuide_percent="0.98"
             android:id="@+id/guide_end">
         </androidx.constraintlayout.widget.Guideline>
 
@@ -57,7 +57,9 @@
             app:layout_constraintTop_toBottomOf="@id/guide_top"
             app:layout_constraintStart_toEndOf="@id/guide_start"
             app:layout_constraintEnd_toStartOf="@id/guide_end"
-            app:layout_constraintBottom_toTopOf="@id/guide_bottom">
+            app:layout_constraintBottom_toTopOf="@id/guide_bottom"
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginEnd="@dimen/dp10">
 
 
         <androidx.appcompat.widget.AppCompatImageView

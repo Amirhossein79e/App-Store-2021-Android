@@ -49,7 +49,7 @@ class AppImageAdapter(private val context:Context, private val packageName:Strin
             {
                 metrics = context.resources.displayMetrics
             }
-            (holder.itemView.layoutParams as RecyclerView.LayoutParams).marginEnd = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, metrics).toInt()
+            (holder.itemView.layoutParams as RecyclerView.LayoutParams).marginEnd = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, metrics).toInt()
         }
 
         Picasso.get().load(ApiCaller.IMAGE_URL+packageName+".$str.jpg").into(holder.img)
