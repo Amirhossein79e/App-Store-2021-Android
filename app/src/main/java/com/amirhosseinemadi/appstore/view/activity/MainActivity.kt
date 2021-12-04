@@ -35,9 +35,14 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onStart() {
-        super.onStart()
+    private fun initView()
+    {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        {
+            Utilities.underApiStatusBarHandle(this)
+        }
 
+        mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
         if (intent.extras != null && intent.extras!!.getString("key") != null)
         {
             when(intent.extras!!.getString("key"))
@@ -52,20 +57,6 @@ class MainActivity : AppCompatActivity() {
         {
             mainBinding.bottomNav.selectedItemId = R.id.item_home
         }
-
-    }
-
-
-
-    private fun initView()
-    {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-        {
-            Utilities.underApiStatusBarHandle(this)
-        }
-
-        mainBinding.bottomNav.setOnItemSelectedListener(this::itemListener)
-
     }
 
 

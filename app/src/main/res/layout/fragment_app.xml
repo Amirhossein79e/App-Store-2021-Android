@@ -172,7 +172,7 @@
                         app:layout_constraintEnd_toStartOf="@id/guide_first"
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintDimensionRatio="1:1"
-                        android:layout_marginStart="@dimen/dp10"
+                        android:layout_marginStart="@dimen/standard_margin"
                         app:cardBackgroundColor="@color/transparent"
                         app:cardCornerRadius="@dimen/dp16"
                         app:cardElevation="@dimen/dp0"
@@ -229,8 +229,8 @@
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         android:layout_marginTop="@dimen/dp16"
-                        android:layout_marginStart="@dimen/dp10"
-                        android:layout_marginEnd="@dimen/dp10"
+                        android:layout_marginStart="@dimen/standard_margin"
+                        android:layout_marginEnd="@dimen/standard_margin"
                         android:orientation="horizontal"
                         android:id="@+id/linear_install">
 
@@ -324,7 +324,7 @@
                         app:layout_constraintTop_toBottomOf="@id/linear_install"
                         app:layout_constraintDimensionRatio="1:1"
                         android:layout_marginTop="@dimen/dp12"
-                        android:layout_marginStart="@dimen/dp10"
+                        android:layout_marginStart="@dimen/standard_margin"
                         android:layout_marginBottom="@dimen/dp32"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp16"
@@ -469,7 +469,7 @@
                         app:layout_constraintBottom_toBottomOf="@id/card_rate"
                         app:layout_constraintDimensionRatio="1:1"
                         android:layout_marginStart="@dimen/dp8"
-                        android:layout_marginEnd="@dimen/dp10"
+                        android:layout_marginEnd="@dimen/standard_margin"
                         app:cardBackgroundColor="@color/colorSecondary"
                         app:cardCornerRadius="@dimen/dp16"
                         app:cardElevation="@dimen/dp12"
@@ -517,8 +517,8 @@
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintDimensionRatio="3:1.5"
                         android:layout_marginTop="@dimen/dp20"
-                        android:layout_marginStart="@dimen/dp10"
-                        android:layout_marginEnd="@dimen/dp10"
+                        android:layout_marginStart="@dimen/standard_margin"
+                        android:layout_marginEnd="@dimen/standard_margin"
                         android:nestedScrollingEnabled="false"
                         android:id="@+id/recycler">
                     </androidx.recyclerview.widget.RecyclerView>
@@ -531,7 +531,7 @@
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintTop_toBottomOf="@id/recycler"
                         android:layout_marginTop="@dimen/dp16"
-                        android:layout_marginStart="@dimen/dp10"
+                        android:layout_marginStart="@dimen/standard_margin"
                         android:textSize="@dimen/text_size_large_normal"
                         android:text="@string/about_app"
                         android:id="@+id/txt_detail_title">
@@ -546,7 +546,7 @@
                         app:layout_constraintTop_toBottomOf="@id/txt_detail_title"
                         android:layout_marginTop="@dimen/dp8"
                         android:paddingStart="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp10"
+                        android:paddingEnd="@dimen/standard_margin"
                         android:textSize="@dimen/text_size_small_normal"
                         android:id="@+id/txt_detail">
                     </androidx.appcompat.widget.AppCompatTextView>
@@ -577,8 +577,8 @@
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         android:layout_marginTop="@dimen/dp8"
-                        android:layout_marginStart="@dimen/dp10"
-                        android:layout_marginEnd="@dimen/dp10"
+                        android:layout_marginStart="@dimen/standard_margin"
+                        android:layout_marginEnd="@dimen/standard_margin"
                         android:fillViewport="true"
                         android:id="@+id/scroll_chip">
 
@@ -604,8 +604,8 @@
                         app:layout_constraintStart_toEndOf="@id/guide_start"
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         android:layout_marginTop="@dimen/dp16"
-                        android:layout_marginStart="@dimen/dp10"
-                        android:layout_marginEnd="@dimen/dp10"
+                        android:layout_marginStart="@dimen/standard_margin"
+                        android:layout_marginEnd="@dimen/standard_margin"
                         android:textSize="@dimen/text_size_large_normal"
                         android:text="@string/user_comments"
                         android:id="@+id/txt_comment_app">
@@ -639,8 +639,8 @@
                         app:layout_constraintEnd_toStartOf="@id/guide_end"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginTop="@dimen/dp32"
-                        android:layout_marginStart="@dimen/dp10"
-                        android:layout_marginEnd="@dimen/dp10"
+                        android:layout_marginStart="@dimen/standard_margin"
+                        android:layout_marginEnd="@dimen/standard_margin"
                         android:layout_marginBottom="@dimen/dp16"
                         android:gravity="center"
                         android:textSize="@dimen/text_size_normal"

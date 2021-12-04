@@ -64,8 +64,8 @@
         app:layout_constraintStart_toEndOf="@id/guide_start"
         app:layout_constraintEnd_toStartOf="@id/guide_end"
         android:layout_marginTop="@dimen/dp24"
-        android:layout_marginStart="@dimen/dp10"
-        android:layout_marginEnd="@dimen/dp10"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginEnd="@dimen/standard_margin"
         app:cardBackgroundColor="@color/colorSecondary"
         app:cardElevation="@dimen/dp12"
         app:cardCornerRadius="@dimen/dp16">
