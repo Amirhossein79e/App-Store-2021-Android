@@ -17,24 +17,6 @@ class Application : Application() {
     override fun onCreate() {
         super.onCreate()
         component = DaggerComponent.builder().module(Module(applicationContext)).build()
-        when(PrefManager.getTheme())
-        {
-            "dark" ->
-            {
-                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES)
-                {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                }
-            }
-
-            "light" ->
-            {
-                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO)
-                {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-            }
-        }
     }
 
 }

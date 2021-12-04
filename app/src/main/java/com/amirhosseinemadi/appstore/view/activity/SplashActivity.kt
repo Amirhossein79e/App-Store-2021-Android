@@ -38,6 +38,25 @@ class SplashActivity : AppCompatActivity() {
 
     private fun initView()
     {
+        when(PrefManager.getTheme())
+        {
+            "dark" ->
+            {
+                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES)
+                {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+            }
+
+            "light" ->
+            {
+                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO)
+                {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
+        }
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
         {
             Utilities.underApiStatusBarHandle(this)

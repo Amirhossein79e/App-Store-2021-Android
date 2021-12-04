@@ -76,13 +76,13 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun backClick(view:View)
     {
-        startActivity(Intent(this,MainActivity::class.java)/*.also { it.putExtra("key","settings") }*/)
+        startActivity(Intent(this,MainActivity::class.java).also { it.putExtra("key","settings") })
         finish()
     }
 
 
     override fun onBackPressed() {
-        startActivity(Intent(this,MainActivity::class.java)/*.also { it.putExtra("key","settings") }*/)
+        startActivity(Intent(this,MainActivity::class.java).also { it.putExtra("key","settings") })
         finish()
     }
 

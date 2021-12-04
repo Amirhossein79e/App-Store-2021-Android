@@ -44,7 +44,7 @@
 
         <activity android:name=".view.activity.IntroActivity"> </activity>
 
-        <activity android:name=".view.activity.MainActivity"> </activity>
+        <activity android:name=".view.activity.MainActivity" android:windowSoftInputMode="adjustNothing"> </activity>
 
         <activity android:name=".view.activity.SettingsActivity"> </activity>
 

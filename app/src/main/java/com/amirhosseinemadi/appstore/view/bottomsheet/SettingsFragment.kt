@@ -115,7 +115,6 @@ class SettingsFragment(private val mode:String, private val callback:Callback?) 
             {
                 if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES)
                 {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     PrefManager.setTheme("dark")
                     dismiss()
                     startActivity(Intent(requireContext(),SplashActivity::class.java))
@@ -127,7 +126,6 @@ class SettingsFragment(private val mode:String, private val callback:Callback?) 
             {
                 if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO)
                 {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     PrefManager.setTheme("light")
                     dismiss()
                     startActivity(Intent(requireContext(),SplashActivity::class.java))
