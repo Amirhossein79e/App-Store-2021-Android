@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import com.amirhosseinemadi.appstore.R
 import com.amirhosseinemadi.appstore.databinding.ActivityMainBinding
+import com.amirhosseinemadi.appstore.util.DownloadManager
 import com.amirhosseinemadi.appstore.util.PrefManager
 import com.amirhosseinemadi.appstore.util.Utilities
 import com.amirhosseinemadi.appstore.view.fragment.*
@@ -51,7 +52,17 @@ class MainActivity : AppCompatActivity() {
 
                 "update" -> { mainBinding.bottomNav.selectedItemId = R.id.item_account }
 
-                "download" -> { supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(intent.extras?.getString("packageName")!!),"appFragment").commit() }
+                "download" ->
+                {
+                    if (DownloadManager.downloadQueue?.get(0)?.packageName != null)
+                    {
+                        supportFragmentManager.beginTransaction().add(R.id.frame,AppFragment(DownloadManager.downloadQueue!!.get(0).packageName!!),"appFragment").commit()
+                    }else
+                    {
+                        mainBinding.bottomNav.selectedItemId = R.id.item_home
+                    }
+
+                }
             }
         }else
         {

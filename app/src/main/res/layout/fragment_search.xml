@@ -101,13 +101,18 @@
 
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="@dimen/dp0"
                 app:layout_constraintTop_toTopOf="@id/sch"
                 app:layout_constraintBottom_toBottomOf="@id/sch"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="@dimen/dp8"
+                android:paddingStart="@dimen/dp16"
                 app:srcCompat="@drawable/ic_voice"
+                android:paddingTop="@dimen/dp12"
+                android:paddingEnd="@dimen/dp8"
+                android:paddingBottom="@dimen/dp12"
+                app:layout_constraintDimensionRatio="1:1"
                 app:tint="@color/colorOnPrimary"
                 android:id="@+id/btn_voice">
             </androidx.appcompat.widget.AppCompatImageView>
@@ -120,11 +125,11 @@
                 app:layout_constraintBottom_toBottomOf="@id/sch"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintDimensionRatio="1:1"
-                app:lottie_rawRes="@raw/loading"
+                android:visibility="gone"
                 app:lottie_loop="true"
                 app:lottie_repeatMode="reverse"
                 app:lottie_autoPlay="false"
-                android:visibility="visible"
+                app:lottie_rawRes="@raw/loading_alt"
                 android:id="@+id/loading">
             </com.airbnb.lottie.LottieAnimationView>
 

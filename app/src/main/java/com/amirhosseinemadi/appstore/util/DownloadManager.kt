@@ -79,7 +79,7 @@ class DownloadManager : Service() {
                 if (downloadQueue!!.size == 0)
                 {
                     downloadQueue!!.add(downloadModel)
-                    startForeground(1000,progressNotification(downloadModel,0,true))
+                    startForeground(1000,progressNotification(downloadModel,0,true,true))
                     Executors.defaultThreadFactory().newThread { download(downloadQueue!!.get(0)) }.start()
                 }else
                 {
@@ -114,7 +114,7 @@ class DownloadManager : Service() {
     }
 
 
-    private fun progressNotification(downloadModel:DownloadModel, progress:Int, isIndeterminate:Boolean) : Notification
+    private fun progressNotification(downloadModel:DownloadModel, progress:Int, isIndeterminate:Boolean,isForeground:Boolean) : Notification
     {
         val intent:Intent = Intent(this,MainActivity::class.java)
         intent.putExtra("key","download")
@@ -126,7 +126,10 @@ class DownloadManager : Service() {
             .setContentTitle("Downloading ${downloadModel.appName}")
             .setContentText(progress.toString()+"%")
             .setProgress(100,progress,isIndeterminate)
-            .setContentIntent(PendingIntent.getActivity(this,0,intent,0))
+        if (!isForeground)
+        {
+            notificationCompat.setContentIntent(PendingIntent.getActivity(this,0,intent,0))
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
@@ -319,7 +322,7 @@ class DownloadManager : Service() {
                     outputStream.write(buffer, 0, i)
                     progress += i
                     updateProgress(downloadModel,(progress*100/fileSize).toInt())
-                    val notification:Notification = progressNotification(downloadModel,(progress*100/fileSize).toInt(),false)
+                    val notification:Notification = progressNotification(downloadModel,(progress*100/fileSize).toInt(),false,false)
                     notificationManager.notify(1000,notification)
                 }else
                 {
